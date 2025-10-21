@@ -79,7 +79,7 @@
     "pinst": "^3.0.0",
     "rimraf": "^5.0.0",
     "semantic-release": "^22.0.0",
-    "size-limit": "^9.0.0",
+    "size-limit": "^11.0.0",
     "ts-jest": "^29.0.0",
     "ts-loader": "^9.3.0",
     "tslib": "^2.4.0",
