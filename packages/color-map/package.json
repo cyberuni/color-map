@@ -68,6 +68,7 @@
     "param-case": "^3.0.4",
     "pascal-case": "^3.1.2",
     "rimraf": "^5.0.0",
+    "size-limit": "^9.0.0",
     "ts-jest": "^29.0.0",
     "ts-loader": "^9.3.0",
     "tslib": "^2.4.0",
