@@ -1,9 +1,11 @@
 packages:
   - packages/*
 
-# pnpm blocks postinstall scripts unless a package is listed here. Both of these are
+# pnpm blocks postinstall scripts unless a package is listed here. These are all
 # native-binary installers pulled in transitively; without this they are silently
 # skipped and fail later at build time rather than at install.
+# unrs-resolver arrived with jest 30, which resolves through it.
 allowBuilds:
   '@swc/core': true
   esbuild: true
+  unrs-resolver: true
