@@ -1,3 +1,24 @@
 {
-  "extends": "./tsconfig.esm.json"
+	"compilerOptions": {
+		"declaration": true,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"newLine": "LF",
+		"noEmit": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		// Load-bearing: assertron pulls in iso-error, whose .d.ts uses private
+		// identifiers. Checking dependency declarations gains nothing here and has
+		// broken the build before.
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "ES2022",
+		// TypeScript 7 no longer pulls every @types/* package into the global scope
+		// on its own, so the ambient ones this package relies on are named here.
+		"types": ["jest", "node"]
+	},
+	"include": ["ts", "tsdown.config.ts"]
 }

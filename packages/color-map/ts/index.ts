@@ -1,5 +1,5 @@
 export * from './createColors.js'
 export * from './createColorsFromMap.js'
 export type { Alpha, ColorMap, RGB, RGBA } from './interfaces.js'
-export * from './rgbHex.js'
 export * from './rgbaString.js'
+export * from './rgbHex.js'

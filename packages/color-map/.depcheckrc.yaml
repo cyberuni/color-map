@@ -3,16 +3,15 @@ parsers:
   "**/*.mjs": "es6"
   "**/*.ts": "typescript"
 ignores:
-  # Used only as a bin in package.json scripts (clean, nuke), which depcheck does
-  # not resolve — same reason ts-loader and webpack-cli are listed below.
-  - rimraf
-  - "@commitlint/*"
+  # Resolved by name from config rather than imported, so depcheck cannot see them.
+  # Listed individually on purpose: a blanket `jest-*` ignore hid four dependencies
+  # that nothing referenced at all.
   - "@repobuddy/jest"
-  - "@size-limit/preset-small-lib"
-  - "@types/node"
   - "@types/jest"
-  - jest-*
+  - "@types/node"
+  - jest-watch-suspend
+  - jest-watch-toggle-config-2
+  - jest-watch-typeahead
   - ts-jest
-  - ts-loader
-  - tslib
-  - webpack-cli
+  # Used only as a bin in package.json scripts (clean, nuke).
+  - rimraf

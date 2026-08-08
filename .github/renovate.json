@@ -1,16 +1,16 @@
 {
-  "extends": ["github>unional/renovate-preset"],
-  "platformAutomerge": true,
-  "packageRules": [
-    {
-      "description": "Auto-merge non-major updates. Majors stay manual.",
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true
-    },
-    {
-      "description": "@types/node tracks the supported Node range, so bumps are a deliberate call.",
-      "matchPackageNames": ["@types/node"],
-      "automerge": false
-    }
-  ]
+	"extends": ["github>unional/renovate-preset"],
+	"platformAutomerge": true,
+	"packageRules": [
+		{
+			"description": "Auto-merge non-major updates. Majors stay manual.",
+			"matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+			"automerge": true
+		},
+		{
+			"description": "@types/node tracks the supported Node range, so bumps are a deliberate call.",
+			"matchPackageNames": ["@types/node"],
+			"automerge": false
+		}
+	]
 }
