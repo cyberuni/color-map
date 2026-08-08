@@ -72,12 +72,12 @@ git push
 # create PR
 ```
 
-[codecov-image]: https://codecov.io/gh/unional/color-map/branch/master/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/unional/color-map
+[codecov-image]: https://codecov.io/gh/cyberuni/color-map/branch/main/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/cyberuni/color-map
 [downloads-image]: https://img.shields.io/npm/dm/color-map.svg?style=flat
 [downloads-url]: https://npmjs.org/package/color-map
-[github-nodejs]: https://github.com/unional/color-map/workflows/nodejs/badge.svg
-[github-action-url]: https://github.com/unional/color-map/actions
+[github-nodejs]: https://github.com/cyberuni/color-map/actions/workflows/pull-request.yml/badge.svg
+[github-action-url]: https://github.com/cyberuni/color-map/actions
 [npm-image]: https://img.shields.io/npm/v/color-map.svg?style=flat
 [npm-url]: https://npmjs.org/package/color-map
 [semantic-release-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
