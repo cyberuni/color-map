@@ -4003,7 +4003,7 @@ __metadata:
     jest-watch-typeahead: ^2.0.0
     ncp: ^2.0.0
     npm-run-all: ^4.1.5
-    param-case: ^3.0.4
+    param-case: ^4.0.0
     pascal-case: ^3.1.2
     pinst: ^3.0.0
     rimraf: ^5.0.0
@@ -4477,16 +4477,6 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: fd7673ca77fe26cd5cba38d816bc72d641f500f1f9b25b83e8ce28827fe2da7ad583a8da26ab6af85f834138cf8dae9f69b0cd6ab925f52ddab1754db44d99ce
-  languageName: node
-  linkType: hard
-
-"dot-case@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "dot-case@npm:3.0.4"
-  dependencies:
-    no-case: ^3.0.4
-    tslib: ^2.0.3
-  checksum: a65e3519414856df0228b9f645332f974f2bf5433370f544a681122eab59e66038fc3349b4be1cdc47152779dac71a5864f1ccda2f745e767c46e9c6543b1169
   languageName: node
   linkType: hard
 
@@ -8329,6 +8319,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"no-case@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "no-case@npm:4.0.0"
+  checksum: cbfd08163260cb6be5451637193332aff4b27ea741944f268c63adc874eb7343b0319714202a9293464b691674e2422eaaa9b851bae87d342d2162438846d585
+  languageName: node
+  linkType: hard
+
 "node-emoji@npm:^1.11.0":
   version: 1.11.0
   resolution: "node-emoji@npm:1.11.0"
@@ -9004,13 +9001,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"param-case@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "param-case@npm:3.0.4"
+"param-case@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "param-case@npm:4.0.0"
   dependencies:
-    dot-case: ^3.0.4
-    tslib: ^2.0.3
-  checksum: b34227fd0f794e078776eb3aa6247442056cb47761e9cd2c4c881c86d84c64205f6a56ef0d70b41ee7d77da02c3f4ed2f88e3896a8fefe08bdfb4deca037c687
+    no-case: ^4.0.0
+  checksum: 42f29ae506b6848c016c7dbd9235fdda8bb4a5e307d79ac229322cf8f7eefded5014fa4d3160bd07ff1b628c7f7e6c84231a3f03a07eb81a27b363e3ffd53c67
   languageName: node
   linkType: hard
 
