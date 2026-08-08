@@ -15,7 +15,10 @@
 		// broken the build before.
 		"skipLibCheck": true,
 		"strict": true,
-		"target": "ES2022"
+		"target": "ES2022",
+		// TypeScript 7 no longer pulls every @types/* package into the global scope
+		// on its own, so the ambient ones this package relies on are named here.
+		"types": ["jest", "node"]
 	},
 	"include": ["ts", "tsdown.config.ts"]
 }
