@@ -1,23 +1,28 @@
 {
-  "private": true,
-  "scripts": {
-    "build": "pnpm -r build",
-    "clean": "pnpm -r clean",
-    "coverage": "pnpm -r coverage",
-    "cm": "pnpm --filter color-map",
-    "depcheck": "pnpm -r depcheck",
-    "lint": "pnpm -r lint",
-    "nuke": "pnpm -r nuke && rimraf node_modules",
-    "prepare": "husky install",
-    "test": "pnpm -r test",
-    "verify": "pnpm -r verify",
-    "watch": "pnpm -r watch"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^18.0.0",
-    "@commitlint/config-conventional": "^18.0.0",
-    "husky": "^8.0.1",
-    "rimraf": "^5.0.0"
-  },
-  "packageManager": "pnpm@11.20.0"
+	"private": true,
+	"scripts": {
+		"build": "pnpm -r build",
+		"check": "biome check",
+		"check:fix": "biome check --fix",
+		"clean": "pnpm -r clean",
+		"cm": "pnpm --filter color-map",
+		"coverage": "pnpm -r coverage",
+		"depcheck": "pnpm -r depcheck",
+		"format": "biome format . --write",
+		"lint": "biome lint .",
+		"nuke": "pnpm -r nuke && rimraf node_modules",
+		"prepare": "husky install",
+		"test": "pnpm -r test",
+		"verify": "pnpm -r verify",
+		"watch": "pnpm -r watch"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.7",
+		"@commitlint/cli": "^18.0.0",
+		"@commitlint/config-conventional": "^18.0.0",
+		"@repobuddy/biome": "^2.3.1",
+		"husky": "^8.0.1",
+		"rimraf": "^5.0.0"
+	},
+	"packageManager": "pnpm@11.20.0"
 }

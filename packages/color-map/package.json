@@ -1,73 +1,69 @@
 {
-  "name": "color-map",
-  "version": "0.0.0-development",
-  "description": "Color map generator",
-  "homepage": "https://github.com/cyberuni/color-map",
-  "bugs": {
-    "url": "https://github.com/cyberuni/color-map/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cyberuni/color-map.git"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Homa Wong (unional)",
-    "email": "homawong@gmail.com"
-  },
-  "type": "module",
-  "exports": {
-    "types": "./esm/index.d.ts",
-    "import": "./esm/index.js",
-    "require": "./cjs/index.js",
-    "default": "./cjs/index.js"
-  },
-  "main": "./cjs/index.js",
-  "types": "./esm/index.d.ts",
-  "files": [
-    "cjs",
-    "dist",
-    "esm",
-    "ts",
-    "!**/*.spec.*"
-  ],
-  "scripts": {
-    "build": "tsdown",
-    "build:watch": "tsdown --watch",
-    "clean": "rimraf .reports cjs coverage dist esm",
-    "coverage": "jest --coverage",
-    "depcheck": "depcheck",
-    "lint": "eslint --ext=js,ts .",
-    "nuke": "pnpm clean && rimraf node_modules",
-    "test": "jest",
-    "typecheck": "tsc",
-    "verify": "npm-run-all -p build depcheck lint typecheck coverage",
-    "watch": "jest --watch"
-  },
-  "devDependencies": {
-    "@repobuddy/jest": "^3.0.0",
-    "@types/jest": "^29.0.0",
-    "@types/node": "^26.2.0",
-    "@typescript-eslint/eslint-plugin": "^5.27.1",
-    "assertron": "^11.0.0",
-    "depcheck": "^1.4.3",
-    "eslint": "^8.17.0",
-    "eslint-plugin-harmony": "^7.1.0",
-    "jest": "^29.0.0",
-    "jest-junit": "^16.0.0",
-    "jest-progress-tracker": "^3.0.4",
-    "jest-validate": "^29.0.0",
-    "jest-watch-repeat": "^3.0.0",
-    "jest-watch-suspend": "^1.1.2",
-    "jest-watch-toggle-config-2": "^2.1.0",
-    "jest-watch-typeahead": "^2.0.0",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^5.0.0",
-    "ts-jest": "^29.0.0",
-    "tsdown": "^0.22.14",
-    "typescript": "^5.0.0"
-  },
-  "engines": {
-    "node": ">= 20"
-  }
+	"name": "color-map",
+	"version": "0.0.0-development",
+	"description": "Color map generator",
+	"homepage": "https://github.com/cyberuni/color-map",
+	"bugs": {
+		"url": "https://github.com/cyberuni/color-map/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cyberuni/color-map.git"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Homa Wong (unional)",
+		"email": "homawong@gmail.com"
+	},
+	"type": "module",
+	"exports": {
+		"types": "./esm/index.d.ts",
+		"import": "./esm/index.js",
+		"require": "./cjs/index.js",
+		"default": "./cjs/index.js"
+	},
+	"main": "./cjs/index.js",
+	"types": "./esm/index.d.ts",
+	"files": [
+		"cjs",
+		"dist",
+		"esm",
+		"ts",
+		"!**/*.spec.*"
+	],
+	"scripts": {
+		"build": "tsdown",
+		"build:watch": "tsdown --watch",
+		"clean": "rimraf .reports cjs coverage dist esm",
+		"coverage": "jest --coverage",
+		"depcheck": "depcheck",
+		"nuke": "pnpm clean && rimraf node_modules",
+		"test": "jest",
+		"typecheck": "tsc",
+		"verify": "npm-run-all -p build depcheck typecheck coverage",
+		"watch": "jest --watch"
+	},
+	"devDependencies": {
+		"@repobuddy/jest": "^3.0.0",
+		"@types/jest": "^29.0.0",
+		"@types/node": "^26.2.0",
+		"assertron": "^11.0.0",
+		"depcheck": "^1.4.3",
+		"jest": "^29.0.0",
+		"jest-junit": "^16.0.0",
+		"jest-progress-tracker": "^3.0.4",
+		"jest-validate": "^29.0.0",
+		"jest-watch-repeat": "^3.0.0",
+		"jest-watch-suspend": "^1.1.2",
+		"jest-watch-toggle-config-2": "^2.1.0",
+		"jest-watch-typeahead": "^2.0.0",
+		"npm-run-all": "^4.1.5",
+		"rimraf": "^5.0.0",
+		"ts-jest": "^29.0.0",
+		"tsdown": "^0.22.14",
+		"typescript": "^5.0.0"
+	},
+	"engines": {
+		"node": ">= 20"
+	}
 }

@@ -1,21 +1,21 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "newLine": "LF",
-    "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    // Load-bearing: assertron pulls in iso-error, whose .d.ts uses private
-    // identifiers. Checking dependency declarations gains nothing here and has
-    // broken the build before.
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2022"
-  },
-  "include": ["ts", "tsdown.config.ts"]
+	"compilerOptions": {
+		"declaration": true,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"newLine": "LF",
+		"noEmit": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		// Load-bearing: assertron pulls in iso-error, whose .d.ts uses private
+		// identifiers. Checking dependency declarations gains nothing here and has
+		// broken the build before.
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "ES2022"
+	},
+	"include": ["ts", "tsdown.config.ts"]
 }
