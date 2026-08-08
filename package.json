@@ -58,7 +58,7 @@
     "@semantic-release/npm": "^11.0.0",
     "@size-limit/preset-small-lib": "^9.0.0",
     "@types/jest": "^29.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
     "assertron": "^11.0.0",
     "depcheck": "^1.4.3",
     "eslint": "^8.17.0",
