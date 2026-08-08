@@ -17,8 +17,10 @@
   },
   "type": "module",
   "exports": {
+    "types": "./esm/index.d.ts",
     "import": "./esm/index.js",
-    "require": "./cjs/index.js"
+    "require": "./cjs/index.js",
+    "default": "./cjs/index.js"
   },
   "main": "./cjs/index.js",
   "types": "./esm/index.d.ts",
@@ -27,27 +29,23 @@
     "dist",
     "esm",
     "ts",
-    "!ts/**/*.spec.ts"
+    "!**/*.spec.*"
   ],
   "scripts": {
-    "build": "run-p build:cjs build:esm build:tslib bundle",
-    "build:cjs": "tsc -p tsconfig.cjs.json && ncp package.cjs.json cjs/package.json",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:tslib": "tsc -p tsconfig.tslib.json && ncp package.cjs.json tslib/package.json",
-    "bundle": "webpack",
-    "clean": "rimraf .reports cjs coverage esm lib libm tslib",
+    "build": "tsdown",
+    "build:watch": "tsdown --watch",
+    "clean": "rimraf .reports cjs coverage dist esm",
     "coverage": "jest --coverage",
     "depcheck": "depcheck",
     "lint": "eslint --ext=js,ts .",
     "nuke": "pnpm clean && rimraf node_modules",
-    "size": "size-limit",
     "test": "jest",
-    "verify": "npm-run-all -p build depcheck lint coverage -p size",
+    "typecheck": "tsc",
+    "verify": "npm-run-all -p build depcheck lint typecheck coverage",
     "watch": "jest --watch"
   },
   "devDependencies": {
     "@repobuddy/jest": "^3.0.0",
-    "@size-limit/preset-small-lib": "^9.0.0",
     "@types/jest": "^29.0.0",
     "@types/node": "^26.2.0",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
@@ -63,31 +61,13 @@
     "jest-watch-suspend": "^1.1.2",
     "jest-watch-toggle-config-2": "^2.1.0",
     "jest-watch-typeahead": "^2.0.0",
-    "ncp": "^2.0.0",
     "npm-run-all": "^4.1.5",
-    "param-case": "^3.0.4",
-    "pascal-case": "^3.1.2",
     "rimraf": "^5.0.0",
-    "size-limit": "^9.0.0",
     "ts-jest": "^29.0.0",
-    "ts-loader": "^9.3.0",
-    "tslib": "^2.4.0",
-    "typescript": "^5.0.0",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^5.0.0"
+    "tsdown": "^0.22.14",
+    "typescript": "^5.0.0"
   },
-  "size-limit": [
-    {
-      "path": "./cjs/index.js",
-      "limit": "2 KB"
-    },
-    {
-      "path": "./esm/index.js",
-      "limit": "2 KB"
-    },
-    {
-      "path": "./tslib/index.js",
-      "limit": "5 KB"
-    }
-  ]
+  "engines": {
+    "node": ">= 20"
+  }
 }
