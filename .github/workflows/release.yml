@@ -5,7 +5,11 @@ on:
 
 jobs:
   code:
-    uses: unional/.github/.github/workflows/pnpm-verify-linux.yml@main
+    uses: cyberuni/.github/.github/workflows/pnpm-verify.yml@main
+    with:
+      os: '["ubuntu-latest"]'
+      skip-playwright: true
+      skip-codecov: true
 
   release:
     uses: cyberuni/.github/.github/workflows/pnpm-release-semantic-oidc.yml@main
