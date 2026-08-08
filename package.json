@@ -2,13 +2,13 @@
   "name": "color-map",
   "version": "0.0.0-development",
   "description": "Color map generator",
-  "homepage": "https://github.com/unional/color-map",
+  "homepage": "https://github.com/cyberuni/color-map",
   "bugs": {
-    "url": "https://github.com/unional/color-map/issues"
+    "url": "https://github.com/cyberuni/color-map/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/unional/color-map.git"
+    "url": "https://github.com/cyberuni/color-map.git"
   },
   "license": "MIT",
   "author": {
