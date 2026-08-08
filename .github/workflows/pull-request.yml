@@ -4,10 +4,9 @@ on:
     types: [opened, synchronize]
   # The merge queue builds a temporary branch that fires neither `pull_request` nor
   # `push`, so without this trigger the required `code / all-checks` context never
-  # starts and the queue waits on it forever. This must be on the default branch
-  # before the merge_queue rule is added to the ruleset.
+  # starts and the queue waits on it forever.
   merge_group:
 
 jobs:
   code:
-    uses: unional/.github/.github/workflows/yarn-verify-linux.yml@main
+    uses: unional/.github/.github/workflows/pnpm-verify-linux.yml@main
