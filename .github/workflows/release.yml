@@ -8,6 +8,14 @@ jobs:
     uses: unional/.github/.github/workflows/yarn-verify-linux.yml@main
 
   release:
-    uses: unional/.github/.github/workflows/yarn-release-semantic.yml@main
+    uses: unional/.github/.github/workflows/yarn-release-semantic-oidc.yml@main
     needs: code
-    secrets: inherit
+    # Declaring `permissions:` replaces the default, so every scope the callee needs must
+    # be listed here — unlisted ones drop to `none`, not to the default. id-token mints
+    # the OIDC token npm exchanges for short-lived publish credentials; issues and
+    # pull-requests are for @semantic-release/github commenting on what a release closes.
+    permissions:
+      id-token: write
+      contents: write
+      issues: write
+      pull-requests: write
