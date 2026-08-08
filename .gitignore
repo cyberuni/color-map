@@ -42,19 +42,12 @@ node_modules
 # webstorm
 .idea
 
-# yarn
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-# project folders
-/cjs
-/dist
-/esm
-/lib
-/out
-/tslib
+# build output — unanchored so it matches inside packages/*, not just the repo root.
+# Anchored patterns (/cjs) silently stopped matching when the package moved into
+# packages/color-map, which let build artifacts show up as untracked.
+cjs/
+dist/
+esm/
+lib/
+out/
+tslib/

@@ -8,6 +8,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "newLine": "LF",
+    "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
