@@ -16,7 +16,7 @@ jobs:
       # the queue fast. It also sidesteps that workflow's unconditional Xvfb step, which
       # has no counterpart on the macOS and Windows runners.
       os: '["ubuntu-latest"]'
-      # No browser tests — jest only.
+      # No browser tests — vitest runs in node.
       skip-playwright: true
       # No codecov integration on this repo; its stale codecov contexts were part of what
       # made it unmergeable.

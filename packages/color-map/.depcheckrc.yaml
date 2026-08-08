@@ -4,14 +4,7 @@ parsers:
   "**/*.ts": "typescript"
 ignores:
   # Resolved by name from config rather than imported, so depcheck cannot see them.
-  # Listed individually on purpose: a blanket `jest-*` ignore hid four dependencies
-  # that nothing referenced at all.
-  - "@repobuddy/jest"
-  - "@types/jest"
   - "@types/node"
-  - jest-watch-suspend
-  - jest-watch-toggle-config-2
-  - jest-watch-typeahead
-  - ts-jest
+  - "@vitest/coverage-v8"
   # Used only as a bin in package.json scripts (clean, nuke).
   - rimraf
