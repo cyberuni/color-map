@@ -11,7 +11,7 @@
 		},
 		"coverage": {
 			"dependsOn": ["build"],
-			"inputs": ["package.json", "tsconfig.json", "jest.config.mjs", "ts/**/*.tsx?"],
+			"inputs": ["package.json", "tsconfig.json", "vitest.config.ts", "ts/**/*.tsx?"],
 			"outputs": ["coverage/**"]
 		},
 		"depcheck": {
@@ -22,7 +22,7 @@
 		},
 		"test": {
 			"dependsOn": ["build"],
-			"inputs": ["package.json", "tsconfig.json", "jest.config.mjs", "ts/**/*.tsx?"]
+			"inputs": ["package.json", "tsconfig.json", "vitest.config.ts", "ts/**/*.tsx?"]
 		},
 		"typecheck": {
 			"inputs": ["package.json", "tsconfig.json", "tsdown.config.ts", "ts/**/*.tsx?"]

@@ -18,7 +18,8 @@
 		"target": "ES2022",
 		// TypeScript 7 no longer pulls every @types/* package into the global scope
 		// on its own, so the ambient ones this package relies on are named here.
-		"types": ["jest", "node"]
+		// vitest/globals supplies `test` and `expect`, matching `globals: true`.
+		"types": ["node", "vitest/globals"]
 	},
-	"include": ["ts", "tsdown.config.ts"]
+	"include": ["ts", "tsdown.config.ts", "vitest.config.ts"]
 }
