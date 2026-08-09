@@ -11,13 +11,16 @@ jobs:
       skip-playwright: true
       skip-codecov: true
 
+  # changesets, not semantic-release: a push to main only opens or updates the
+  # "Version Packages" PR, so nothing reaches npm until that PR is merged. That second
+  # checkpoint is where pnpm-publish-gate inspects the tarball, which the
+  # semantic-release path had nowhere to put.
   release:
-    uses: cyberuni/.github/.github/workflows/pnpm-release-semantic-oidc.yml@main
+    uses: cyberuni/.github/.github/workflows/pnpm-release-changeset-oidc.yml@main
     needs: code
     # Declaring `permissions:` replaces the default, so every scope the callee needs must
     # be listed here — unlisted ones drop to `none`, not to the default.
     permissions:
       id-token: write
       contents: write
-      issues: write
       pull-requests: write

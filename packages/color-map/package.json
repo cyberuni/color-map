@@ -1,6 +1,6 @@
 {
 	"name": "color-map",
-	"version": "0.0.0-development",
+	"version": "2.2.0",
 	"description": "Color map generator",
 	"homepage": "https://github.com/cyberuni/color-map",
 	"bugs": {
