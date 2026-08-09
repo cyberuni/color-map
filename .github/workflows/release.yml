@@ -9,7 +9,6 @@ jobs:
     with:
       os: '["ubuntu-latest"]'
       skip-playwright: true
-      skip-codecov: true
 
   # changesets, not semantic-release: a push to main only opens or updates the
   # "Version Packages" PR, so nothing reaches npm until that PR is merged. That second

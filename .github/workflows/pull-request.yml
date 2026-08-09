@@ -18,9 +18,10 @@ jobs:
       os: '["ubuntu-latest"]'
       # No browser tests — vitest runs in node.
       skip-playwright: true
-      # No codecov integration on this repo; its stale codecov contexts were part of what
-      # made it unmergeable.
-      skip-codecov: true
+      # `skip-codecov` stays at its `false` default: the upload feeds the README badge.
+      # It gates nothing. `codecov/project` and `codecov/patch` must never be required
+      # status contexts — requiring them is what made this repo unmergeable, and the
+      # merge gate is `code / all-checks` alone.
 
   # The release PR is the last point where the next publish is reviewable; after it
   # merges, release.yml publishes unattended. Only runs there, so ordinary PRs are
