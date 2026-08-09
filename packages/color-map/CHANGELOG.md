@@ -1,3 +1,10 @@
+# color-map
+
+Entries from 2.2.0 and earlier were produced by semantic-release, which was
+configured without the changelog plugin — 2.1.0 and 2.2.0 exist only as GitHub
+Releases and are absent below. Everything from the next release on is written
+here by changesets.
+
 ## [2.0.6](https://github.com/unional/color-map/compare/v2.0.5...v2.0.6) (2022-10-03)
 
 

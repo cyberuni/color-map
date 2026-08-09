@@ -21,3 +21,13 @@ jobs:
       # No codecov integration on this repo; its stale codecov contexts were part of what
       # made it unmergeable.
       skip-codecov: true
+
+  # The release PR is the last point where the next publish is reviewable; after it
+  # merges, release.yml publishes unattended. Only runs there, so ordinary PRs are
+  # unaffected. Deliberately not a required check — it is skipped on every other PR,
+  # and a skipped check never satisfies a required context.
+  publish-gate:
+    if: startsWith(github.head_ref, 'changeset-release/')
+    uses: cyberuni/.github/.github/workflows/pnpm-publish-gate.yml@main
+    permissions:
+      contents: read
