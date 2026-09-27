@@ -18,3 +18,6 @@ allowBuilds:
 # explicitly so the enforcement does not depend on that inference.
 minimumReleaseAge: 1440
 minimumReleaseAgeStrict: true
+minimumReleaseAgeExclude:
+  # Renovate security update: vitest@4.1.11
+  - vitest@4.1.11
