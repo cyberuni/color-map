@@ -1,6 +1,6 @@
 {
 	"name": "color-map",
-	"version": "2.2.0",
+	"version": "2.3.0",
 	"description": "Color map generator and color toolkit: a library, a CLI and an agent skill",
 	"homepage": "https://github.com/cyberuni/color-map",
 	"bugs": {

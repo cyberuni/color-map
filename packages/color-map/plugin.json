@@ -1,7 +1,7 @@
 {
 	"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
 	"name": "color-map",
-	"version": "2.2.0",
+	"version": "2.3.0",
 	"description": "Generate WCAG-checked color palettes, scales and design tokens with the color-map CLI",
 	"author": {
 		"name": "Homa Wong (unional)"
