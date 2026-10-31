@@ -1,11 +1,11 @@
 import { namedColor } from './named.js'
 import type { Color, ColorSpaceId, Component } from './types.js'
 
-const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/
-const UNITS: Record<string, number> = { '': 1, deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 }
+export const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/
+export const UNITS: Record<string, number> = { '': 1, deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 }
 
 /** How one channel reads: what 100% means, and the allowed range. */
-interface Channel {
+export interface Channel {
 	/** The value of 100%. Also the factor applied to a plain number, usually 1. */
 	pct: number
 	/** A plain number is divided by this (255 for sRGB channels). */
@@ -18,11 +18,11 @@ interface Channel {
 const clamp = (n: number, min = Number.NEGATIVE_INFINITY, max = Number.POSITIVE_INFINITY): number =>
 	Math.min(max, Math.max(min, n))
 
-function fail(input: string, what: string, token?: string): never {
+export function fail(input: string, what: string, token?: string): never {
 	throw new Error(`color-map: cannot parse "${input}": ${what}${token === undefined ? '' : ` "${token}"`}`)
 }
 
-function channel(token: string, spec: Channel, input: string): Component {
+export function channel(token: string, spec: Channel, input: string): Component {
 	if (token === 'none') return null
 	const m = NUMBER.exec(token)
 	if (!m) return fail(input, 'invalid value', token)
@@ -40,13 +40,13 @@ function channel(token: string, spec: Channel, input: string): Component {
 	return clamp(value, spec.min, spec.max)
 }
 
-const SRGB: Channel = { pct: 1, div: 255 }
+export const SRGB: Channel = { pct: 1, div: 255 }
 const PCT100: Channel = { pct: 100, min: 0 }
-const UNIT: Channel = { pct: 1 }
-const ALPHA: Channel = { pct: 1, min: 0, max: 1 }
+export const UNIT: Channel = { pct: 1 }
+export const ALPHA: Channel = { pct: 1, min: 0, max: 1 }
 const HUE: Channel = { pct: 0, hue: true }
 
-const FUNCTIONS: Record<string, { space: ColorSpaceId; channels: [Channel, Channel, Channel] }> = {
+export const FUNCTIONS: Record<string, { space: ColorSpaceId; channels: [Channel, Channel, Channel] }> = {
 	rgb: { space: 'srgb', channels: [SRGB, SRGB, SRGB] },
 	hsl: { space: 'hsl', channels: [HUE, PCT100, PCT100] },
 	hwb: { space: 'hwb', channels: [HUE, PCT100, PCT100] },
@@ -56,7 +56,7 @@ const FUNCTIONS: Record<string, { space: ColorSpaceId; channels: [Channel, Chann
 	oklch: { space: 'oklch', channels: [{ pct: 1, min: 0, max: 1 }, { pct: 0.4, min: 0 }, HUE] }
 }
 
-const COLOR_SPACES: Record<string, ColorSpaceId> = {
+export const COLOR_SPACES: Record<string, ColorSpaceId> = {
 	srgb: 'srgb',
 	'srgb-linear': 'srgb-linear',
 	'display-p3': 'display-p3',
@@ -69,7 +69,7 @@ const COLOR_SPACES: Record<string, ColorSpaceId> = {
 	'xyz-d65': 'xyz-d65'
 }
 
-const VALUES_NEEDING_RESOLVE =
+export const VALUES_NEEDING_RESOLVE =
 	/^(?:currentcolor|canvas|canvastext|linktext|visitedtext|activetext|buttonface|buttontext|buttonborder|field|fieldtext|highlight|highlighttext|selecteditem|selecteditemtext|mark|marktext|graytext|accentcolor|accentcolortext)$/
 
 function hex(input: string): Color {
