@@ -4,6 +4,7 @@
 	"files": {
 		"includes": [
 			"!**/.pnpm-store",
+			"!.research",
 			"!**/cjs",
 			"!**/coverage",
 			"!**/dist",
