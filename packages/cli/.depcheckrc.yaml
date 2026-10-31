@@ -1,9 +1,0 @@
-parsers:
-  "**/*.mjs": "es6"
-  "**/*.ts": "typescript"
-ignores:
-  # Resolved by name from config rather than imported, so depcheck cannot see them.
-  - "@types/node"
-  - "@vitest/coverage-v8"
-  # Used only as a bin in package.json scripts (clean, nuke).
-  - rimraf

@@ -1,0 +1,12 @@
+{
+	"name": "color-map",
+	"version": "2.2.0",
+	"description": "Generate WCAG-checked color palettes, scales and design tokens with the color-map CLI",
+	"author": {
+		"name": "Homa Wong (unional)"
+	},
+	"homepage": "https://github.com/cyberuni/color-map",
+	"repository": "https://github.com/cyberuni/color-map",
+	"license": "MIT",
+	"keywords": ["color", "palette", "design-system", "contrast", "css"]
+}

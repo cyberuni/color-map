@@ -1,0 +1,51 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://unpkg.com/color-map/schemas/find-contrast.schema.json",
+	"title": "color-map find-contrast",
+	"description": "Find the color closest in lightness to a background that reaches a WCAG 2 contrast target",
+	"type": "object",
+	"properties": {
+		"bg": {
+			"type": "string",
+			"description": "The background color",
+			"x-kind": "argument"
+		},
+		"target": {
+			"type": "number",
+			"minimum": 1,
+			"maximum": 21,
+			"description": "The contrast ratio to reach, 1 to 21",
+			"default": 4.5,
+			"x-kind": "option"
+		},
+		"hue": {
+			"type": "number",
+			"description": "OKLCH hue of the result in degrees (default: the background's hue)",
+			"x-kind": "option"
+		},
+		"chroma": {
+			"type": "number",
+			"minimum": 0,
+			"description": "OKLCH chroma of the result (default 0, a gray)",
+			"x-kind": "option"
+		},
+		"direction": {
+			"type": "string",
+			"enum": [
+				"lighter",
+				"darker"
+			],
+			"description": "Which way to look first",
+			"x-kind": "option"
+		},
+		"full": {
+			"type": "boolean",
+			"description": "Show the complete output instead of truncating it",
+			"x-kind": "option"
+		}
+	},
+	"required": [
+		"bg"
+	],
+	"additionalProperties": false
+}

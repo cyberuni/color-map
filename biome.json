@@ -6,12 +6,13 @@
 			"!**/.astro",
 			"!**/.pnpm-store",
 			"!.research",
+			"!**/bin",
 			"!**/cjs",
 			"!**/coverage",
 			"!**/dist",
 			"!**/esm",
 			"!**/node_modules",
-			"!packages/cli/schemas",
+			"!packages/color-map/schemas",
 			"!pnpm-lock.yaml",
 			"!skills-lock.json"
 		]

@@ -1,0 +1,56 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://unpkg.com/color-map/schemas/palette.schema.json",
+	"title": "color-map palette",
+	"description": "A semantic palette from one brand color: primary, status colors, surface and outline, each with a text color and its WCAG 2 ratio",
+	"type": "object",
+	"properties": {
+		"brand": {
+			"type": "string",
+			"description": "The brand color",
+			"x-kind": "argument"
+		},
+		"mode": {
+			"type": "string",
+			"enum": [
+				"light",
+				"dark"
+			],
+			"description": "light or dark",
+			"default": "light",
+			"x-kind": "option"
+		},
+		"target": {
+			"type": "number",
+			"minimum": 1,
+			"maximum": 21,
+			"description": "The WCAG 2 ratio every text pair must reach",
+			"default": 4.5,
+			"x-kind": "option"
+		},
+		"gamut": {
+			"type": "string",
+			"enum": [
+				"srgb",
+				"srgb-linear",
+				"display-p3",
+				"display-p3-linear",
+				"a98-rgb",
+				"prophoto-rgb",
+				"rec2020"
+			],
+			"description": "The gamut every color must fit",
+			"default": "srgb",
+			"x-kind": "option"
+		},
+		"full": {
+			"type": "boolean",
+			"description": "Show the complete output instead of truncating it",
+			"x-kind": "option"
+		}
+	},
+	"required": [
+		"brand"
+	],
+	"additionalProperties": false
+}

@@ -1,0 +1,86 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://unpkg.com/color-map/schemas/scale.schema.json",
+	"title": "color-map scale",
+	"description": "Build a color scale from a seed color: a preset, a Radix-style brand scale, or contrast targets",
+	"type": "object",
+	"properties": {
+		"seed": {
+			"type": "string",
+			"description": "The color the scale is built around",
+			"x-kind": "argument"
+		},
+		"preset": {
+			"type": "string",
+			"enum": [
+				"tailwind-11",
+				"radix-12",
+				"tone-13",
+				"even"
+			],
+			"description": "The scale shape",
+			"default": "tailwind-11",
+			"x-kind": "option"
+		},
+		"steps": {
+			"type": "integer",
+			"minimum": 2,
+			"description": "Steps of an even scale; replaces --preset",
+			"x-kind": "option"
+		},
+		"brand": {
+			"type": "boolean",
+			"description": "Build a 12-step UI scale where the seed is step 9 exactly",
+			"x-kind": "option"
+		},
+		"mode": {
+			"type": "string",
+			"enum": [
+				"light",
+				"dark"
+			],
+			"description": "light or dark, for --brand",
+			"default": "light",
+			"x-kind": "option"
+		},
+		"background": {
+			"type": "string",
+			"description": "The background: page color for --brand, or what --targets are measured against",
+			"x-kind": "option"
+		},
+		"targets": {
+			"type": "array",
+			"items": {
+				"type": "number",
+				"minimum": 1,
+				"maximum": 21
+			},
+			"description": "Contrast ratios, one per step, such as 3,4.5,7: builds a contrast scale",
+			"x-kind": "option"
+		},
+		"gamut": {
+			"type": "string",
+			"enum": [
+				"srgb",
+				"srgb-linear",
+				"display-p3",
+				"display-p3-linear",
+				"a98-rgb",
+				"prophoto-rgb",
+				"rec2020"
+			],
+			"description": "The gamut every step must fit",
+			"default": "srgb",
+			"x-kind": "option"
+		},
+		"full": {
+			"type": "boolean",
+			"description": "Show the complete output instead of truncating it",
+			"x-kind": "option"
+		}
+	},
+	"required": [
+		"seed"
+	],
+	"additionalProperties": false
+}

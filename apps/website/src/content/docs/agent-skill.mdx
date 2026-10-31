@@ -3,7 +3,7 @@ title: Agent skill
 description: The color-map skill teaches an agent to build a validated palette and write tokens by calling the CLI.
 ---
 
-The `color-map` skill ships inside `color-map-cli` as a plugin for Claude Code, Cursor, Codex and GitHub Copilot CLI (`plugin.json` and `skills/color-map/SKILL.md` in the package). It tells an agent to call the `color-map` command instead of doing color math by hand.
+The `color-map` skill ships inside the `color-map` package as a plugin for Claude Code, Cursor, Codex and GitHub Copilot CLI (`plugin.json` and `skills/color-map/SKILL.md` in the package). It tells an agent to call the `color-map` command instead of doing color math by hand.
 
 ## One prompt to a valid palette
 
@@ -24,4 +24,4 @@ The agent reads `failing` and `issues` in the first answer. `failing: 0` means e
 - Pass colors as given and do not round-trip them through hex; use `--to oklch` or `--format json` for precision.
 - A coded error names the input to fix; retrying the same call cannot help.
 
-The plugin version is 0.0.0 and follows the package version at release. Like the CLI, it is not published yet.
+The plugin version follows the package version.
