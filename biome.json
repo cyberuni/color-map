@@ -11,6 +11,7 @@
 			"!**/dist",
 			"!**/esm",
 			"!**/node_modules",
+			"!packages/cli/schemas",
 			"!pnpm-lock.yaml",
 			"!skills-lock.json"
 		]
