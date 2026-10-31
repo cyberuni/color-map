@@ -1,0 +1,72 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://unpkg.com/color-map-cli/schemas/mix.schema.json",
+	"title": "color-map mix",
+	"description": "Mix two CSS colors, as color-mix() does",
+	"type": "object",
+	"properties": {
+		"a": {
+			"type": "string",
+			"description": "The first color",
+			"x-kind": "argument"
+		},
+		"b": {
+			"type": "string",
+			"description": "The second color",
+			"x-kind": "argument"
+		},
+		"amount": {
+			"type": "number",
+			"minimum": 0,
+			"maximum": 1,
+			"description": "How far from a to b, 0 to 1",
+			"default": 0.5,
+			"x-kind": "option"
+		},
+		"in": {
+			"type": "string",
+			"enum": [
+				"srgb",
+				"srgb-linear",
+				"hsl",
+				"hwb",
+				"lab",
+				"lch",
+				"oklab",
+				"oklch",
+				"display-p3",
+				"display-p3-linear",
+				"a98-rgb",
+				"prophoto-rgb",
+				"rec2020",
+				"xyz-d50",
+				"xyz-d65"
+			],
+			"description": "The space to interpolate in",
+			"default": "oklab",
+			"x-kind": "option"
+		},
+		"hue": {
+			"type": "string",
+			"enum": [
+				"shorter",
+				"longer",
+				"increasing",
+				"decreasing"
+			],
+			"description": "How hues travel in a polar space",
+			"default": "shorter",
+			"x-kind": "option"
+		},
+		"full": {
+			"type": "boolean",
+			"description": "Show the complete output instead of truncating it",
+			"x-kind": "option"
+		}
+	},
+	"required": [
+		"a",
+		"b"
+	],
+	"additionalProperties": false
+}

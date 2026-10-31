@@ -1,0 +1,84 @@
+{
+	"name": "color-map-cli",
+	"version": "0.0.0",
+	"description": "Color tools for agents: convert, mix, contrast, scale, palette and export, from the command line",
+	"homepage": "https://github.com/cyberuni/color-map",
+	"bugs": {
+		"url": "https://github.com/cyberuni/color-map/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cyberuni/color-map.git",
+		"directory": "packages/cli"
+	},
+	"keywords": [
+		"agent",
+		"axi",
+		"cli",
+		"color",
+		"design-system",
+		"palette"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "Homa Wong (unional)",
+		"email": "homawong@gmail.com"
+	},
+	"type": "module",
+	"bin": {
+		"color-map": "./esm/bin.js"
+	},
+	"exports": {
+		".": {
+			"types": "./esm/index.d.ts",
+			"default": "./esm/index.js"
+		},
+		"./schemas/*": "./schemas/*",
+		"./package.json": "./package.json"
+	},
+	"main": "./esm/index.js",
+	"types": "./esm/index.d.ts",
+	"files": [
+		"esm",
+		"schemas",
+		"skills",
+		"llms.txt",
+		"plugin.json",
+		".claude-plugin",
+		".codex-plugin",
+		".cursor-plugin",
+		"!**/*.spec.*",
+		"CHANGELOG.md"
+	],
+	"scripts": {
+		"build": "tsdown && node scripts/write-schemas.mjs",
+		"clean": "rimraf coverage esm",
+		"coverage": "vitest run --coverage",
+		"depcheck": "depcheck",
+		"llms": "node scripts/generate-llms-txt.mjs",
+		"llms:check": "node scripts/generate-llms-txt.mjs --check",
+		"nuke": "pnpm clean && rimraf node_modules",
+		"schemas": "node scripts/write-schemas.mjs",
+		"test": "vitest run",
+		"typecheck": "tsc",
+		"verify": "npm-run-all build -p depcheck typecheck coverage llms:check",
+		"watch": "vitest"
+	},
+	"dependencies": {
+		"clibuilder": "~12.1.0",
+		"color-map": "workspace:^"
+	},
+	"devDependencies": {
+		"@types/node": "^26.2.0",
+		"@vitest/coverage-v8": "^5.0.0",
+		"depcheck": "^1.4.3",
+		"npm-run-all2": "^9.0.3",
+		"rimraf": "^6.1.3",
+		"tsdown": "^0.23.0",
+		"typescript": "^7.0.2",
+		"vitest": "^5.0.0"
+	},
+	"engines": {
+		"node": ">= 20.19"
+	}
+}
