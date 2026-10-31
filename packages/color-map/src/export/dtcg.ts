@@ -47,11 +47,12 @@ export function toDtcgValue(color: Color, options: DtcgOptions = {}): DtcgColorV
  * JSON, so `JSON.stringify` writes the file.
  */
 export function toDTCG(tree: TokenTree, options: DtcgOptions = {}): DtcgGroup {
-	const root: DtcgGroup = {}
+	// Groups have no prototype, so a token named `__proto__` or `constructor` is an ordinary key.
+	const root: DtcgGroup = Object.create(null)
 	for (const { path, color } of flatten(tree)) {
 		if (!path.length) throw new TypeError('A DTCG file needs a name for each token: pass an object, not a single color')
 		let group = root
-		for (const name of path.slice(0, -1)) group = (group[name] ??= {}) as DtcgGroup
+		for (const name of path.slice(0, -1)) group = (group[name] ??= Object.create(null)) as DtcgGroup
 		group[path[path.length - 1] as string] = { $type: 'color', $value: toDtcgValue(color, options) }
 	}
 	return root

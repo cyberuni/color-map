@@ -28,6 +28,7 @@ export type ColorExpr =
 	  }
 
 const INTERPOLATION_SPACES: Record<string, ColorSpaceId> = {
+	__proto__: null as never,
 	...COLOR_SPACES,
 	hsl: 'hsl',
 	hwb: 'hwb',

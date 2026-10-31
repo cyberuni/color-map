@@ -17,6 +17,7 @@ export interface ResolveContext {
 
 /** The names a relative color's channel keywords have, by space, one letter each. The RGB spaces use `rgb`. */
 const KEYWORDS: Record<string, string> = {
+	__proto__: null as never,
 	hsl: 'hsl',
 	hwb: 'hwb',
 	lab: 'lab',

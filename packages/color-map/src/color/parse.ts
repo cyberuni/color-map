@@ -2,7 +2,15 @@ import { namedColor } from './named.js'
 import type { Color, ColorSpaceId, Component } from './types.js'
 
 export const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/
-export const UNITS: Record<string, number> = { '': 1, deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 }
+// Tables keyed by text a caller wrote have no prototype (`__proto__: null`), so `constructor` or `toString` is an unknown name, not Object.prototype's.
+export const UNITS: Record<string, number> = {
+	__proto__: null as never,
+	'': 1,
+	deg: 1,
+	grad: 0.9,
+	rad: 180 / Math.PI,
+	turn: 360
+}
 
 /** How one channel reads: what 100% means, and the allowed range. */
 export interface Channel {
@@ -44,6 +52,7 @@ export const ALPHA: Channel = { pct: 1, min: 0, max: 1 }
 const HUE: Channel = { pct: 0, hue: true }
 
 export const FUNCTIONS: Record<string, { space: ColorSpaceId; channels: [Channel, Channel, Channel] }> = {
+	__proto__: null as never,
 	rgb: { space: 'srgb', channels: [SRGB, SRGB, SRGB] },
 	hsl: { space: 'hsl', channels: [HUE, PCT100, PCT100] },
 	hwb: { space: 'hwb', channels: [HUE, PCT100, PCT100] },
@@ -54,7 +63,7 @@ export const FUNCTIONS: Record<string, { space: ColorSpaceId; channels: [Channel
 }
 
 /** The spaces `color()` names, by the name it uses: their own, and `xyz` for `xyz-d65`. */
-export const COLOR_SPACES: Record<string, ColorSpaceId> = { xyz: 'xyz-d65' }
+export const COLOR_SPACES: Record<string, ColorSpaceId> = { __proto__: null as never, xyz: 'xyz-d65' }
 for (const id of [
 	'srgb',
 	'srgb-linear',
@@ -82,7 +91,7 @@ function hex(input: string): Color {
 	return color
 }
 
-const ALIASES: Record<string, string> = { rgba: 'rgb', hsla: 'hsl' }
+const ALIASES: Record<string, string> = { __proto__: null as never, rgba: 'rgb', hsla: 'hsl' }
 
 function functional(rawName: string, body: string, input: string): Color {
 	const name = ALIASES[rawName] ?? rawName

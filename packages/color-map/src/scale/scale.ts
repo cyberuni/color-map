@@ -41,7 +41,8 @@ function even(n: number): Curve {
 	}
 }
 
-const PRESETS: Record<Exclude<ScalePreset, 'even'>, Curve> = {
+const PRESETS: Record<string, Curve> = {
+	__proto__: null as never,
 	'tailwind-11': {
 		lightness: TW_L,
 		chroma: TW_C.map((c) => c / TW_C[5]),

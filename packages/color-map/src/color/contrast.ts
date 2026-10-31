@@ -74,7 +74,9 @@ export function contrast(fg: ColorInput, bg: ColorInput, algo: ContrastOption = 
  */
 export function meets(fg: ColorInput, bg: ColorInput, level: number | string, algo: ContrastOption = 'wcag2'): boolean {
 	const fn = pick(algo)
-	const target = typeof level === 'number' ? level : fn.thresholds?.[level]
+	const named = typeof level === 'number' ? level : fn.thresholds?.[level]
+	// A name that is not the algorithm's own (`constructor`) finds something that is not a number.
+	const target = typeof named === 'number' ? named : undefined
 	if (target === undefined)
 		throw new Error(
 			`Unknown contrast level "${level}"${fn.thresholds ? `; use one of ${Object.keys(fn.thresholds).join(', ')}` : ''}`

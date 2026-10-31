@@ -14,14 +14,15 @@ export interface MixOptions {
 }
 
 /** Index of the hue component, for the polar spaces. */
-const HUE_AT: Partial<Record<ColorSpaceId, number>> = { hsl: 0, hwb: 0, lch: 2, oklch: 2 }
+const HUE_AT: Record<string, number> = { __proto__: null as never, hsl: 0, hwb: 0, lch: 2, oklch: 2 }
 
 /**
  * Which components are "analogous" (CSS Color 4 section 4.4): a `none` in one
  * space carries to the analogous component of another. One letter per
  * component; the RGB spaces share `RGB` and the XYZ ones `XYZ`.
  */
-const ANALOGOUS: Partial<Record<ColorSpaceId, string>> = {
+const ANALOGOUS: Record<string, string> = {
+	__proto__: null as never,
 	hsl: 'hcl',
 	hwb: 'hwk',
 	lab: 'lab',
@@ -50,7 +51,7 @@ export function convertKeepingNone(color: Color, space: ColorSpaceId): Color {
  * axes are under 1/100000 of their reference extent: 0.8 for Oklab (a, b in
  * -0.4 to 0.4) gives 8e-6, 250 for Lab (-125 to 125) gives 0.0025.
  */
-const POWERLESS: Partial<Record<ColorSpaceId, number>> = { oklch: 8e-6, lch: 0.0025, hsl: 1e-4 }
+const POWERLESS: Record<string, number> = { __proto__: null as never, oklch: 8e-6, lch: 0.0025, hsl: 1e-4 }
 
 /**
  * Converts for interpolation. A hue that conversion produced for a gray
