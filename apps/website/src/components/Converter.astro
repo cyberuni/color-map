@@ -1,0 +1,107 @@
+<div class="demo" id="converter">
+	<label>Any CSS color
+		<input type="text" id="cv-input" value="oklch(0.7 0.25 150)" spellcheck="false" autocomplete="off" />
+	</label>
+	<div class="chips" id="cv-examples"></div>
+	<p class="err" id="cv-error" hidden></p>
+	<div id="cv-out" hidden>
+		<div class="pair">
+			<div><h3>Parsed</h3><div class="big" id="cv-swatch"></div></div>
+			<div><h3>Gamut flags</h3><table id="cv-flags"></table></div>
+		</div>
+		<h3>Clip versus map</h3>
+		<label style="max-width: 16rem">Target gamut
+			<select id="cv-gamut">
+				<option value="srgb">sRGB</option>
+				<option value="display-p3">Display P3</option>
+				<option value="rec2020">Rec.2020</option>
+			</select>
+		</label>
+		<div class="pair" id="cv-compare"></div>
+		<h3>Every space</h3>
+		<table id="cv-spaces"></table>
+	</div>
+</div>
+
+<script>
+	import {
+		convert,
+		deltaEOK,
+		type GamutId,
+		inGamut,
+		spaces,
+		toCss,
+		toGamut,
+		toHex
+	} from 'color-map/color'
+	import { el, esc, tryParse } from '../lib/ui'
+
+	const root = document.getElementById('converter') as HTMLElement
+	const input = el<HTMLInputElement>(root, '#cv-input')
+	const gamutSelect = el<HTMLSelectElement>(root, '#cv-gamut')
+	const GAMUTS: [GamutId, string][] = [
+		['srgb', 'sRGB'],
+		['display-p3', 'Display P3'],
+		['rec2020', 'Rec.2020']
+	]
+	const EXAMPLES = [
+		'#3b82f6',
+		'rebeccapurple',
+		'oklch(0.7 0.25 150)',
+		'color(display-p3 0 1 0)',
+		'color(rec2020 0.1 0.9 0.2)',
+		'lab(60% 100 -80)',
+		'hsl(200deg 100% 50% / 0.5)',
+		'oklch(0.6 0.2 none)'
+	]
+	el(root, '#cv-examples').innerHTML = EXAMPLES.map(
+		(e) => `<button type="button" data-example="${esc(e)}">${esc(e)}</button>`
+	).join('')
+
+	function render() {
+		const out = el(root, '#cv-out')
+		const error = el(root, '#cv-error')
+		const color = tryParse(input.value)
+		if (typeof color === 'string') {
+			error.textContent = color
+			error.hidden = false
+			out.hidden = true
+			return
+		}
+		error.hidden = true
+		out.hidden = false
+		el(root, '#cv-swatch').style.background = input.value
+		el(root, '#cv-swatch').textContent = 'the browser paints your input'
+		el(root, '#cv-flags').innerHTML = GAMUTS.map(([id, name]) => {
+			const ok = inGamut(color, id)
+			return `<tr><td>${name}</td><td class="${ok ? 'yes' : 'no'}">${ok ? 'in gamut' : 'out of gamut'}</td></tr>`
+		}).join('')
+
+		const gamut = gamutSelect.value as GamutId
+		const clipped = toGamut(color, { gamut, method: 'clip' })
+		const mapped = toGamut(color, { gamut, method: 'css' })
+		const panel = (title: string, c: typeof color) =>
+			`<div><h3>${title}</h3><div class="big" style="background:${esc(toCss(c))}">${esc(toCss(c))}</div>` +
+			`<p>ΔEOK from original: ${deltaEOK(color, c).toFixed(4)}</p></div>`
+		el(root, '#cv-compare').innerHTML =
+			panel('Clip (what most browsers do)', clipped) + panel('Map (CSS Color 4 §13.2)', mapped)
+
+		const rows = Object.keys(spaces).map((id) => {
+			const converted = convert(color, id as keyof typeof spaces)
+			return `<tr><td>${id}</td><td><code>${esc(toCss(converted))}</code></td></tr>`
+		})
+		rows.unshift(`<tr><td>hex (sRGB, clipped)</td><td><code>${esc(toHex(color))}</code></td></tr>`)
+		el(root, '#cv-spaces').innerHTML = rows.join('')
+	}
+
+	input.addEventListener('input', render)
+	gamutSelect.addEventListener('change', render)
+	root.addEventListener('click', (event) => {
+		const example = (event.target as HTMLElement).dataset.example
+		if (example) {
+			input.value = example
+			render()
+		}
+	})
+	render()
+</script>

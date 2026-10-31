@@ -20,7 +20,8 @@
 		"verify": "run-p lint verify:pkg",
 		"verify:pkg": "turbo run build coverage depcheck typecheck",
 		"version": "changeset version",
-		"watch": "turbo run watch"
+		"watch": "turbo run watch",
+		"web": "pnpm --filter=website"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.7",

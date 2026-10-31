@@ -1,0 +1,12 @@
+---
+title: Mix and relative color
+description: Try color-mix() and relative color syntax, with color-map's result next to the browser's own.
+---
+
+import MixPlayground from '../../components/MixPlayground.astro'
+
+Type any `color-mix()`, relative color (`oklch(from ...)`), or `light-dark()` expression. `resolve` evaluates it in the library. The page also assigns the same text to an element and reads back the browser's computed color, so the right-hand panel is your browser's own answer. The comparison is the ΔEOK between the two in OKLab.
+
+<MixPlayground />
+
+If your browser does not support an expression, such as relative color in an older release, the right panel says so and no comparison is made. A larger difference on a wide-gamut color is expected: browsers clip to the display when they compute a color, and the library returns the exact value.

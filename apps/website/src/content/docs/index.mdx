@@ -1,0 +1,20 @@
+---
+title: color-map
+description: Parse, convert, mix and serialize every CSS color, and build design-system palettes from one brand color.
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components'
+
+`color-map` reads every color form in CSS Color 4 and 5, converts between the 15 CSS color spaces, mixes colors the way `color-mix()` does, and builds scales and role-based palettes from one brand color. Colors are plain JSON, `{ colorSpace, components, alpha? }`, shaped like the W3C design-token color value.
+
+The pages below run the library in your browser. They import `color-map/color`, `color-map/scale` and `color-map/palette` straight from this repository's workspace, so what you see is what the current source does.
+
+<CardGrid>
+	<LinkCard title="Color converter" href="/color-map/converter/" description="Paste any CSS color and see it in every space, with in-gamut flags and a clip-versus-map comparison." />
+	<LinkCard title="Mix and relative color" href="/color-map/mix/" description="Try color-mix() and relative colors, with the library's answer next to your browser's." />
+	<LinkCard title="Palette builder" href="/color-map/palette/" description="Turn a brand color into scales, harmonies and a validated set of role pairs." />
+</CardGrid>
+
+## Why not the browser
+
+The browser already does most of this, but only for painting. It gives a script no scale to choose from, no contrast target to solve for, and no way to read a color back in another space. Most browsers also clip an out-of-gamut color to the display, while `color-map` keeps the value or maps it with the CSS Color 4 algorithm. The converter and mixer pages show both side by side.

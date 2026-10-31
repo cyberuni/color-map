@@ -1,0 +1,10 @@
+---
+title: Palette builder
+description: Build scales, harmonies and role-based palettes from one brand color, and validate them.
+---
+
+import PaletteBuilder from '../../components/PaletteBuilder.astro'
+
+Choose a brand color. Each section calls one part of the library with it: `createScale` with a preset, `darkVariant`, `scaleFromBrand`, `createContrastScale` against a background, `harmony`, and `semanticPalette` checked by `validate`.
+
+<PaletteBuilder />

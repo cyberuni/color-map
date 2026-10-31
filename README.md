@@ -53,6 +53,17 @@ const summer: ColorMap = [{ index: 0, rgb: [0,128,102] }, { index: 1, rgb: [255,
 const colors = createColorsFromMap(summer, 60)
 ```
 
+## Demo website
+
+`apps/website` is an Astro + Starlight site with a color converter, a `color-mix()` playground and a palette builder. It builds against the workspace copy of `color-map`.
+
+```sh
+pnpm web dev     # serve locally
+pnpm web build   # static build into apps/website/dist
+```
+
+Internal links in the site's Markdown need the `/color-map/` base prefix, and new pages need a `sidebar` entry in `apps/website/astro.config.mjs`.
+
 ## Contribute
 
 ```sh
