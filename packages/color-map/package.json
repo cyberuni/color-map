@@ -71,6 +71,7 @@
 	],
 	"scripts": {
 		"build": "tsdown && node scripts/write-schemas.mjs",
+		"bench": "node scripts/bench.mjs",
 		"build:watch": "tsdown --watch",
 		"clean": "rimraf .reports bin cjs coverage dist esm",
 		"coverage": "vitest run --coverage",
