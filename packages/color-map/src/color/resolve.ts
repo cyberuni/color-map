@@ -3,7 +3,7 @@ import { wcag2 } from './contrast.js'
 import { type ColorExpr, parseExpr } from './expr.js'
 import { mix } from './mix.js'
 import { ALPHA, channel, FUNCTIONS, fail, UNIT } from './parse.js'
-import { convert } from './spaces.js'
+import { componentsIn } from './spaces.js'
 import type { Color, Component } from './types.js'
 
 export interface ResolveContext {
@@ -15,18 +15,17 @@ export interface ResolveContext {
 	systemColors?: Record<string, string | ColorExpr>
 }
 
-/** The names a relative color's channel keywords have, by space. */
-const KEYWORDS: Record<string, string[]> = {
-	hsl: ['h', 's', 'l'],
-	hwb: ['h', 'w', 'b'],
-	lab: ['l', 'a', 'b'],
-	lch: ['l', 'c', 'h'],
-	oklab: ['l', 'a', 'b'],
-	oklch: ['l', 'c', 'h'],
-	'xyz-d50': ['x', 'y', 'z'],
-	'xyz-d65': ['x', 'y', 'z']
+/** The names a relative color's channel keywords have, by space, one letter each. The RGB spaces use `rgb`. */
+const KEYWORDS: Record<string, string> = {
+	hsl: 'hsl',
+	hwb: 'hwb',
+	lab: 'lab',
+	lch: 'lch',
+	oklab: 'lab',
+	oklch: 'lch',
+	'xyz-d50': 'xyz',
+	'xyz-d65': 'xyz'
 }
-const RGB_KEYWORDS = ['r', 'g', 'b']
 const SIMPLE = /^(?:none|[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?[a-z%]*)$/
 
 const WHITE: Color = { colorSpace: 'srgb', components: [1, 1, 1] }
@@ -39,13 +38,11 @@ function contrastColor(color: Color): Color {
 
 function resolveRelative(node: Extract<ColorExpr, { type: 'relative' }>, context: ResolveContext): Color {
 	const origin = resolve(node.from, context)
-	const c = convert(origin, node.space).components
+	const c = componentsIn(origin, node.space)
 	const scale = node.fn === 'rgb' ? 255 : 1
-	const names = KEYWORDS[node.space] ?? RGB_KEYWORDS
+	const names = KEYWORDS[node.space] ?? 'rgb'
 	const vars: Record<string, number> = { alpha: origin.alpha === undefined ? 1 : (origin.alpha ?? 0) }
-	names.forEach((name, i) => {
-		vars[name] = (c[i] ?? 0) * scale
-	})
+	for (let i = 0; i < 3; i++) vars[names[i]] = (c[i] ?? 0) * scale
 	const specs = node.fn === 'color' ? [UNIT, UNIT, UNIT] : FUNCTIONS[node.fn].channels
 	const value = (token: string, spec: typeof ALPHA): Component =>
 		channel(SIMPLE.test(token) ? token : String(evaluate(token, vars)), spec, token)

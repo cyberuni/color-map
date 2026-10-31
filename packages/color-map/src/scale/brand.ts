@@ -1,7 +1,7 @@
 import type { GamutId } from '../color/gamut.js'
 import { toGamut } from '../color/gamut.js'
-import { parse } from '../color/parse.js'
-import { convert } from '../color/spaces.js'
+import { toColor } from '../color/parse.js'
+import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 
 export interface BrandScaleOptions {
@@ -29,15 +29,11 @@ const CHROMA = [0.04, 0.08, 0.2, 0.32, 0.43, 0.52, 0.6, 0.75]
 export function scaleFromBrand(brand: Color | string, options: BrandScaleOptions = {}): Color[] {
 	const { mode = 'light', gamut = 'srgb' } = options
 	const dark = mode === 'dark'
-	const exact = typeof brand === 'string' ? parse(brand) : brand
-	const [l9, c9, h9] = convert(exact, 'oklch').components as [number, number, number | null]
+	const exact = toColor(brand)
+	const [l9, c9, h9] = componentsIn(exact, 'oklch') as [number, number, number | null]
 	const hue = h9 ?? 0
 	const bg = options.background
-	const l1 = bg
-		? (convert(typeof bg === 'string' ? parse(bg) : bg, 'oklch').components[0] as number)
-		: dark
-			? 0.18
-			: 0.992
+	const l1 = bg ? (componentsIn(toColor(bg), 'oklch')[0] as number) : dark ? 0.18 : 0.992
 	const step = (l: number, c: number): Color => toGamut({ colorSpace: 'oklch', components: [l, c, hue] }, { gamut })
 
 	const out: Color[] = []

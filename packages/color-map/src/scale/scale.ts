@@ -1,7 +1,7 @@
 import type { GamutId } from '../color/gamut.js'
 import { toGamut } from '../color/gamut.js'
-import { parse } from '../color/parse.js'
-import { convert } from '../color/spaces.js'
+import { toColor } from '../color/parse.js'
+import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 import { MATERIAL_TONES, toneColor } from './tone.js'
 
@@ -111,11 +111,7 @@ export function createScale(options: ScaleOptions): Color[] {
 		typeof options.hueShift === 'number' ? curve.lightness.map(() => options.hueShift as number) : options.hueShift
 	const hueShift = pick('hueShift', drift, curve.hueShift)
 
-	const [, seedC, seedH] = convert(typeof seed === 'string' ? parse(seed) : seed, 'oklch').components as [
-		number,
-		number,
-		number | null
-	]
+	const [, seedC, seedH] = componentsIn(toColor(seed), 'oklch') as [number, number, number | null]
 	const hue = seedH ?? 0
 	return lightness.map((l, i) => {
 		const c = seedC * (chroma[i] as number)

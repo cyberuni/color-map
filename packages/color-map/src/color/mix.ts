@@ -1,5 +1,5 @@
 import { normalizeHue } from './math.js'
-import { parse } from './parse.js'
+import { toColor } from './parse.js'
 import { convert } from './spaces.js'
 import type { Color, ColorSpaceId } from './types.js'
 
@@ -16,36 +16,29 @@ export interface MixOptions {
 /** Index of the hue component, for the polar spaces. */
 const HUE_AT: Partial<Record<ColorSpaceId, number>> = { hsl: 0, hwb: 0, lch: 2, oklch: 2 }
 
-const RGB = ['R', 'G', 'B']
-const XYZ = ['X', 'Y', 'Z']
 /**
  * Which components are "analogous" (CSS Color 4 section 4.4): a `none` in one
- * space carries to the analogous component of another.
+ * space carries to the analogous component of another. One letter per
+ * component; the RGB spaces share `RGB` and the XYZ ones `XYZ`.
  */
-const ANALOGOUS: Record<ColorSpaceId, string[]> = {
-	srgb: RGB,
-	'srgb-linear': RGB,
-	'display-p3': RGB,
-	'display-p3-linear': RGB,
-	'a98-rgb': RGB,
-	'prophoto-rgb': RGB,
-	rec2020: RGB,
-	'xyz-d50': XYZ,
-	'xyz-d65': XYZ,
-	hsl: ['h', 'c', 'l'],
-	hwb: ['h', 'w', 'k'],
-	lab: ['l', 'a', 'b'],
-	lch: ['l', 'c', 'h'],
-	oklab: ['l', 'a', 'b'],
-	oklch: ['l', 'c', 'h']
+const ANALOGOUS: Partial<Record<ColorSpaceId, string>> = {
+	hsl: 'hcl',
+	hwb: 'hwk',
+	lab: 'lab',
+	lch: 'lch',
+	oklab: 'lab',
+	oklch: 'lch',
+	'xyz-d50': 'XYZ',
+	'xyz-d65': 'XYZ'
 }
+const analogous = (id: ColorSpaceId): string => ANALOGOUS[id] ?? 'RGB'
 
 /** Converts, keeping `none` on components that have an analogous one in the source. */
 export function convertKeepingNone(color: Color, space: ColorSpaceId): Color {
 	const out = convert(color, space)
 	if (color.colorSpace !== space) {
-		const from = ANALOGOUS[color.colorSpace]
-		const to = ANALOGOUS[space]
+		const from = analogous(color.colorSpace)
+		const to = analogous(space)
 		out.components = out.components.map((c, i) => (color.components[from.indexOf(to[i])] === null ? null : c))
 	}
 	return out
@@ -110,8 +103,8 @@ function carry(x: number | null, y: number | null): [number | null, number | nul
  */
 export function mix(a: Color | string, b: Color | string, t = 0.5, options: MixOptions = {}): Color {
 	const space = options.in ?? 'oklab'
-	const c1 = prepare(typeof a === 'string' ? parse(a) : a, space)
-	const c2 = prepare(typeof b === 'string' ? parse(b) : b, space)
+	const c1 = prepare(toColor(a), space)
+	const c2 = prepare(toColor(b), space)
 	const [a1, a2] = carry(c1.alpha === undefined ? 1 : c1.alpha, c2.alpha === undefined ? 1 : c2.alpha)
 	const p1 = a1 ?? 1
 	const p2 = a2 ?? 1

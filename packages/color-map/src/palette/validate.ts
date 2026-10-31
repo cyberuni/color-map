@@ -1,6 +1,6 @@
 import { type ContrastOption, wcag2 } from '../color/contrast.js'
 import { type GamutId, inGamut } from '../color/gamut.js'
-import { convert } from '../color/spaces.js'
+import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 import type { RolePair } from './semantic.js'
 
@@ -60,7 +60,7 @@ export function validate(palette: PaletteLike, options: ValidateOptions = {}): V
 	}
 
 	for (const [name, scale] of Object.entries(palette.scales ?? {})) {
-		const ls = scale.map((c) => convert(c, 'oklch').components[0] as number)
+		const ls = scale.map((c) => componentsIn(c, 'oklch')[0] as number)
 		const steps = ls.slice(1).map((l, k) => l - (ls[k] as number))
 		const direction = Math.sign(steps.find((d) => d !== 0) ?? 0)
 		steps.forEach((d, k) => {

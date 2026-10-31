@@ -1,10 +1,10 @@
 import { type GamutId, inGamut } from '../color/gamut.js'
-import { convert } from '../color/spaces.js'
+import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 
 /** CIE L* (0 to 100) of a color: its relative luminance on the CIELAB lightness curve. */
 export function lstar(color: Color): number {
-	const y = Math.max(0, convert(color, 'xyz-d65').components[1] as number)
+	const y = Math.max(0, componentsIn(color, 'xyz-d65')[1] as number)
 	return y > 216 / 24389 ? 116 * Math.cbrt(y) - 16 : (24389 / 27) * y
 }
 
@@ -24,26 +24,32 @@ export interface TonalPaletteOptions {
 export function toneColor(tone: number, chroma: number, hue: number, gamut: GamutId = 'srgb'): Color {
 	if (tone <= 0) return { colorSpace: 'oklch', components: [0, 0, hue] }
 	if (tone >= 100) return { colorSpace: 'oklch', components: [1, 0, hue] }
+	// The hue is fixed, so its cosine and sine are taken once: OKLCH converts by
+	// way of OKLab with exactly these products, so the results are the same.
+	const r = (hue * Math.PI) / 180
+	const cos = Math.cos(r)
+	const sin = Math.sin(r)
+	const lab = (l: number, c: number): Color => ({ colorSpace: 'oklab', components: [l, c * cos, c * sin] })
 	// The most chroma, up to `chroma`, that fits at this lightness; no clipping, so L* is monotone in L.
-	const at = (l: number): Color => {
-		const make = (c: number): Color => ({ colorSpace: 'oklch', components: [l, c, hue] })
-		if (inGamut(make(chroma), gamut)) return make(chroma)
+	const chromaAt = (l: number): number => {
+		if (inGamut(lab(l, chroma), gamut)) return chroma
 		let [lo, hi] = [0, chroma]
 		for (let i = 0; i < 24; i++) {
 			const mid = (lo + hi) / 2
-			if (inGamut(make(mid), gamut)) lo = mid
+			if (inGamut(lab(l, mid), gamut)) lo = mid
 			else hi = mid
 		}
-		return make(lo)
+		return lo
 	}
 	let lo = 0
 	let hi = 1
 	for (let i = 0; i < 40; i++) {
 		const mid = (lo + hi) / 2
-		if (lstar(at(mid)) < tone) lo = mid
+		if (lstar(lab(mid, chromaAt(mid))) < tone) lo = mid
 		else hi = mid
 	}
-	return at((lo + hi) / 2)
+	const l = (lo + hi) / 2
+	return { colorSpace: 'oklch', components: [l, chromaAt(l), hue] }
 }
 
 /**

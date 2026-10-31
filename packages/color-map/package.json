@@ -112,63 +112,63 @@
 			"name": "existing API",
 			"path": "esm/index.js",
 			"import": "{ createColors, createColorsFromMap, rgbHex, rgbaString }",
-			"limit": "0.6 kB",
+			"limit": "0.45 kB",
 			"gzip": true
 		},
 		{
 			"name": "convert between two spaces",
 			"path": "esm/color/index.js",
 			"import": "{ createConverter, srgb, oklch }",
-			"limit": "2 kB",
+			"limit": "1.2 kB",
 			"gzip": true
 		},
 		{
 			"name": "full color core",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toHex, toGamut, inGamut, deltaEOK, equals, fromArgb, toArgb, convert, spaces }",
-			"limit": "10 kB",
+			"limit": "6.6 kB",
 			"gzip": true
 		},
 		{
 			"name": "core with mix",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix }",
-			"limit": "12 kB",
+			"limit": "6.85 kB",
 			"gzip": true
 		},
 		{
 			"name": "core with mix and contrast",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix, contrast, meets, onColor, findContrast }",
-			"limit": "12 kB",
+			"limit": "7.5 kB",
 			"gzip": true
 		},
 		{
 			"name": "scales",
 			"path": "esm/scale/index.js",
 			"import": "*",
-			"limit": "9 kB",
+			"limit": "8 kB",
 			"gzip": true
 		},
 		{
 			"name": "palette",
 			"path": "esm/palette/index.js",
 			"import": "*",
-			"limit": "9 kB",
+			"limit": "8.3 kB",
 			"gzip": true
 		},
 		{
 			"name": "export",
 			"path": "esm/export/index.js",
 			"import": "*",
-			"limit": "8 kB",
+			"limit": "7.45 kB",
 			"gzip": true
 		},
 		{
 			"name": "everything",
 			"path": "esm/color/index.js",
 			"import": "*",
-			"limit": "18 kB",
+			"limit": "10.2 kB",
 			"gzip": true
 		}
 	],

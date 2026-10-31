@@ -1,6 +1,6 @@
 import { type ContrastOption, findContrast } from '../color/contrast.js'
-import { parse } from '../color/parse.js'
-import { convert } from '../color/spaces.js'
+import { toColor } from '../color/parse.js'
+import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 
 export interface ContrastScaleOptions {
@@ -34,11 +34,7 @@ export interface ContrastStep {
  */
 export function createContrastScale(options: ContrastScaleOptions): ContrastStep[] {
 	const { seed, background, targets, contrast, direction } = options
-	const [, chroma, hue] = convert(typeof seed === 'string' ? parse(seed) : seed, 'oklch').components as [
-		number,
-		number,
-		number | null
-	]
+	const [, chroma, hue] = componentsIn(toColor(seed), 'oklch') as [number, number, number | null]
 	const entries: [string, number][] = Array.isArray(targets)
 		? targets.map((t, i) => [String(i), t])
 		: Object.entries(targets)

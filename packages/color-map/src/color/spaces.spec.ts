@@ -202,6 +202,13 @@ describe('convert', () => {
 		const c: [number, number, number] = [0.1, 0.2, 0.3]
 		expect(convertComponents(spaces.srgb, spaces.srgb, c)).toBe(c)
 	})
+
+	test('convertComponents gives what convert gives, between two spaces', () => {
+		const c: [number, number, number] = [0.1, 0.2, 0.3]
+		expect(convertComponents(spaces.srgb, spaces.oklch, c)).toEqual(
+			convert({ colorSpace: 'srgb', components: c }, 'oklch').components
+		)
+	})
 })
 
 describe('known values', () => {
