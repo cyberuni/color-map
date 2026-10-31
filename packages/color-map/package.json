@@ -30,6 +30,12 @@
 			"require": "./cjs/color/index.js",
 			"default": "./cjs/color/index.js"
 		},
+		"./palette": {
+			"types": "./esm/palette/index.d.ts",
+			"import": "./esm/palette/index.js",
+			"require": "./cjs/palette/index.js",
+			"default": "./cjs/palette/index.js"
+		},
 		"./scale": {
 			"types": "./esm/scale/index.d.ts",
 			"import": "./esm/scale/index.js",
@@ -118,6 +124,13 @@
 		{
 			"name": "scales",
 			"path": "esm/scale/index.js",
+			"import": "*",
+			"limit": "9 kB",
+			"gzip": true
+		},
+		{
+			"name": "palette",
+			"path": "esm/palette/index.js",
 			"import": "*",
 			"limit": "9 kB",
 			"gzip": true
