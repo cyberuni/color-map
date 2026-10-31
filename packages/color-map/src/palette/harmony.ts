@@ -8,6 +8,7 @@ type ColorInput = Color | string
 
 /** The hue rotations, in degrees, that each scheme adds to the base color. */
 const SCHEMES = {
+	__proto__: null,
 	complementary: [0, 180],
 	split: [0, 150, 210],
 	analogous: [-30, 0, 30],

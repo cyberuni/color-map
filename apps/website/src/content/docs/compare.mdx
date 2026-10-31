@@ -21,7 +21,7 @@ Measured on {data.generatedAt} with color-map {v['color-map']}, culori {v.culori
 ## Summary
 
 - `color-map` is smaller than culori, colorjs.io and chroma-js for the same job, and larger than `@texel/color` and `colord`. Those two cover far less.
-- `color-map` converts between spaces at roughly culori's speed (from about 15% slower to about 15% faster, depending on the pair), and is faster at parsing, mixing, gamut mapping and WCAG contrast. It is about {times('toCss (oklch)')} times slower at `toCss` and about {times('toHex (srgb)')} times slower at `toHex`.
+- `color-map` converts between spaces at roughly culori's speed (within about 15% of it, depending on the pair), and is faster at parsing, mixing and gamut mapping. It is about {times('toCss (oklch)')} times slower at `toCss` and about {times('toHex (srgb)')} times slower at `toHex`.
 - colorjs.io has more color spaces and more contrast algorithms, including APCA. `color-map` has no APCA yet (issue [#255](https://github.com/cyberuni/color-map/issues/255)).
 - lightningcss is a native Rust CSS tool for build time. It is not a browser library, so it has no browser size.
 
@@ -54,7 +54,7 @@ Operations per second, higher is better. Each library runs in its own process on
 
 Run on {data.env.cpu}, {data.env.os}, Node {data.env.node}. Absolute numbers change with the machine and Node version. Compare the columns, not the figures.
 
-Where `color-map` is slower: `toCss` and `toHex` are the largest gaps. Some conversions, such as sRGB to OKLCH, are also slower than culori's.
+Where `color-map` is slower: `toCss` and `toHex` are the only large gaps. The conversions are within about 15% of culori's.
 
 ## Method and caveats
 

@@ -6,9 +6,33 @@ export interface ToCssOptions {
 	precision?: number
 }
 
+const POWERS = Array.from({ length: 23 }, (_, i) => Number(`1e${i}`))
+
+/**
+ * `Number(n.toFixed(precision))`, without building the string. `toFixed` rounds
+ * the exact value of `n` half up (away from zero), and the number it then reads
+ * is `k / 10^precision` for that integer `k`, which one division gives exactly.
+ * `k` comes from `t = |n| * 10^precision`. The product is rounded, but a tie
+ * (`t` ending in .5) is a double, and rounding is monotonic, so any `t` that
+ * is not exactly a tie lies on the same side of it as the exact product: only
+ * `t` ending in .5 is left to `toFixed`. So are NaN, the infinities, products
+ * of 1e9 and up, and precisions that `POWERS` lacks.
+ */
+export function roundTo(n: number, precision: number): number {
+	const scale = POWERS[precision]
+	const t = Math.abs(n) * scale
+	const whole = Math.floor(t)
+	const rest = t - whole
+	if (t < 1e9 && rest !== 0.5) {
+		const r = (rest > 0.5 ? whole + 1 : whole) / scale
+		return n < 0 ? -r : r
+	}
+	return Number(n.toFixed(precision))
+}
+
 /** Prints a number with at most `precision` decimals, without `-0` or trailing zeros. */
 function num(n: number, precision: number): string {
-	return String(Number(n.toFixed(precision)) + 0)
+	return String(roundTo(n, precision) + 0)
 }
 
 const part = (c: Component, precision: number, scale = 1, suffix = ''): string =>

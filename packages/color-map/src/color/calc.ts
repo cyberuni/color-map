@@ -74,7 +74,8 @@ export function evaluate(text: string, vars: Record<string, number>): number {
 		}
 		if (t === 'pi') return Math.PI
 		if (t === 'e') return Math.E
-		if (t in vars) return vars[t]
+		const v = vars[t]
+		if (typeof v === 'number') return v
 		return fail(text, 'unknown keyword', t)
 	}
 	const value = sum()
