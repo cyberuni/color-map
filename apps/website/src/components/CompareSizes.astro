@@ -2,7 +2,6 @@
 import data from '../data/compare.json'
 
 const kb = (b: number) => `${(b / 1000).toFixed(1)} kB`
-const fmt = (b?: number) => (b === undefined ? 'n/a' : `${b.toLocaleString('en-US')} B (${kb(b)})`)
 const rows: [string, string][] = [
 	['color-map', 'color-map'],
 	['culori', 'culori'],
@@ -13,6 +12,8 @@ const rows: [string, string][] = [
 ]
 const sizes = data.sizes as Record<string, Record<string, number>>
 const ver = data.versions as Record<string, string>
+const max = Math.max(...Object.values(sizes).map((s) => s.convert ?? 0))
+const pct = (b: number) => `${Math.max(1, (b / max) * 100).toFixed(1)}%`
 ---
 <div class="table-wrap">
 	<table>
@@ -20,7 +21,7 @@ const ver = data.versions as Record<string, string>
 			<tr>
 				<th>Library</th>
 				<th>Version</th>
-				<th style="text-align:right">Convert one color</th>
+				<th>Convert one color</th>
 				<th style="text-align:right">Whole package</th>
 			</tr>
 		</thead>
@@ -29,24 +30,39 @@ const ver = data.versions as Record<string, string>
 				<tr>
 					<td>{label}</td>
 					<td>{ver[key]}</td>
-					<td style="text-align:right">{fmt(sizes[key]?.convert)}</td>
-					<td style="text-align:right">{key === 'chroma-js' ? 'one import, not tree-shakeable' : fmt(sizes[key]?.whole)}</td>
+					<td>
+						<div class="bar-row">
+							<div class="bar"><span class:list={['fill', key === 'color-map' && 'self']} style={`width:${pct(sizes[key].convert)}`}></span></div>
+							<span class="val">{kb(sizes[key].convert)}</span>
+						</div>
+					</td>
+					<td style="text-align:right">{key === 'chroma-js' ? 'not tree-shakeable' : kb(sizes[key].whole)}</td>
 				</tr>
 			))}
 			<tr>
 				<td>color-map, narrow path</td>
 				<td>{ver['color-map']}</td>
-				<td style="text-align:right">{fmt(sizes['color-map']?.narrow)}</td>
+				<td>
+					<div class="bar-row">
+						<div class="bar"><span class="fill self" style={`width:${pct(sizes['color-map'].narrow)}`}></span></div>
+						<span class="val">{kb(sizes['color-map'].narrow)}</span>
+					</div>
+				</td>
 				<td style="text-align:right">n/a</td>
 			</tr>
 			<tr>
 				<td>lightningcss</td>
 				<td>{ver.lightningcss}</td>
-				<td style="text-align:right" colspan="2">not measured: a native Rust build tool, not a browser library</td>
+				<td colspan="2">not measured: a native Rust build tool</td>
 			</tr>
 		</tbody>
 	</table>
 </div>
 <style>
 	.table-wrap { overflow-x: auto; }
+	.bar-row { display: flex; align-items: center; gap: 0.5rem; min-width: 12rem; }
+	.bar { flex: 1; height: 0.7rem; background: var(--sl-color-gray-5); border-radius: 2px; }
+	.fill { display: block; height: 100%; background: var(--sl-color-gray-3); border-radius: 2px; }
+	.fill.self { background: var(--sl-color-accent); }
+	.val { min-width: 4.5rem; text-align: right; font-variant-numeric: tabular-nums; }
 </style>
