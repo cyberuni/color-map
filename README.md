@@ -68,6 +68,16 @@ const summer: ColorMap = [{ index: 0, rgb: [0,128,102] }, { index: 1, rgb: [255,
 const colors = createColorsFromMap(summer, 60)
 ```
 
+`createColorsFromMap` is deprecated. Use `createGradient` instead:
+
+```ts
+import { createGradient } from 'color-map'
+
+const colors = createGradient(['rgb(0 128 102)', 'rgb(255 255 102)'], 60, { in: 'srgb' })
+```
+
+It returns color objects with channels from 0 to 1, not whole numbers. See [Gradients](https://cyberuni.github.io/color-map/library/#gradients) for the full recipe.
+
 ## Demo website
 
 `apps/website` is an Astro + Starlight site with a color converter, a `color-mix()` playground and a palette builder. It builds against the workspace copy of `color-map`.
