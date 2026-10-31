@@ -1,7 +1,7 @@
 import { writeFile } from 'node:fs/promises'
 import { defineConfig } from 'tsdown'
 
-const entry = ['ts/index.ts']
+const entry = ['src/index.ts']
 
 // Three outputs, each pinned to the path it already publishes at, so replacing
 // webpack/tsc with tsdown stays invisible to consumers:
@@ -37,7 +37,7 @@ export default defineConfig([
 	{
 		// Named entry plus an explicit entryFileNames: tsdown would otherwise infix
 		// the format and emit color-map.iife.es5.js, moving a published path.
-		entry: { 'color-map': 'ts/index.ts' },
+		entry: { 'color-map': 'src/index.ts' },
 		format: 'iife',
 		globalName: 'ColorMap',
 		outDir: 'dist',

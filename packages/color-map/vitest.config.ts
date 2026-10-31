@@ -6,11 +6,11 @@ export default defineConfig({
 		// need no per-file imports.
 		globals: true,
 		environment: 'node',
-		include: ['ts/**/*.spec.ts'],
+		include: ['src/**/*.spec.ts'],
 		coverage: {
 			provider: 'v8',
-			include: ['ts/**/*.ts'],
-			exclude: ['ts/**/*.spec.ts'],
+			include: ['src/**/*.ts'],
+			exclude: ['src/**/*.spec.ts'],
 			reporter: ['text', 'lcov'],
 			// This package has been at 100% for its whole life. Pin it so a drop
 			// fails the build instead of quietly showing up in a coverage report.
