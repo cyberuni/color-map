@@ -69,7 +69,7 @@
 		validate
 	} from 'color-map/palette'
 	import { createContrastScale, createScale, type ScalePreset, scaleFromBrand } from 'color-map/scale'
-	import { el, esc, swatch, tryParse } from '../lib/ui'
+	import { el, esc, swatch, tryParse } from '../util/ui'
 
 	const root = document.getElementById('pb') as HTMLElement
 	const val = (id: string) => (el(root, id) as HTMLInputElement | HTMLSelectElement).value
