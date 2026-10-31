@@ -3,6 +3,7 @@ import { normalizeHue } from '../color/math.js'
 import { toColor } from '../color/parse.js'
 import { convert } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
+import { unknownName } from '../color/unknown-name.js'
 
 type ColorInput = Color | string
 
@@ -28,6 +29,8 @@ export interface HarmonyOptions {
 	gamut?: GamutId
 }
 
+const HUE_SPACES: readonly string[] = ['oklch', 'lch', 'hsl', 'hwb']
+
 const hueIndex = (space: HarmonySpace): number => (space === 'hsl' || space === 'hwb' ? 0 : 2)
 
 /**
@@ -41,7 +44,8 @@ const hueIndex = (space: HarmonySpace): number => (space === 'hsl' || space === 
 export function harmony(color: ColorInput, scheme: HarmonyScheme, options: HarmonyOptions = {}): Color[] {
 	const { space = 'oklch', gamut = 'srgb' } = options
 	const angles = SCHEMES[scheme]
-	if (!angles) throw new Error(`unknown harmony scheme "${scheme}"`)
+	if (!angles) throw unknownName('harmony scheme', scheme, Object.keys(SCHEMES))
+	if (!HUE_SPACES.includes(space)) throw unknownName('harmony space', space, HUE_SPACES)
 	const base = toColor(color)
 	const inSpace = convert(base, space)
 	const at = hueIndex(space)

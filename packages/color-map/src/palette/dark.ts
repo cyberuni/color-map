@@ -1,9 +1,12 @@
 import { type GamutId, toGamut } from '../color/gamut.js'
 import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
+import { unknownName } from '../color/unknown-name.js'
 import { lstar, toneColor } from '../scale/tone.js'
 
 export type DarkStrategy = 'mirror' | 'tone-swap' | 'lightness-invert'
+
+const STRATEGIES: readonly string[] = ['mirror', 'tone-swap', 'lightness-invert']
 
 export interface DarkVariantOptions {
 	/** The gamut every color must fit. Default `srgb`. */
@@ -28,6 +31,7 @@ export function darkVariant(
 	options: DarkVariantOptions = {}
 ): Color[] {
 	const { gamut = 'srgb' } = options
+	if (!STRATEGIES.includes(strategy)) throw unknownName('dark variant strategy', strategy, STRATEGIES)
 	if (strategy === 'mirror') return [...scale].reverse()
 	if (strategy === 'tone-swap') {
 		return scale.map((c) => {
@@ -35,7 +39,6 @@ export function darkVariant(
 			return withAlpha(toneColor(100 - lstar(c), chroma, hue ?? 0, gamut), c)
 		})
 	}
-	if (strategy !== 'lightness-invert') throw new Error(`unknown dark variant strategy "${strategy}"`)
 	const oklch = scale.map((c) => componentsIn(c, 'oklch') as [number, number, number | null])
 	const ls = oklch.map((c) => c[0])
 	const sum = Math.min(...ls) + Math.max(...ls)

@@ -2,6 +2,7 @@ import { toGamut } from './gamut.js'
 import { toColor } from './parse.js'
 import { componentsIn } from './spaces.js'
 import type { Color } from './types.js'
+import { unknownName } from './unknown-name.js'
 
 /**
  * A contrast measure: `(fg, bg) => number`, plus what a caller needs to use it
@@ -57,7 +58,12 @@ export const wcag2: ContrastFn = Object.assign(
 	} as const
 )
 
-const pick = (algo: ContrastOption): ContrastFn => (algo === 'wcag2' ? wcag2 : algo)
+/** The measure `algo` names: `wcag2` or a function; anything else is an unknown name. */
+export function pick(algo: ContrastOption): ContrastFn {
+	if (algo === 'wcag2') return wcag2
+	if (typeof algo !== 'function') throw unknownName('contrast algorithm', algo, ['wcag2'])
+	return algo
+}
 
 /**
  * Contrast of `fg` on `bg`. Colors may be CSS strings. The default is WCAG 2;
@@ -77,10 +83,7 @@ export function meets(fg: ColorInput, bg: ColorInput, level: number | string, al
 	const named = typeof level === 'number' ? level : fn.thresholds?.[level]
 	// A name that is not the algorithm's own (`constructor`) finds something that is not a number.
 	const target = typeof named === 'number' ? named : undefined
-	if (target === undefined)
-		throw new Error(
-			`Unknown contrast level "${level}"${fn.thresholds ? `; use one of ${Object.keys(fn.thresholds).join(', ')}` : ''}`
-		)
+	if (target === undefined) throw unknownName('contrast level', level, Object.keys(fn.thresholds ?? {}))
 	return Math.abs(fn(toColor(fg), toColor(bg))) >= target
 }
 
