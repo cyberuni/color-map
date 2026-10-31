@@ -1,0 +1,107 @@
+---
+title: Library
+description: The color-map entry points, what each exports, how to use them, and what each costs in bytes.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+
+`color-map` has zero runtime dependencies and `"sideEffects": false`, so a bundler keeps only what you import. Import from the subpath that holds what you need.
+
+| Entry point | Holds |
+| --- | --- |
+| `color-map` | The original API: `createColors`, `createColorsFromMap`, `rgbHex`, `rgbaString`. Unchanged. |
+| `color-map/color` | The color core: parse, convert, serialize, gamut mapping, `mix`, `resolve`, contrast. |
+| `color-map/scale` | `createScale`, `createContrastScale`, `scaleFromBrand`, `tonalPalette`. |
+| `color-map/palette` | `harmony`, `harmonize`, `inverse`, `darkVariant`, `semanticPalette`, `validate`. |
+| `color-map/export` | `toDTCG`, `toCssVariables`, `toTailwindTheme`. |
+
+## Usage
+
+A color is a plain object, `{ colorSpace, components, alpha? }`, with CSS names for the spaces and `null` for `none`. It is JSON, so it survives `JSON.stringify`.
+
+```ts
+import { parse, toCss, convert, mix, contrast, onColor } from 'color-map/color'
+
+const blue = parse('#3b82f6')
+toCss(convert(blue, 'oklch'))           // oklch(0.62308 0.18801 259.81453)
+toCss(mix(blue, 'white', 0.2, { in: 'oklab' }))
+contrast('#3b82f6', 'white')            // 3.68, the WCAG 2 ratio
+onColor(blue)                           // a text color that reaches 4.5 on it
+```
+
+From one brand color to a palette and a token file:
+
+```ts
+import { semanticPalette, validate } from 'color-map/palette'
+import { toTailwindTheme } from 'color-map/export'
+
+const palette = semanticPalette({ brand: '#3b82f6', mode: 'light' })
+validate(palette).ok                     // true: every pair meets its target
+const css = toTailwindTheme(palette)     // an @theme { ... } block
+```
+
+## API
+
+### `color-map/color`
+
+- **Spaces:** `srgb`, `srgbLinear`, `hsl`, `hwb`, `lab`, `lch`, `oklab`, `oklch`, `displayP3`, `displayP3Linear`, `a98Rgb`, `prophotoRgb`, `rec2020`, `xyzD50`, `xyzD65`.
+- **Read and write:** `parse`, `parseExpr`, `toCss`, `toHex`, `fromArgb`, `toArgb`.
+- **Convert:** `convert`, `convertComponents`, `createConverter`, `spaces`.
+- **Gamut:** `inGamut`, `toGamut` (the CSS Color 4 algorithm, or clip).
+- **Compare:** `equals`, `deltaEOK`.
+- **Color 5:** `mix` follows CSS Color 5 §13 and `resolve` evaluates `color-mix()`, relative colors with a `calc()` subset, `light-dark()` and `contrast-color()`.
+- **Contrast:** `contrast`, `meets`, `onColor`, `findContrast`, and the `ContrastFn` type for supplying another measure. The default is WCAG 2.
+
+### `color-map/scale`
+
+- `createScale({ seed, steps })` with the presets `tailwind-11`, `radix-12`, `tone-13` and `even`, or a number of steps.
+- `createContrastScale({ seed, background, targets })` returns one step per WCAG 2 target, each with its measured ratio and whether it was met.
+- `scaleFromBrand(brand, { mode })` puts the brand color exactly at step 9, with a Radix-like shape.
+- `tonalPalette(hue, chroma, tones)` holds an OKLCH hue and chroma across CIE L\* tones, with Material's 13 tones by default.
+
+### `color-map/palette`
+
+- `harmony(color, scheme)` for `complementary`, `split`, `analogous`, `triadic` and `tetradic`, in `oklch`, `lch`, `hsl` or `hwb`; `harmonize` nudges a color's hue toward another; `inverse` flips lightness (or RGB).
+- `darkVariant(scale, strategy)` with `tone-swap`, `mirror` or `lightness-invert`.
+- `semanticPalette({ brand, mode })` returns scales and role pairs (`primary`, `primaryContainer`, `success`, `warning`, `danger`, `info`, `surface`, `surfaceVariant`, `outline`), each with its background, text color, measured ratio and target.
+- `validate(palette)` returns `{ ok, issues }`: pairs below target, non-monotonic scales, colors outside sRGB.
+
+### `color-map/export`
+
+Each exporter takes a token tree: a color, a CSS color string, an array (a scale), an object of these nested to any depth, or a `SemanticPalette` as is. An array of 11 colors gets the keys 50 to 950; any other length gets 1 to N.
+
+- `toDTCG(tree)` returns a W3C design-token (2025.10) group; write it with `JSON.stringify`.
+- `toCssVariables(tree, { selector, prefix, space })` returns one rule of custom properties.
+- `toTailwindTheme(tree, { namespace, inline, space })` returns a Tailwind v4 `@theme` block. The default space is `oklch`. The [export panel](/color-map/export/) shows each output, and this site's build compiles the Tailwind output with Tailwind v4.
+
+## Contrast guarantees
+
+Contrast follows luminance, and a tone is CIE L\*. The tone-based scales (`tone-13`, `tonalPalette`) therefore let you pick a text pair by tone alone:
+
+| Tone gap | WCAG 2 contrast |
+| --- | --- |
+| 40 or more | at least 3 |
+| 50 or more | at least 4.48, not exactly 4.5 (4.48 at the worst pair, tones 100 and 50) |
+| 100 | holds 4.5 |
+
+Do not rely on a gap of 50 for the 4.5 threshold. Use a larger gap, or check the pair with `contrast` or `meets`. `semanticPalette` measures every pair and `validate` reports any that fall short.
+
+## Color spaces and browser support
+
+`color()` accepts `display-p3-linear`, which is in CSS Color 4. Browser support for it is unverified, so test it in the browsers you target before shipping it in a stylesheet. The library parses, converts and serializes it either way.
+
+## Size budgets
+
+Each budget is a gzip limit enforced by `size-limit` in CI. The measured size is smaller.
+
+| Import | Budget |
+| --- | --- |
+| Original API (`color-map`) | 0.6 kB |
+| Convert between two spaces (`createConverter`, `srgb`, `oklch`) | 2 kB |
+| Full color core, without `mix` | 10 kB |
+| Core with `mix` | 12 kB |
+| Core with `mix` and contrast | 12 kB |
+| `color-map/scale` | 9 kB |
+| `color-map/palette` | 9 kB |
+| `color-map/export` | 8 kB |
+| Everything | 18 kB |

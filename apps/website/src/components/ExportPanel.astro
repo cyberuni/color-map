@@ -1,0 +1,90 @@
+<div class="demo" id="ep">
+	<div class="row">
+		<label>Brand color
+			<input type="text" id="ep-brand" value="#3b82f6" spellcheck="false" autocomplete="off" />
+		</label>
+		<label>Tokens
+			<select id="ep-source">
+				<option value="scale">One scale (createScale, tailwind-11)</option>
+				<option value="palette">Semantic palette (semanticPalette)</option>
+			</select>
+		</label>
+		<label>Format
+			<select id="ep-format">
+				<option value="tailwind">Tailwind v4 theme (toTailwindTheme)</option>
+				<option value="css">CSS variables (toCssVariables)</option>
+				<option value="dtcg">DTCG tokens (toDTCG)</option>
+			</select>
+		</label>
+		<label>Color space
+			<select id="ep-space">
+				<option value="">as built</option><option>oklch</option><option>srgb</option><option>display-p3</option>
+			</select>
+		</label>
+	</div>
+	<p class="err" id="ep-error" hidden></p>
+	<div id="ep-out" hidden>
+		<div class="row">
+			<button type="button" id="ep-copy">Copy</button>
+			<span id="ep-note" aria-live="polite"></span>
+		</div>
+		<pre id="ep-code" style="max-height: 28rem; overflow: auto"></pre>
+		<div class="strip" id="ep-strip"></div>
+	</div>
+</div>
+
+<script>
+	import type { ColorSpaceId } from 'color-map/color'
+	import { toCssVariables, toDTCG, toTailwindTheme } from 'color-map/export'
+	import { semanticPalette } from 'color-map/palette'
+	import { createScale } from 'color-map/scale'
+	import { el, swatch, tryParse } from '../util/ui'
+
+	const root = document.getElementById('ep') as HTMLElement
+	const val = (id: string) => (el(root, id) as HTMLInputElement | HTMLSelectElement).value
+
+	function render() {
+		const error = el(root, '#ep-error')
+		const out = el(root, '#ep-out')
+		const brand = tryParse(val('#ep-brand'))
+		if (typeof brand === 'string') {
+			error.textContent = brand
+			error.hidden = false
+			out.hidden = true
+			return
+		}
+		error.hidden = true
+		out.hidden = false
+		const space = (val('#ep-space') || undefined) as ColorSpaceId | undefined
+		try {
+			const scale = createScale({ seed: brand })
+			const tree = val('#ep-source') === 'palette' ? semanticPalette({ brand }) : { brand: scale }
+			const format = val('#ep-format')
+			const text =
+				format === 'tailwind'
+					? toTailwindTheme(tree, { space })
+					: format === 'css'
+						? toCssVariables(tree, { space })
+						: `${JSON.stringify(toDTCG(tree), null, '\t')}\n`
+			el(root, '#ep-code').textContent = text
+			el(root, '#ep-strip').innerHTML = scale
+				.map((c, i) => swatch(c, String(i + 1)))
+				.join('')
+		} catch (e) {
+			el(root, '#ep-code').textContent = e instanceof Error ? e.message : String(e)
+		}
+	}
+
+	el(root, '#ep-copy').addEventListener('click', async () => {
+		const note = el(root, '#ep-note')
+		try {
+			await navigator.clipboard.writeText(el(root, '#ep-code').textContent ?? '')
+			note.textContent = 'Copied.'
+		} catch {
+			note.textContent = 'Select the text and copy it by hand.'
+		}
+	})
+	root.addEventListener('input', render)
+	root.addEventListener('change', render)
+	render()
+</script>

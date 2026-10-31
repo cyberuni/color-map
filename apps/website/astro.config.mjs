@@ -48,7 +48,16 @@ export default defineConfig({
 					items: [
 						{ label: 'Color converter', slug: 'converter' },
 						{ label: 'Mix and relative color', slug: 'mix' },
-						{ label: 'Palette builder', slug: 'palette' }
+						{ label: 'Palette builder', slug: 'palette' },
+						{ label: 'Export panel', slug: 'export' }
+					]
+				},
+				{
+					label: 'Docs',
+					items: [
+						{ label: 'Library', slug: 'library' },
+						{ label: 'CLI', slug: 'cli' },
+						{ label: 'Agent skill', slug: 'agent-skill' }
 					]
 				}
 			]

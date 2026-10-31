@@ -1,0 +1,43 @@
+---
+title: CLI
+description: The color-map command to convert, mix, check contrast, build scales and palettes, and export tokens from a terminal or an agent.
+---
+
+`color-map-cli` provides the `color-map` command on top of the library. It is built for agents: output is [TOON](https://github.com/toon-format/toon) by default and `--format json` gives JSON; essential fields print by default and `--full` adds the rest; empty results say so; every text pair carries its ratio.
+
+```sh
+npx color-map-cli palette '#3b82f6'
+```
+
+:::note
+The package is in this repository, but its version is 0.0.0 and it has not been published to npm yet. Until it is, build it from the repository.
+:::
+
+## Commands
+
+| Command | Use it to |
+| --- | --- |
+| `convert <color> --to <space> [--gamut <gamut>]` | change space; `--gamut` maps into a gamut instead of clipping |
+| `mix <a> <b> [--amount 0.5] [--in oklab]` | blend as `color-mix()` does |
+| `contrast <fg> <bg>` | the WCAG 2 ratio with the AA and AAA verdicts |
+| `find-contrast <bg> --target 4.5` | find a color that reaches a ratio |
+| `scale <seed> [--preset ...] [--brand] [--targets ...]` | a preset scale, a brand scale, or a contrast scale |
+| `palette <brand> [--mode dark] [--target ...]` | the semantic palette, each pair with its ratio |
+| `harmony <color> --scheme ...` | related hues |
+| `export [color] --to css\|tailwind\|dtcg` | write CSS variables, a Tailwind v4 theme or DTCG tokens |
+| `schema [command]` | print a command's JSON Schema |
+
+Colors are any CSS color, including `color-mix()` and relative colors. Run `color-map <command> --help` for a command's options.
+
+## Contrast
+
+Contrast is WCAG 2. The CLI has no option to choose another measure.
+
+## Errors
+
+A failed call exits 1 (the work failed) or 2 (the call was wrong) and prints `error`, `code` and `help` on stdout. Nothing prompts, and an unknown option fails instead of being ignored.
+
+## Machine-readable help
+
+- JSON Schemas for every command's arguments and options ship in the package under `schemas/` and print with `color-map schema <command>`.
+- `llms.txt` in the package maps the commands.
