@@ -30,7 +30,7 @@ jobs:
       # exist only after color-map is built. Turbo builds that dependency first, the same way
       # the pull request workflow's root build does, so a green PR build is a green deploy build.
       - run: pnpm exec turbo run build --filter=website
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: apps/website/dist
 
