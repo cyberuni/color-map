@@ -1,0 +1,44 @@
+---
+import data from '../data/compare.json'
+
+type Row = { hz: number }
+const speed = data.speed as Record<string, Record<string, Row>>
+const libs = ['color-map', 'culori', 'colorjs.io']
+// Only operations all three libraries ran can be compared.
+const ops = Object.keys(speed['color-map']).filter((op) => libs.every((l) => speed[l]?.[op]))
+const fmt = (hz: number) => (hz >= 1e6 ? `${(hz / 1e6).toFixed(1)} M` : `${Math.round(hz / 1e3)} k`)
+const ratio = (op: string) => speed['color-map'][op].hz / speed.culori[op].hz
+const ratioText = (op: string) => {
+	const r = ratio(op)
+	if (r >= 1.05) return `${r.toFixed(1)}x faster`
+	if (r <= 0.95) return `${(1 / r).toFixed(1)}x slower`
+	return 'about the same'
+}
+---
+<div class="table-wrap">
+	<table>
+		<thead>
+			<tr>
+				<th>Operation</th>
+				<th style="text-align:right">color-map</th>
+				<th style="text-align:right">culori</th>
+				<th style="text-align:right">colorjs.io</th>
+				<th>color-map vs culori</th>
+			</tr>
+		</thead>
+		<tbody>
+			{ops.map((op) => (
+				<tr>
+					<td>{op}</td>
+					<td style="text-align:right">{fmt(speed['color-map'][op].hz)}</td>
+					<td style="text-align:right">{fmt(speed.culori[op].hz)}</td>
+					<td style="text-align:right">{fmt(speed['colorjs.io'][op].hz)}</td>
+					<td>{ratioText(op)}</td>
+				</tr>
+			))}
+		</tbody>
+	</table>
+</div>
+<style>
+	.table-wrap { overflow-x: auto; }
+</style>

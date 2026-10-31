@@ -1,0 +1,22 @@
+{
+	"name": "color-map-compare",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Measures color-map against other color libraries for the website's Compare page. Not published.",
+	"type": "module",
+	"scripts": {
+		"measure": "node scripts/measure.mjs"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@size-limit/preset-small-lib": "^14.3.0",
+		"@texel/color": "1.1.11",
+		"chroma-js": "3.2.0",
+		"color-map": "workspace:*",
+		"colord": "2.10.0",
+		"colorjs.io": "0.7.1",
+		"culori": "4.0.2",
+		"lightningcss": "1.33.0",
+		"size-limit": "^14.3.0"
+	}
+}
