@@ -326,7 +326,7 @@
 			"cells": {
 				"color-map": {
 					"value": "partial",
-					"note": "WCAG 2 ratio only; no APCA (issue #255).",
+					"note": "WCAG 2 ratio only; APCA is available through a documented recipe, not the CLI.",
 					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/README.md"
 				},
 				"culori": {
