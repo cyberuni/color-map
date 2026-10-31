@@ -91,8 +91,22 @@
 		{
 			"name": "full color core",
 			"path": "esm/color/index.js",
-			"import": "*",
+			"import": "{ parse, toCss, toHex, toGamut, inGamut, deltaEOK, equals, fromArgb, toArgb, convert, spaces }",
 			"limit": "10 kB",
+			"gzip": true
+		},
+		{
+			"name": "core with mix",
+			"path": "esm/color/index.js",
+			"import": "{ parse, toCss, toGamut, mix }",
+			"limit": "12 kB",
+			"gzip": true
+		},
+		{
+			"name": "everything",
+			"path": "esm/color/index.js",
+			"import": "*",
+			"limit": "18 kB",
 			"gzip": true
 		}
 	]
