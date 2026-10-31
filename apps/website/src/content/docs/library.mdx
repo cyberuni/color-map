@@ -6,22 +6,29 @@ description: The color-map entry points, what each exports, how to use them, and
 import { Tabs, TabItem } from '@astrojs/starlight/components'
 import SizeBudgets from '../../components/SizeBudgets.astro'
 
-`color-map` has zero runtime dependencies and `"sideEffects": false`, so a bundler keeps only what you import. Import from the subpath that holds what you need.
+`color-map` has zero runtime dependencies and `"sideEffects": false`, so a bundler keeps only what you import. Import everything from `color-map`:
+
+```ts
+import { parse, toCss, semanticPalette, toTailwindTheme } from 'color-map'
+```
+
+The root re-exports the four subpaths below. With a bundler, importing from the root costs the same bytes as importing from a subpath. Without a bundler, for example in Node or in a `<script type="module">`, the root loads every module: about 26 ms instead of 3 ms as an ES module. Code that runs that way can import the subpath that holds what it needs instead.
 
 | Entry point | Holds |
 | --- | --- |
-| `color-map` | The original API: `createColors`, `createColorsFromMap`, `rgbHex`, `rgbaString`. Unchanged. |
+| `color-map` | Everything below. The original API is still here too, deprecated: import it from `color-map/legacy`. |
 | `color-map/color` | The color core: parse, convert, serialize, gamut mapping, `mix`, `resolve`, contrast. |
 | `color-map/scale` | `createScale`, `createContrastScale`, `scaleFromBrand`, `tonalPalette`. |
 | `color-map/palette` | `harmony`, `harmonize`, `inverse`, `darkVariant`, `semanticPalette`, `validate`. |
-| `color-map/export` | `toDTCG`, `toCssVariables`, `toTailwindTheme`. |
+| `color-map/tokens` | The output formats: `toDTCG`, `toCssVariables`, `toTailwindTheme`. |
+| `color-map/legacy` | The original API: `createColors`, `createColorsFromMap`, `rgbHex`, `rgbaString`. Unchanged. |
 
 ## Usage
 
 A color is a plain object, `{ colorSpace, components, alpha? }`, with CSS names for the spaces and `null` for `none`. It is JSON, so it survives `JSON.stringify`.
 
 ```ts
-import { parse, toCss, convert, mix, contrast, onColor } from 'color-map/color'
+import { parse, toCss, convert, mix, contrast, onColor } from 'color-map'
 
 const blue = parse('#3b82f6')
 toCss(convert(blue, 'oklch'))           // oklch(0.62308 0.18801 259.81453)
@@ -33,8 +40,7 @@ onColor(blue)                           // a text color that reaches 4.5 on it
 From one brand color to a palette and a token file:
 
 ```ts
-import { semanticPalette, validate } from 'color-map/palette'
-import { toTailwindTheme } from 'color-map/export'
+import { semanticPalette, validate, toTailwindTheme } from 'color-map'
 
 const palette = semanticPalette({ brand: '#3b82f6', mode: 'light' })
 validate(palette).ok                     // true: every pair meets its target
@@ -67,13 +73,24 @@ const css = toTailwindTheme(palette)     // an @theme { ... } block
 - `semanticPalette({ brand, mode })` returns scales and role pairs (`primary`, `primaryContainer`, `success`, `warning`, `danger`, `info`, `surface`, `surfaceVariant`, `outline`), each with its background, text color, measured ratio and target.
 - `validate(palette)` returns `{ ok, issues }`: pairs below target, non-monotonic scales, colors outside sRGB.
 
-### `color-map/export`
+### `color-map/tokens`
 
 Each exporter takes a token tree: a color, a CSS color string, an array (a scale), an object of these nested to any depth, or a `SemanticPalette` as is. An array of 11 colors gets the keys 50 to 950; any other length gets 1 to N.
 
 - `toDTCG(tree)` returns a W3C design-token (2025.10) group; write it with `JSON.stringify`.
 - `toCssVariables(tree, { selector, prefix, space })` returns one rule of custom properties.
 - `toTailwindTheme(tree, { namespace, inline, space })` returns a Tailwind v4 `@theme` block. The default space is `oklch`. The [export panel](/color-map/export/) shows each output, and this site's build compiles the Tailwind output with Tailwind v4.
+
+### `color-map/legacy`
+
+The original API works only in sRGB, interpolates in gamma-encoded sRGB, rounds to integers and takes alpha as a separate argument. It stays in `color-map/legacy` for all of 3.x. The root `color-map` still exports it in 2.x, marked deprecated; 3.0 removes it from the root, so change `from 'color-map'` to `from 'color-map/legacy'` for these names.
+
+| Legacy | Replacement |
+| --- | --- |
+| `rgbHex(rgb)` | `toHex(color)` |
+| `rgbaString(rgba)` | `toCss(color)` |
+| `createColors(from, to, shades, alpha)` | `mix(from, to, t)` in a loop. The results differ: `mix` interpolates in `oklab` by default and does not round. |
+| `createColorsFromMap(colormap, shades, alpha)` | No equivalent yet. |
 
 ## Contrast guarantees
 

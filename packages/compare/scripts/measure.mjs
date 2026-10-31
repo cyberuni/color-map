@@ -34,7 +34,7 @@ console.log(createConverter(srgb, oklch)([0.23, 0.51, 0.96]))`,
 		whole: `export * from 'color-map/color'
 export * from 'color-map/scale'
 export * from 'color-map/palette'
-export * from 'color-map/export'`
+export * from 'color-map/tokens'`
 	},
 	culori: {
 		convert: `import { parse, oklch, formatCss } from 'culori'

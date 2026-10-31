@@ -13,10 +13,25 @@ Color map generator with no dependency.
 
 Inspired from [`colormap`](https://github.com/bpostlethwaite/colormap).
 
-## `createColors(from, to, shades, alpha?)`
+## Library
 
 ```ts
-import { createColors } from 'color-map'
+import { parse, toCss, convert, semanticPalette, toTailwindTheme } from 'color-map'
+
+toCss(convert(parse('#3b82f6'), 'oklch')) // oklch(0.62308 0.18801 259.81453)
+toTailwindTheme(semanticPalette({ brand: '#3b82f6', mode: 'light' })) // an @theme { ... } block
+```
+
+`color-map` re-exports the subpaths `color-map/color`, `color-map/scale`, `color-map/palette` and `color-map/tokens`. With a bundler, the root costs the same bytes as a subpath. Code that runs without a bundler can import a subpath to load less. See the [library docs](https://cyberuni.github.io/color-map/library/) for the full API.
+
+## Legacy API
+
+The original API lives in `color-map/legacy`. The root `color-map` still exports it in 2.x, marked deprecated, and stops in 3.0.
+
+### `createColors(from, to, shades, alpha?)`
+
+```ts
+import { createColors } from 'color-map/legacy'
 
 // creates array of [r,g,b,a]
 const rgbaRange = createColors([0, 0, 255], [0, 255, 128], 72, [0, 1])
@@ -25,28 +40,28 @@ const rgbaRange = createColors([0, 0, 255], [0, 255, 128], 72, [0, 1])
 const rgbRange = createColors([0, 0, 255], [0, 255, 128], 72)
 ```
 
-## `rgbHex(rgb)`
+### `rgbHex(rgb)`
 
 ```ts
-import { rgbHex } from 'color-map'
+import { rgbHex } from 'color-map/legacy'
 
 rgbHex([0, 128, 255]) // '#0080ff'
 rgbHex([0, 128, 255, 0.3]) // '#0080ff'
 ```
 
-## `rgbaString(rgba)`
+### `rgbaString(rgba)`
 
 ```ts
-import { rgbaString } from 'color-map'
+import { rgbaString } from 'color-map/legacy'
 
 rgbaString([0, 128, 255, 0.2]) // 'rgba(0,128,255,0.2)`
 
 ```
 
-## `createColorsFromMap(colormap, shades, alpha?)`
+### `createColorsFromMap(colormap, shades, alpha?)`
 
 ```ts
-import { createColorsFromMap, ColorMap } from 'color-map'
+import { createColorsFromMap, ColorMap } from 'color-map/legacy'
 
 const summer: ColorMap = [{ index: 0, rgb: [0,128,102] }, { index: 1, rgb: [255,255,102] }]
 

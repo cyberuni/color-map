@@ -2,9 +2,9 @@ import { readFileSync } from 'node:fs'
 import { type cli, command, t } from 'clibuilder'
 import { CliError, document, exitCodes, isCliError } from 'clibuilder/axi'
 import type { ColorSpaceId } from '../../color/index.js'
-import { toCssVariables, toDTCG, toTailwindTheme } from '../../export/index.js'
 import { semanticPalette } from '../../palette/index.js'
 import { createScale } from '../../scale/index.js'
+import { toCssVariables, toDTCG, toTailwindTheme } from '../../tokens/index.js'
 import { EXPORT_SOURCES, EXPORT_TARGETS, MODES, readColor, SPACES } from '../shared.js'
 
 function usage(code: string, message: string, help: string, details: CliError.Details = {}) {
