@@ -26,7 +26,10 @@ jobs:
           cache: pnpm
       - uses: actions/configure-pages@v5
       - run: pnpm install --frozen-lockfile
-      - run: pnpm web build
+      # Through turbo, not `pnpm web build`: the site imports color-map's subpath exports, which
+      # exist only after color-map is built. Turbo builds that dependency first, the same way
+      # the pull request workflow's root build does, so a green PR build is a green deploy build.
+      - run: pnpm exec turbo run build --filter=website
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/website/dist
