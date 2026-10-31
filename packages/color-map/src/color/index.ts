@@ -1,6 +1,19 @@
 export { a98Rgb } from './a98-rgb.js'
 export { fromArgb, toArgb } from './argb.js'
 export { deltaEOK, equals } from './compare.js'
+export {
+	type ContrastAlgorithm,
+	type ContrastFn,
+	type ContrastOption,
+	contrast,
+	type FindContrastOptions,
+	type FoundContrast,
+	findContrast,
+	meets,
+	type OnColorOptions,
+	onColor,
+	wcag2
+} from './contrast.js'
 export { convertComponents, createConverter } from './convert.js'
 export { displayP3 } from './display-p3.js'
 export { displayP3Linear } from './display-p3-linear.js'

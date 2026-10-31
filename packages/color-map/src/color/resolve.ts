@@ -1,4 +1,5 @@
 import { evaluate } from './calc.js'
+import { wcag2 } from './contrast.js'
 import { type ColorExpr, parseExpr } from './expr.js'
 import { mix } from './mix.js'
 import { ALPHA, channel, FUNCTIONS, fail, UNIT } from './parse.js'
@@ -28,12 +29,12 @@ const KEYWORDS: Record<string, string[]> = {
 const RGB_KEYWORDS = ['r', 'g', 'b']
 const SIMPLE = /^(?:none|[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?[a-z%]*)$/
 
-/** WCAG 2 choice between white and black, from the luminance of the color. */
+const WHITE: Color = { colorSpace: 'srgb', components: [1, 1, 1] }
+const BLACK: Color = { colorSpace: 'srgb', components: [0, 0, 0] }
+
+/** WCAG 2 choice between white and black: whichever contrasts more with the color. */
 function contrastColor(color: Color): Color {
-	const y = (convert(color, 'xyz-d65').components[1] as number) + 0.05
-	// White wins when 1.05 / y >= y / 0.05
-	const v = y * y <= 0.0525 ? 1 : 0
-	return { colorSpace: 'srgb', components: [v, v, v] }
+	return wcag2(WHITE, color) >= wcag2(BLACK, color) ? WHITE : BLACK
 }
 
 function resolveRelative(node: Extract<ColorExpr, { type: 'relative' }>, context: ResolveContext): Color {

@@ -140,4 +140,38 @@ describe('serializes mix results', () => {
 	test('in srgb', () => {
 		expect(toCss(mix('red', 'blue', 0.5, { in: 'srgb' }))).toBe('rgb(127.5, 0, 127.5)')
 	})
+
+	describe('powerless hue', () => {
+		const hue = (c: string, d: string, space: 'oklch' | 'lch') => mix(c, d, 0.5, { in: space }).components[2]
+
+		test.each(['oklch', 'lch'] as const)('a converted gray takes the other hue in %s', (space) => {
+			const blue = convert(parse('blue'), space).components[2] as number
+			expect(hue('white', 'blue', space)).toBeCloseTo(blue, 9)
+			expect(hue('blue', 'black', space)).toBeCloseTo(blue, 9)
+		})
+
+		test('chroma at or above the epsilon keeps its hue', () => {
+			const near = { colorSpace: 'oklch' as const, components: [0.5, 0.001, 90] }
+			expect(mix(near, 'blue', 0.5, { in: 'oklch' }).components[2]).not.toBeNull()
+			const tint = { colorSpace: 'oklab' as const, components: [0.5, 0, 0.0001] }
+			expect(mix(tint, 'blue', 0, { in: 'oklch' }).components[2]).toBeCloseTo(90, 6)
+		})
+
+		test('a hue written in the target space stays as written', () => {
+			const gray = { colorSpace: 'oklch' as const, components: [0.5, 0, 90] }
+			expect(mix(gray, { colorSpace: 'oklch', components: [0.5, 0.1, 270] }, 0.5, { in: 'oklch' }).components[2]).toBe(
+				180
+			)
+		})
+
+		test('matches colorjs.io', () => {
+			const c = new Colorjs('white').mix('blue', 0.5, { space: 'oklch', outputSpace: 'oklch' })
+			expect(hue('white', 'blue', 'oklch')).toBeCloseTo(c.coords[2] as number, 6)
+		})
+
+		test('an already none chroma stays none-safe', () => {
+			const c = { colorSpace: 'oklab' as const, components: [0.5, null, 0] }
+			expect(mix(c, 'blue', 0.5, { in: 'oklch' }).components[2]).not.toBeUndefined()
+		})
+	})
 })

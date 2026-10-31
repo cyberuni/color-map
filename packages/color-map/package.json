@@ -103,6 +103,13 @@
 			"gzip": true
 		},
 		{
+			"name": "core with mix and contrast",
+			"path": "esm/color/index.js",
+			"import": "{ parse, toCss, toGamut, mix, contrast, meets, onColor, findContrast }",
+			"limit": "12 kB",
+			"gzip": true
+		},
+		{
 			"name": "everything",
 			"path": "esm/color/index.js",
 			"import": "*",
