@@ -8,3 +8,5 @@ ignores:
   - "@vitest/coverage-v8"
   # Used only as a bin in package.json scripts (clean, nuke).
   - rimraf
+  # The size-limit plugin; size-limit loads it from the "size-limit" config in package.json.
+  - "@size-limit/preset-small-lib"
