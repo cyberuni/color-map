@@ -7,7 +7,12 @@ const hueOf = (c: Color | string, space: 'oklch' | 'hsl' = 'oklch') =>
 	convert(typeof c === 'string' ? parse(c) : c, space).components[space === 'hsl' ? 0 : 2] as number
 const diff = (a: number, b: number) => ((((b - a + 540) % 360) + 360) % 360) - 180
 
+const noHue: Color = { colorSpace: 'oklch', components: [0.6, 0.1, null] }
+
 describe('harmony', () => {
+	test('a color with no hue rotates from 0', () => {
+		expect(hueOf(harmony(noHue, 'complementary')[1] as Color)).toBeCloseTo(180, 0)
+	})
 	const base = 'oklch(0.6 0.1 40)'
 	test.each([
 		['complementary', [0, 180]],
@@ -108,6 +113,7 @@ describe('darkVariant', () => {
 		for (let i = 1; i < ls.length; i++) expect(ls[i]).toBeGreaterThan(ls[i - 1] as number)
 	})
 	test('hue-less colors are handled and an unknown strategy throws', () => {
+		expect(darkVariant([noHue], 'tone-swap')).toHaveLength(1)
 		expect(darkVariant([parse('#888')], 'tone-swap')).toHaveLength(1)
 		expect(darkVariant([parse('#888')], 'lightness-invert')).toHaveLength(1)
 		expect(() => darkVariant(light, 'nope' as never)).toThrow('unknown dark variant strategy "nope"')
@@ -147,6 +153,7 @@ describe('semanticPalette', () => {
 		expect(anon.meta.contrast).toBe('custom')
 	})
 	test('accepts a Color and a hue-less brand', () => {
+		expect(semanticPalette({ brand: noHue }).roles.primary.ratio).toBeGreaterThan(4.5)
 		expect(semanticPalette({ brand: parse('#808080') }).roles.primary.ratio).toBeGreaterThan(4.5)
 	})
 	test('a target the tone gap cannot reach is searched for, and validate reports what stays short', () => {
