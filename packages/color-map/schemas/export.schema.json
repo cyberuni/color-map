@@ -1,0 +1,106 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://unpkg.com/color-map/schemas/export.schema.json",
+	"title": "color-map export",
+	"description": "Write a palette, a scale or your own tokens as DTCG JSON, CSS variables or a Tailwind v4 theme",
+	"type": "object",
+	"properties": {
+		"color": {
+			"type": "string",
+			"description": "The brand color to build tokens from; leave out with --tokens",
+			"x-kind": "argument"
+		},
+		"to": {
+			"type": "string",
+			"enum": [
+				"dtcg",
+				"css",
+				"tailwind"
+			],
+			"description": "Output format",
+			"default": "css",
+			"x-kind": "option"
+		},
+		"source": {
+			"type": "string",
+			"enum": [
+				"palette",
+				"scale"
+			],
+			"description": "What to build from the color",
+			"default": "palette",
+			"x-kind": "option"
+		},
+		"mode": {
+			"type": "string",
+			"enum": [
+				"light",
+				"dark"
+			],
+			"description": "light or dark, for --source palette",
+			"default": "light",
+			"x-kind": "option"
+		},
+		"tokens": {
+			"type": "string",
+			"description": "A JSON file of CSS color strings, nested as you like, instead of a color",
+			"x-kind": "option"
+		},
+		"space": {
+			"type": "string",
+			"enum": [
+				"srgb",
+				"srgb-linear",
+				"hsl",
+				"hwb",
+				"lab",
+				"lch",
+				"oklab",
+				"oklch",
+				"display-p3",
+				"display-p3-linear",
+				"a98-rgb",
+				"prophoto-rgb",
+				"rec2020",
+				"xyz-d50",
+				"xyz-d65"
+			],
+			"description": "Convert every color to this space (css, tailwind)",
+			"x-kind": "option"
+		},
+		"prefix": {
+			"type": "string",
+			"description": "Variable name prefix (css; tailwind uses --namespace)",
+			"x-kind": "option"
+		},
+		"selector": {
+			"type": "string",
+			"description": "The CSS rule selector (css)",
+			"x-kind": "option"
+		},
+		"namespace": {
+			"type": "string",
+			"description": "The Tailwind theme namespace (tailwind)",
+			"x-kind": "option"
+		},
+		"inline": {
+			"type": "boolean",
+			"description": "Write @theme inline (tailwind)",
+			"x-kind": "option"
+		},
+		"precision": {
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 10,
+			"description": "Decimal places in printed numbers",
+			"x-kind": "option"
+		},
+		"hex": {
+			"type": "boolean",
+			"description": "Add the hex fallback to DTCG values; --hex=false drops it",
+			"x-kind": "option"
+		}
+	},
+	"required": [],
+	"additionalProperties": false
+}

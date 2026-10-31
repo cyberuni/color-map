@@ -1,7 +1,7 @@
 {
 	"name": "color-map",
 	"version": "2.2.0",
-	"description": "Color map generator",
+	"description": "Color map generator and color toolkit: a library, a CLI and an agent skill",
 	"homepage": "https://github.com/cyberuni/color-map",
 	"bugs": {
 		"url": "https://github.com/cyberuni/color-map/issues"
@@ -47,30 +47,44 @@
 			"import": "./esm/scale/index.js",
 			"require": "./cjs/scale/index.js",
 			"default": "./cjs/scale/index.js"
-		}
+		},
+		"./schemas/*": "./schemas/*",
+		"./package.json": "./package.json"
 	},
 	"main": "./cjs/index.js",
 	"types": "./esm/index.d.ts",
 	"files": [
+		"bin",
 		"cjs",
 		"dist",
 		"esm",
+		"schemas",
+		"skills",
 		"src",
+		"llms.txt",
+		"plugin.json",
+		".claude-plugin",
+		".codex-plugin",
+		".cursor-plugin",
 		"!**/*.spec.*",
 		"CHANGELOG.md"
 	],
 	"scripts": {
-		"build": "tsdown",
+		"build": "tsdown && node scripts/write-schemas.mjs",
 		"build:watch": "tsdown --watch",
-		"clean": "rimraf .reports cjs coverage dist esm",
+		"clean": "rimraf .reports bin cjs coverage dist esm",
 		"coverage": "vitest run --coverage",
 		"depcheck": "depcheck",
+		"llms": "node scripts/generate-llms-txt.mjs",
+		"llms:check": "node scripts/generate-llms-txt.mjs --check",
 		"nuke": "pnpm clean && rimraf node_modules",
+		"pack:check": "node scripts/check-pack.mjs && node scripts/sync-plugin-version.mjs --check",
+		"schemas": "node scripts/write-schemas.mjs",
+		"size": "size-limit",
 		"test": "vitest run",
 		"typecheck": "tsc",
-		"verify": "npm-run-all build -p depcheck typecheck coverage size",
-		"watch": "vitest",
-		"size": "size-limit"
+		"verify": "npm-run-all build -p depcheck typecheck coverage size llms:check pack:check",
+		"watch": "vitest"
 	},
 	"devDependencies": {
 		"@size-limit/preset-small-lib": "^14.3.0",
@@ -78,6 +92,7 @@
 		"@types/node": "^26.2.0",
 		"@vitest/coverage-v8": "^5.0.0",
 		"assertron": "^11.0.0",
+		"clibuilder": "~12.1.0",
 		"colorjs.io": "0.7.1",
 		"culori": "4.0.2",
 		"depcheck": "^1.4.3",
@@ -89,7 +104,7 @@
 		"vitest": "^5.0.0"
 	},
 	"engines": {
-		"node": ">= 20"
+		"node": ">= 20.19"
 	},
 	"size-limit": [
 		{
@@ -155,5 +170,16 @@
 			"limit": "18 kB",
 			"gzip": true
 		}
-	]
+	],
+	"keywords": [
+		"agent",
+		"axi",
+		"cli",
+		"color",
+		"design-system",
+		"palette"
+	],
+	"bin": {
+		"color-map": "./bin/color-map.js"
+	}
 }

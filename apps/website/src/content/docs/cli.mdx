@@ -3,15 +3,13 @@ title: CLI
 description: The color-map command to convert, mix, check contrast, build scales and palettes, and export tokens from a terminal or an agent.
 ---
 
-`color-map-cli` provides the `color-map` command on top of the library. It is built for agents: output is [TOON](https://github.com/toon-format/toon) by default and `--format json` gives JSON; essential fields print by default and `--full` adds the rest; empty results say so; every text pair carries its ratio.
+The `color-map` package ships a `color-map` command next to the library. It is built for agents: output is [TOON](https://github.com/toon-format/toon) by default and `--format json` gives JSON; essential fields print by default and `--full` adds the rest; empty results say so; every text pair carries its ratio.
 
 ```sh
-npx color-map-cli palette '#3b82f6'
+npx color-map palette '#3b82f6'
 ```
 
-:::note
-The package is in this repository, but its version is 0.0.0 and it has not been published to npm yet. Until it is, build it from the repository.
-:::
+The command has no runtime dependencies to install: `npx color-map` runs it from the same package as the library.
 
 ## Commands
 

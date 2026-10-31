@@ -41,6 +41,20 @@ export default defineConfig([
 		}
 	},
 	{
+		// The CLI: a bundle on its own, kept out of esm/ so no library entry point can
+		// reach it. clibuilder is a devDependency and is inlined here, which is what
+		// keeps the package's "dependencies" empty. onlyBundle fails the build if a
+		// new dependency is pulled in without being listed.
+		entry: { 'color-map': 'src/cli/bin.ts', index: 'src/cli/index.ts' },
+		format: 'esm',
+		outDir: 'bin',
+		outExtensions: () => ({ js: '.js' }),
+		dts: false,
+		platform: 'node',
+		target: 'node20',
+		deps: { onlyBundle: ['clibuilder', 'args-minus', '@toon-format/toon'] }
+	},
+	{
 		// Named entry plus an explicit entryFileNames: tsdown would otherwise infix
 		// the format and emit color-map.iife.es5.js, moving a published path.
 		entry: { 'color-map': 'src/index.ts' },

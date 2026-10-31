@@ -47,6 +47,7 @@ node_modules
 # build output — unanchored so it matches inside packages/*, not just the repo root.
 # Anchored patterns (/cjs) silently stopped matching when the package moved into
 # packages/color-map, which let build artifacts show up as untracked.
+bin/
 cjs/
 dist/
 esm/
