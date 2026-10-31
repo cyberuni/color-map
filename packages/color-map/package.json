@@ -28,7 +28,7 @@
 		"cjs",
 		"dist",
 		"esm",
-		"ts",
+		"src",
 		"!**/*.spec.*",
 		"CHANGELOG.md"
 	],
