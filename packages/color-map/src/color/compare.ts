@@ -1,10 +1,10 @@
-import { convert } from './spaces.js'
+import { componentsIn, convert } from './spaces.js'
 import type { Color } from './types.js'
 
 /** Euclidean distance in OKLab, the ΔEOK of CSS Color 4 gamut mapping. */
 export function deltaEOK(a: Color, b: Color): number {
-	const [l1, a1, b1] = convert(a, 'oklab').components as number[]
-	const [l2, a2, b2] = convert(b, 'oklab').components as number[]
+	const [l1, a1, b1] = componentsIn(a, 'oklab') as number[]
+	const [l2, a2, b2] = componentsIn(b, 'oklab') as number[]
 	return Math.hypot(l1 - l2, a1 - a2, b1 - b2)
 }
 

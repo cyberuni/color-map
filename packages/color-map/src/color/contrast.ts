@@ -1,6 +1,6 @@
 import { toGamut } from './gamut.js'
-import { parse } from './parse.js'
-import { convert } from './spaces.js'
+import { toColor } from './parse.js'
+import { componentsIn } from './spaces.js'
 import type { Color } from './types.js'
 
 /**
@@ -26,19 +26,17 @@ export type ContrastOption = ContrastAlgorithm | ContrastFn
 
 type ColorInput = Color | string
 
-const toColor = (c: ColorInput): Color => (typeof c === 'string' ? parse(c) : c)
-
 /** Relative luminance (WCAG 2): the Y of the color in XYZ-D65, with white at 1. */
 function luminance(color: Color): number {
-	return Math.max(0, convert(color, 'xyz-d65').components[1] as number)
+	return Math.max(0, componentsIn(color, 'xyz-d65')[1] as number)
 }
 
 /** Lays a translucent color over `bg`, in `srgb`, the way a browser paints it. */
 function flatten(fg: Color, bg: Color): Color {
 	const alpha = fg.alpha === null ? 0 : (fg.alpha ?? 1)
 	if (alpha >= 1) return fg
-	const f = convert(fg, 'srgb').components
-	const b = convert(bg, 'srgb').components
+	const f = componentsIn(fg, 'srgb')
+	const b = componentsIn(bg, 'srgb')
 	return { colorSpace: 'srgb', components: f.map((x, i) => (x as number) * alpha + (b[i] as number) * (1 - alpha)) }
 }
 
@@ -115,7 +113,7 @@ const STEPS = 32
 export function findContrast(bg: ColorInput, target: number, options: FindContrastOptions = {}): FoundContrast {
 	const back = toColor(bg)
 	const fn = pick(options.contrast ?? 'wcag2')
-	const lch = convert(back, 'oklch').components
+	const lch = componentsIn(back, 'oklch')
 	const l0 = lch[0] as number
 	const hue = options.hue ?? (lch[2] as number)
 	const chroma = options.chroma ?? 0
@@ -170,7 +168,7 @@ export function onColor(bg: ColorInput, options: OnColorOptions = {}): Color {
 	const white: Color = { colorSpace: 'srgb', components: [1, 1, 1] }
 	const whiteScore = Math.abs(fn(white, back))
 	if (whiteScore >= target) return white
-	const hue = convert(back, 'oklch').components[2] as number
+	const hue = componentsIn(back, 'oklch')[2] as number
 	const dark = toGamut({ colorSpace: 'oklch', components: [0.2, options.chroma ?? 0.03, hue] })
 	return Math.abs(fn(dark, back)) >= whiteScore ? dark : white
 }

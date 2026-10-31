@@ -1,5 +1,5 @@
 import { type GamutId, toGamut } from '../color/gamut.js'
-import { convert } from '../color/spaces.js'
+import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 import { lstar, toneColor } from '../scale/tone.js'
 
@@ -31,12 +31,12 @@ export function darkVariant(
 	if (strategy === 'mirror') return [...scale].reverse()
 	if (strategy === 'tone-swap') {
 		return scale.map((c) => {
-			const [, chroma, hue] = convert(c, 'oklch').components as [number, number, number | null]
+			const [, chroma, hue] = componentsIn(c, 'oklch') as [number, number, number | null]
 			return withAlpha(toneColor(100 - lstar(c), chroma, hue ?? 0, gamut), c)
 		})
 	}
 	if (strategy !== 'lightness-invert') throw new Error(`unknown dark variant strategy "${strategy}"`)
-	const oklch = scale.map((c) => convert(c, 'oklch').components as [number, number, number | null])
+	const oklch = scale.map((c) => componentsIn(c, 'oklch') as [number, number, number | null])
 	const ls = oklch.map((c) => c[0])
 	const sum = Math.min(...ls) + Math.max(...ls)
 	return scale.map((c, i) => {

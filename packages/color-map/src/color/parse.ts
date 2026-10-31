@@ -15,9 +15,6 @@ export interface Channel {
 	hue?: boolean
 }
 
-const clamp = (n: number, min = Number.NEGATIVE_INFINITY, max = Number.POSITIVE_INFINITY): number =>
-	Math.min(max, Math.max(min, n))
-
 export function fail(input: string, what: string, token?: string): never {
 	throw new Error(`color-map: cannot parse "${input}": ${what}${token === undefined ? '' : ` "${token}"`}`)
 }
@@ -37,7 +34,7 @@ export function channel(token: string, spec: Channel, input: string): Component 
 	if (rest === '%') value = (n * spec.pct) / 100
 	else if (rest === '') value = n / (spec.div ?? 1)
 	else return fail(input, 'invalid value', token)
-	return clamp(value, spec.min, spec.max)
+	return Math.min(spec.max ?? Number.POSITIVE_INFINITY, Math.max(spec.min ?? Number.NEGATIVE_INFINITY, value))
 }
 
 export const SRGB: Channel = { pct: 1, div: 255 }
@@ -56,27 +53,28 @@ export const FUNCTIONS: Record<string, { space: ColorSpaceId; channels: [Channel
 	oklch: { space: 'oklch', channels: [{ pct: 1, min: 0, max: 1 }, { pct: 0.4, min: 0 }, HUE] }
 }
 
-export const COLOR_SPACES: Record<string, ColorSpaceId> = {
-	srgb: 'srgb',
-	'srgb-linear': 'srgb-linear',
-	'display-p3': 'display-p3',
-	'display-p3-linear': 'display-p3-linear',
-	'a98-rgb': 'a98-rgb',
-	'prophoto-rgb': 'prophoto-rgb',
-	rec2020: 'rec2020',
-	xyz: 'xyz-d65',
-	'xyz-d50': 'xyz-d50',
-	'xyz-d65': 'xyz-d65'
-}
+/** The spaces `color()` names, by the name it uses: their own, and `xyz` for `xyz-d65`. */
+export const COLOR_SPACES: Record<string, ColorSpaceId> = { xyz: 'xyz-d65' }
+for (const id of [
+	'srgb',
+	'srgb-linear',
+	'display-p3',
+	'display-p3-linear',
+	'a98-rgb',
+	'prophoto-rgb',
+	'rec2020',
+	'xyz-d50',
+	'xyz-d65'
+] as const)
+	COLOR_SPACES[id] = id
 
+/** `currentcolor` and the CSS Color 4 system colors (canvas, canvastext, linktext, buttonface, ...). */
 export const VALUES_NEEDING_RESOLVE =
-	/^(?:currentcolor|canvas|canvastext|linktext|visitedtext|activetext|buttonface|buttontext|buttonborder|field|fieldtext|highlight|highlighttext|selecteditem|selecteditemtext|mark|marktext|graytext|accentcolor|accentcolortext)$/
+	/^(?:currentcolor|(?:canvas|field|highlight|selecteditem|mark|accentcolor)(?:text)?|(?:link|visited|active|button|gray)text|button(?:face|border))$/
 
 function hex(input: string): Color {
 	const digits = input.slice(1)
-	if (!/^(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/.test(digits) || digits.length === 5 || digits.length === 7) {
-		return fail(input, 'invalid hex color')
-	}
+	if (!/^(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/.test(digits)) return fail(input, 'invalid hex color')
 	const full = digits.length < 5 ? [...digits].map((d) => d + d).join('') : digits
 	const byte = (i: number): number => Number.parseInt(full.slice(i * 2, i * 2 + 2), 16) / 255
 	const color: Color = { colorSpace: 'srgb', components: [byte(0), byte(1), byte(2)] }
@@ -144,3 +142,6 @@ export function parse(input: string): Color {
 	if (VALUES_NEEDING_RESOLVE.test(text)) return fail(input, 'needs a context to resolve', text)
 	return fail(input, 'not a color')
 }
+
+/** A color as given, or parsed with {@link parse} when it is a string. */
+export const toColor = (c: Color | string): Color => (typeof c === 'string' ? parse(c) : c)

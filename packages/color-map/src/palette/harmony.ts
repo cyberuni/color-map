@@ -1,13 +1,10 @@
 import { type GamutId, toGamut } from '../color/gamut.js'
-import { parse } from '../color/parse.js'
+import { normalizeHue } from '../color/math.js'
+import { toColor } from '../color/parse.js'
 import { convert } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 
 type ColorInput = Color | string
-
-const toColor = (c: ColorInput): Color => (typeof c === 'string' ? parse(c) : c)
-
-const norm = (h: number): number => ((h % 360) + 360) % 360
 
 /** The hue rotations, in degrees, that each scheme adds to the base color. */
 const SCHEMES = {
@@ -51,7 +48,7 @@ export function harmony(color: ColorInput, scheme: HarmonyScheme, options: Harmo
 	return angles.map((angle) => {
 		if (angle === 0) return base
 		const components = [...inSpace.components]
-		components[at] = norm(hue + angle)
+		components[at] = normalizeHue(hue + angle)
 		return toGamut({ ...inSpace, components }, { gamut })
 	})
 }
@@ -78,10 +75,10 @@ export function harmonize(color: ColorInput, toward: ColorInput, options: Harmon
 	const h0 = (from.components[2] as number | null) ?? 0
 	const h1 = (to.components[2] as number | null) ?? h0
 	// Signed shortest way round, -180 to 180.
-	const diff = norm(h1 - h0 + 180) - 180
+	const diff = normalizeHue(h1 - h0 + 180) - 180
 	const rotation = Math.min(Math.abs(diff) * factor, max) * Math.sign(diff)
 	const components = [...from.components]
-	components[2] = norm(h0 + rotation)
+	components[2] = normalizeHue(h0 + rotation)
 	return toGamut({ ...from, components }, { gamut })
 }
 

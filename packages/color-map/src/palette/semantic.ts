@@ -1,7 +1,7 @@
 import { type ContrastOption, findContrast, wcag2 } from '../color/contrast.js'
 import type { GamutId } from '../color/gamut.js'
-import { parse } from '../color/parse.js'
-import { convert } from '../color/spaces.js'
+import { toColor } from '../color/parse.js'
+import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 import { tonalPalette, toneColor } from '../scale/tone.js'
 import { harmonize } from './harmony.js'
@@ -68,8 +68,8 @@ export function semanticPalette(options: SemanticPaletteOptions): SemanticPalett
 	const fn = contrast === 'wcag2' ? wcag2 : contrast
 	const dark = mode === 'dark'
 	const i = dark ? 1 : 0
-	const brand = typeof options.brand === 'string' ? parse(options.brand) : options.brand
-	const [, c, h] = convert(brand, 'oklch').components as [number, number, number | null]
+	const brand = toColor(options.brand)
+	const [, c, h] = componentsIn(brand, 'oklch') as [number, number, number | null]
 	const hue = h ?? 0
 	const chroma = Math.max(c, 0.04)
 	const tint = 0.015

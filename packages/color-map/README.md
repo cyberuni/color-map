@@ -103,6 +103,8 @@ git push
 # create PR
 ```
 
+`npm run size` checks the gzip size of each entry point against its budget. `npm run build && npm run bench` times the same operations in color-map, culori and colorjs.io and prints ops/sec for each; `--filter <name>` runs only the matching operations.
+
 [codecov-image]: https://codecov.io/gh/cyberuni/color-map/branch/main/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/cyberuni/color-map
 [downloads-image]: https://img.shields.io/npm/dm/color-map.svg?style=flat

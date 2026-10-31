@@ -1,4 +1,4 @@
-import { convert } from './spaces.js'
+import { componentsIn } from './spaces.js'
 import type { Color, ColorSpaceId, Component } from './types.js'
 
 export interface ToCssOptions {
@@ -50,7 +50,7 @@ const hexByte = (n: number): string =>
  * Colors outside sRGB are converted and clipped, so map them with `toGamut` first.
  */
 export function toHex(color: Color): string {
-	const [r, g, b] = convert(color, 'srgb').components as number[]
+	const [r, g, b] = componentsIn(color, 'srgb') as number[]
 	const alpha = color.alpha ?? 1
 	return `#${hexByte(r)}${hexByte(g)}${hexByte(b)}${alpha === 1 ? '' : hexByte(alpha)}`
 }

@@ -1,5 +1,5 @@
 import type { HueMethod } from './mix.js'
-import { COLOR_SPACES, fail, parse, VALUES_NEEDING_RESOLVE } from './parse.js'
+import { COLOR_SPACES, FUNCTIONS, fail, parse, VALUES_NEEDING_RESOLVE } from './parse.js'
 import type { Color, ColorSpaceId } from './types.js'
 
 /** A color that needs a context to become concrete: see {@link resolve}. */
@@ -38,15 +38,6 @@ const INTERPOLATION_SPACES: Record<string, ColorSpaceId> = {
 }
 const HUE_METHODS = new Set(['shorter', 'longer', 'increasing', 'decreasing'])
 const RELATIVE = new Set(['rgb', 'rgba', 'hsl', 'hsla', 'hwb', 'lab', 'lch', 'oklab', 'oklch', 'color'])
-const FUNCTION_SPACE: Record<string, ColorSpaceId> = {
-	rgb: 'srgb',
-	hsl: 'hsl',
-	hwb: 'hwb',
-	lab: 'lab',
-	lch: 'lch',
-	oklab: 'oklab',
-	oklch: 'oklch'
-}
 const PERCENT = /^[+-]?(?:\d+\.?\d*|\.\d+)%$/
 
 /** Splits at top-level commas, or at top-level whitespace with `/` as its own item. */
@@ -120,7 +111,7 @@ function relative(name: string, words: string[], input: string): ColorExpr {
 		if (!id) return fail(input, 'unknown color space', words[2])
 		space = id
 		at = 3
-	} else space = FUNCTION_SPACE[fn]
+	} else space = FUNCTIONS[fn].space
 	const channels = words.slice(at, at + 3)
 	const tail = words.slice(at + 3)
 	if (channels.length !== 3) return fail(input, `expected 3 components, got ${channels.length}`)

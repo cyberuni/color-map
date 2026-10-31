@@ -1,6 +1,6 @@
 import { deltaEOK } from './compare.js'
-import { convert } from './spaces.js'
-import type { Color, ColorSpaceId } from './types.js'
+import { componentsIn, convert } from './spaces.js'
+import type { Color, ColorSpaceId, Component } from './types.js'
 
 /** The bounded RGB spaces a color can be tested or mapped against. */
 export type GamutId =
@@ -12,9 +12,12 @@ export type GamutId =
 	| 'prophoto-rgb'
 	| 'rec2020'
 
+const within = (components: Component[], epsilon: number): boolean =>
+	components.every((c) => (c as number) >= -epsilon && (c as number) <= 1 + epsilon)
+
 /** True when every channel of `color`, seen in `gamut`, is within 0 to 1 (± `epsilon`). */
 export function inGamut(color: Color, gamut: GamutId = 'srgb', epsilon = 1e-6): boolean {
-	return convert(color, gamut).components.every((c) => (c as number) >= -epsilon && (c as number) <= 1 + epsilon)
+	return within(componentsIn(color, gamut), epsilon)
 }
 
 export interface ToGamutOptions {
@@ -24,10 +27,12 @@ export interface ToGamutOptions {
 	method?: 'css' | 'clip'
 }
 
-function clip(color: Color, gamut: GamutId): Color {
-	const mapped = convert(color, gamut)
-	mapped.components = mapped.components.map((c) => Math.min(1, Math.max(0, c as number)))
-	return mapped
+/** `color` with `components`, which are in `gamut`, clamped to 0 to 1: what `convert` then a clamp gives. */
+function clipped(color: Color, gamut: GamutId, components: Component[]): Color {
+	return withAlpha(
+		{ colorSpace: gamut, components: components.map((c) => Math.min(1, Math.max(0, c as number))) },
+		color
+	)
 }
 
 /**
@@ -38,33 +43,35 @@ function clip(color: Color, gamut: GamutId): Color {
 export function toGamut(color: Color, options: ToGamutOptions = {}): Color {
 	const { gamut = 'srgb', method = 'css' } = options
 	const back = (c: Color): Color => convert(c, color.colorSpace as ColorSpaceId)
-	if (inGamut(color, gamut)) return color
-	if (method === 'clip') return back(clip(color, gamut))
+	// Each candidate is converted to the gamut once, then tested and clipped from that.
+	const fit = componentsIn(color, gamut)
+	if (within(fit, 1e-6)) return color
+	if (method === 'clip') return back(clipped(color, gamut, fit))
 
 	const origin = convert(color, 'oklch')
-	const [lightness, chroma] = origin.components as [number, number, number]
+	const [lightness, chroma, hue] = origin.components as [number, number, Component]
 	if (lightness >= 1) return back(withAlpha({ colorSpace: gamut, components: [1, 1, 1] }, color))
 	if (lightness <= 0) return back(withAlpha({ colorSpace: gamut, components: [0, 0, 0] }, color))
 
 	const JND = 0.02
 	const EPSILON = 0.0001
-	const at = (c: number): Color => ({ ...origin, components: [lightness, c, origin.components[2]] })
 	let min = 0
 	let max = chroma
 	let minInGamut = true
-	let clipped = clip(origin, gamut)
-	if (deltaEOK(clipped, origin) < JND) return back(clipped)
+	let clip = clipped(origin, gamut, componentsIn(origin, gamut))
+	if (deltaEOK(clip, origin) < JND) return back(clip)
 	while (max - min > EPSILON) {
 		const mid = (min + max) / 2
-		const current = at(mid)
-		if (minInGamut && inGamut(current, gamut)) {
+		const current = withAlpha({ colorSpace: 'oklch', components: [lightness, mid, hue] }, origin)
+		const inGamutSpace = componentsIn(current, gamut)
+		if (minInGamut && within(inGamutSpace, 1e-6)) {
 			min = mid
 			continue
 		}
-		clipped = clip(current, gamut)
-		const e = deltaEOK(clipped, current)
+		clip = clipped(current, gamut, inGamutSpace)
+		const e = deltaEOK(clip, current)
 		if (e < JND) {
-			if (JND - e < EPSILON) return back(clipped)
+			if (JND - e < EPSILON) return back(clip)
 			minInGamut = false
 			min = mid
 		} else {
@@ -74,7 +81,7 @@ export function toGamut(color: Color, options: ToGamutOptions = {}): Color {
 	// The search ended by narrowing to EPSILON rather than by an early return. A
 	// sweep of 88,000 colors never gets here, but the algorithm allows it.
 	/* v8 ignore next */
-	return back(clipped)
+	return back(clip)
 }
 
 function withAlpha(c: Color, source: Color): Color {

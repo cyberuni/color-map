@@ -1,5 +1,5 @@
 import { a98Rgb } from './a98-rgb.js'
-import { createConverter } from './convert.js'
+import { componentsOver, createConverter } from './convert.js'
 import { displayP3 } from './display-p3.js'
 import { displayP3Linear } from './display-p3-linear.js'
 import { hsl } from './hsl.js'
@@ -34,6 +34,9 @@ export const spaces: Record<ColorSpaceId, Space> = {
 	'xyz-d50': xyzD50,
 	'xyz-d65': xyzD65
 }
+
+/** A color's components in any of the 15 spaces, as `convert` gives them, without the color object. */
+export const componentsIn = componentsOver(Object.values(spaces))
 
 /** Converts a color to any of the 15 spaces. */
 export const convert = createConverter(...Object.values(spaces))

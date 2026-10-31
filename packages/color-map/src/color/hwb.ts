@@ -1,5 +1,4 @@
 import { hslToSrgb, srgbToHsl } from './hsl.js'
-import { map3 } from './math.js'
 import { srgb } from './srgb.js'
 import type { Space } from './types.js'
 
@@ -12,7 +11,9 @@ export const hwb: Space = {
 			const gray = white / (white + black)
 			return srgb.toXyz([gray, gray, gray])
 		}
-		return srgb.toXyz(map3(hslToSrgb(h, 1, 0.5), (v) => v * (1 - white - black) + white))
+		const k = 1 - white - black
+		const [red, green, blue] = hslToSrgb(h, 1, 0.5)
+		return srgb.toXyz([red * k + white, green * k + white, blue * k + white])
 	},
 	fromXyz: (xyz) => {
 		const rgb = srgb.fromXyz(xyz)
