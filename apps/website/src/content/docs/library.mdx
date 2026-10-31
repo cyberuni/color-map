@@ -4,6 +4,7 @@ description: The color-map entry points, what each exports, how to use them, and
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components'
+import SizeBudgets from '../../components/SizeBudgets.astro'
 
 `color-map` has zero runtime dependencies and `"sideEffects": false`, so a bundler keeps only what you import. Import from the subpath that holds what you need.
 
@@ -92,16 +93,6 @@ Do not rely on a gap of 50 for the 4.5 threshold. Use a larger gap, or check the
 
 ## Size budgets
 
-Each budget is a gzip limit enforced by `size-limit` in CI. The measured size is smaller.
+Each budget is a gzip limit enforced by `size-limit` in CI. The measured size is smaller. The table is read from `size-limit` in `packages/color-map/package.json`, so it matches what CI enforces. For how these sizes compare with other libraries, see [Compare](/color-map/compare/).
 
-| Import | Budget |
-| --- | --- |
-| Original API (`color-map`) | 0.45 kB |
-| Convert between two spaces (`createConverter`, `srgb`, `oklch`) | 1.2 kB |
-| Full color core, without `mix` | 6.65 kB |
-| Core with `mix` | 6.9 kB |
-| Core with `mix` and contrast | 7.55 kB |
-| `color-map/scale` | 8 kB |
-| `color-map/palette` | 8.3 kB |
-| `color-map/export` | 7.5 kB |
-| Everything | 10.2 kB |
+<SizeBudgets />

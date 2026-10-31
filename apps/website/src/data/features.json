@@ -1,0 +1,485 @@
+{
+	"libraries": ["color-map", "culori", "colorjs.io", "chroma-js", "@texel/color", "lightningcss", "colord"],
+	"rows": [
+		{
+			"feature": "License",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "MIT, from package.json license field.",
+					"source": "https://www.npmjs.com/package/color-map/v/2.2.0"
+				},
+				"culori": {
+					"value": "yes",
+					"note": "MIT.",
+					"source": "https://www.npmjs.com/package/culori/v/4.0.2"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "MIT.",
+					"source": "https://www.npmjs.com/package/colorjs.io/v/0.7.1"
+				},
+				"chroma-js": {
+					"value": "yes",
+					"note": "BSD-3-Clause AND Apache-2.0 (dual terms in the license field).",
+					"source": "https://www.npmjs.com/package/chroma-js/v/3.2.0"
+				},
+				"@texel/color": {
+					"value": "yes",
+					"note": "MIT.",
+					"source": "https://www.npmjs.com/package/@texel/color/v/1.1.11"
+				},
+				"lightningcss": {
+					"value": "yes",
+					"note": "MPL-2.0, a file-level copyleft license.",
+					"source": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+				},
+				"colord": {
+					"value": "yes",
+					"note": "MIT.",
+					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				}
+			}
+		},
+		{
+			"feature": "Runtime dependencies",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "None. package.json has no dependencies; the CLI bundle inlines its parser.",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/package.json"
+				},
+				"culori": {
+					"value": "yes",
+					"note": "None; package.json lists no dependencies.",
+					"source": "https://www.npmjs.com/package/culori/v/4.0.2"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "None; package.json lists no dependencies.",
+					"source": "https://www.npmjs.com/package/colorjs.io/v/0.7.1"
+				},
+				"chroma-js": {
+					"value": "yes",
+					"note": "None; package.json lists no dependencies.",
+					"source": "https://www.npmjs.com/package/chroma-js/v/3.2.0"
+				},
+				"@texel/color": {
+					"value": "yes",
+					"note": "None; the README says zero dependencies.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "partial",
+					"note": "One: detect-libc. The CSS engine is a native Rust binary installed as a platform package.",
+					"source": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+				},
+				"colord": {
+					"value": "yes",
+					"note": "None; package.json lists no dependencies.",
+					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				}
+			}
+		},
+		{
+			"feature": "TypeScript types shipped",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "types field points to esm/index.d.ts; every export entry has types.",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/package.json"
+				},
+				"culori": {
+					"value": "no",
+					"note": "No .d.ts files or types field in the 4.0.2 package. Types come from the separate @types/culori.",
+					"source": "https://www.npmjs.com/package/culori/v/4.0.2"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "types field and per-export types under ./types.",
+					"source": "https://www.npmjs.com/package/colorjs.io/v/0.7.1"
+				},
+				"chroma-js": {
+					"value": "no",
+					"note": "No .d.ts files or types field in the 3.2.0 package. Types come from the separate @types/chroma-js.",
+					"source": "https://www.npmjs.com/package/chroma-js/v/3.2.0"
+				},
+				"@texel/color": {
+					"value": "yes",
+					"note": "types field points to types.d.ts.",
+					"source": "https://www.npmjs.com/package/@texel/color/v/1.1.11"
+				},
+				"lightningcss": {
+					"value": "yes",
+					"note": "types field points to node/index.d.ts.",
+					"source": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+				},
+				"colord": {
+					"value": "yes",
+					"note": "types field points to index.d.ts; plugins ship .d.ts files.",
+					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				}
+			}
+		},
+		{
+			"feature": "Tree-shakeable ESM (sideEffects/exports)",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "type module, sideEffects false, subpath exports for color, scale, palette, export.",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/package.json"
+				},
+				"culori": {
+					"value": "yes",
+					"note": "ESM source; sideEffects lists only 3 entry files; exports ./fn gives a function-only entry.",
+					"source": "https://www.npmjs.com/package/culori/v/4.0.2"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "ESM source; sideEffects lists 4 files; exports ./fn and ./spaces for selective imports.",
+					"source": "https://www.npmjs.com/package/colorjs.io/v/0.7.1"
+				},
+				"chroma-js": {
+					"value": "partial",
+					"note": "ESM with per-module subpath exports and a ./light build; no sideEffects field, so bundlers may keep modules.",
+					"source": "https://www.npmjs.com/package/chroma-js/v/3.2.0"
+				},
+				"@texel/color": {
+					"value": "partial",
+					"note": "ESM; README says unused spaces are tree-shaken (~3.5 kB for OKLCH to sRGB). No sideEffects field.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "no",
+					"note": "Native binary behind a Node API; there is no JS color code to tree-shake. Not applicable to the design.",
+					"source": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+				},
+				"colord": {
+					"value": "yes",
+					"note": "sideEffects false; plugins are separate subpath exports.",
+					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				}
+			}
+		},
+		{
+			"feature": "Color spaces",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "15: srgb, srgb-linear, hsl, hwb, lab, lch, oklab, oklch, display-p3 (and linear), a98-rgb, prophoto-rgb, rec2020, xyz-d50, xyz-d65.",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/src/color/spaces.ts"
+				},
+				"culori": {
+					"value": "yes",
+					"note": "Includes rgb, lrgb, hsl, hsv, hsi, hwb, lab, lch, oklab, oklch, okhsl, okhsv, p3, a98, prophoto, rec2020, jab, jch, luv, xyz50, xyz65, cubehelix.",
+					"source": "https://github.com/Evercoder/culori/blob/v4.0.2/src"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "Includes srgb, p3, a98rgb, prophoto, rec2020, rec2100, hsl, hwb, lab, lch, oklab, oklch, okhsl, okhsv, jzazbz, ictcp, cam16, hct, luv, acescg.",
+					"source": "https://github.com/color-js/color.js/blob/v0.7.1/src/spaces"
+				},
+				"chroma-js": {
+					"value": "partial",
+					"note": "rgb, hsl, hsv, hsi, cmyk, lab, lch, hcl, oklab, oklch, hcg, gl, temperature. No P3, Adobe RGB, ProPhoto or Rec.2020 module in src/io.",
+					"source": "https://github.com/gka/chroma.js/blob/v3.2.0/src/io"
+				},
+				"@texel/color": {
+					"value": "partial",
+					"note": "Small set: xyz, oklab, oklch, okhsv, okhsl, srgb, display-p3, rec2020, a98-rgb, prophoto-rgb (plus linear forms). Others via custom spaces.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "partial",
+					"note": "Parses and lowers rgb, hsl, hwb, lab, lch, oklab, oklch and color() spaces such as display-p3, xyz and a98-rgb. It does not expose a color API.",
+					"source": "https://github.com/parcel-bundler/lightningcss/blob/v1.33.0/website/pages/transpilation.md"
+				},
+				"colord": {
+					"value": "partial",
+					"note": "Core: rgb, hsl, hsv. Plugins add hwb, cmyk, lab, lch, xyz and names. No oklab, oklch or P3 in the package.",
+					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				}
+			}
+		},
+		{
+			"feature": "CSS Color 4 string parsing",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "parse(): hex, named, rgb, hsl, hwb, lab, lch, oklab, oklch, color() with 9 spaces, none. parseExpr() adds relative colors, color-mix(), light-dark().",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/src/color/expr.ts"
+				},
+				"culori": {
+					"value": "partial",
+					"note": "Parses hex, named, rgb, hsl, hwb, lab, lch, oklab, oklch, color() and none. No relative colors, color-mix() or light-dark() in src.",
+					"source": "https://github.com/Evercoder/culori/blob/v4.0.2/src/parse.js"
+				},
+				"colorjs.io": {
+					"value": "partial",
+					"note": "parse() reads function syntax incl. color() and none. No color-mix(), relative color or light-dark() parsing; tryColor defers those to the DOM.",
+					"source": "https://github.com/color-js/color.js/blob/v0.7.1/src/parse.js"
+				},
+				"chroma-js": {
+					"value": "partial",
+					"note": "Parses hex, named, rgb, hsl, lab, lch, oklab, oklch and none. No hwb() or color() in src/io/css, and no relative, color-mix() or light-dark().",
+					"source": "https://github.com/gka/chroma.js/blob/v3.2.0/src/io/css/css2rgb.js"
+				},
+				"@texel/color": {
+					"value": "partial",
+					"note": "deserialize() reads hex, rgb(), oklch(), oklab() and plain color() only; README says complex CSS strings are out of scope.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "yes",
+					"note": "Parses stylesheets, not strings: lab, lch, oklab, oklch, hwb, color(), color-mix(), relative colors, light-dark(); none is in the AST.",
+					"source": "https://github.com/parcel-bundler/lightningcss/blob/v1.33.0/website/pages/transpilation.md"
+				},
+				"colord": {
+					"value": "partial",
+					"note": "Core parses hex, rgb, hsl; plugins add names, hwb, lch, cmyk. No oklab, oklch, color(), none, relative colors or color-mix().",
+					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				}
+			}
+		},
+		{
+			"feature": "Serialize to CSS (oklch(), color())",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "toCss() prints rgb, hsl, hwb, lab, lch, oklab, oklch and color(<space> ...); toHex() for hex.",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/src/color/serialize.ts"
+				},
+				"culori": {
+					"value": "yes",
+					"note": "formatCss() prints oklch(), lab(), color(display-p3 ...) and other color() forms; formatHex, formatRgb, formatHsl too.",
+					"source": "https://github.com/Evercoder/culori/blob/v4.0.2/src/formatter.js"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "toString() prints oklch() and other function forms, or color(<space> ...); format and precision options.",
+					"source": "https://github.com/color-js/color.js/blob/v0.7.1/src/serialize.js"
+				},
+				"chroma-js": {
+					"value": "partial",
+					"note": "css() prints rgb, hsl, lab, lch, oklab, oklch. No color() output.",
+					"source": "https://github.com/gka/chroma.js/blob/v3.2.0/src/io/css/index.js"
+				},
+				"@texel/color": {
+					"value": "yes",
+					"note": "serialize() prints rgb(), oklch() and color(display-p3 ...) with alpha.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "partial",
+					"note": "Output lowers or keeps lab, oklch and color() per browser targets; there is no call to serialize one color.",
+					"source": "https://github.com/parcel-bundler/lightningcss/blob/v1.33.0/website/pages/transpilation.md"
+				},
+				"colord": {
+					"value": "partial",
+					"note": "Prints hex, rgb, hsl, plus hwb, cmyk, lch via plugins. No oklch() or color() output.",
+					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				}
+			}
+		},
+		{
+			"feature": "Gamut mapping",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "toGamut() with method css follows the CSS Color 4 OKLCH chroma reduction (section 13.2, JND 0.02); clip also available.",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/src/color/gamut.ts"
+				},
+				"culori": {
+					"value": "yes",
+					"note": "toGamut() defaults follow the CSS Color 4 algorithm per its source comment; also clampChroma and clampRgb.",
+					"source": "https://github.com/Evercoder/culori/blob/v4.0.2/src/clamp.js"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "toGamut() method css is the default; also clip, raytrace and per-coordinate reduction.",
+					"source": "https://github.com/color-js/color.js/blob/v0.7.1/src/toGamut.js"
+				},
+				"chroma-js": {
+					"value": "no",
+					"note": "No gamut-mapping module in src; only a clipped() flag that reports clipping during conversion.",
+					"source": "https://github.com/gka/chroma.js/blob/v3.2.0/src/ops/clipped.js"
+				},
+				"@texel/color": {
+					"value": "partial",
+					"note": "gamutMapOKLCH() uses Ottosson's cusp method, not the CSS Color 4 algorithm; several mapping strategies.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "unverified",
+					"note": "Docs and types show no gamut-mapping option; could not confirm how out-of-gamut lab or oklch is converted to RGB fallbacks.",
+					"source": ""
+				},
+				"colord": {
+					"value": "no",
+					"note": "No gamut or wide-gamut code in the 2.10.0 package (searched for gamut, oklab, oklch, display-p3).",
+					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				}
+			}
+		},
+		{
+			"feature": "Contrast (WCAG 2 / APCA)",
+			"cells": {
+				"color-map": {
+					"value": "partial",
+					"note": "WCAG 2 ratio only; no APCA (issue #255).",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/README.md"
+				},
+				"culori": {
+					"value": "partial",
+					"note": "wcagContrast and wcagLuminance; no APCA in src.",
+					"source": "https://github.com/Evercoder/culori/blob/v4.0.2/src/wcag.js"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "WCAG 2.1, APCA, Weber, Michelson, Lstar and DeltaPhi in src/contrast.",
+					"source": "https://github.com/color-js/color.js/blob/v0.7.1/src/contrast/index.js"
+				},
+				"chroma-js": {
+					"value": "yes",
+					"note": "contrast() for WCAG 2 and contrastAPCA(); the source calls the APCA implementation beta.",
+					"source": "https://github.com/gka/chroma.js/blob/v3.2.0/src/utils/contrastAPCA.js"
+				},
+				"@texel/color": {
+					"value": "no",
+					"note": "No contrast or luminance function in src or README; only deltaEOK for color difference.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "no",
+					"note": "Node API types expose no contrast function; it is a CSS transformer.",
+					"source": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+				},
+				"colord": {
+					"value": "partial",
+					"note": "WCAG 2.0 luminance, contrast and isReadable via the a11y plugin; no APCA.",
+					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				}
+			}
+		},
+		{
+			"feature": "Scales, palettes, interpolation",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "createScale (Tailwind, Radix, tone, even presets), brand and contrast scales, tonalPalette, semantic palette, harmony, mix().",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/src/scale/index.ts"
+				},
+				"culori": {
+					"value": "yes",
+					"note": "interpolate with easing and hints, samples, average, blend.",
+					"source": "https://github.com/Evercoder/culori/blob/v4.0.2/src/index.js"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "range(), steps(), mix() with hue interpolation modes.",
+					"source": "https://github.com/color-js/color.js/blob/v0.7.1/src/interpolation.js"
+				},
+				"chroma-js": {
+					"value": "yes",
+					"note": "scale, bezier, cubehelix, average, mix, blend and random generators in src/generator.",
+					"source": "https://github.com/gka/chroma.js/blob/v3.2.0/src/generator/scale.js"
+				},
+				"@texel/color": {
+					"value": "partial",
+					"note": "Only lerp and lerpAngle; README says to build color interpolation yourself.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "no",
+					"note": "No color scale or interpolation API; checked Node API types.",
+					"source": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+				},
+				"colord": {
+					"value": "partial",
+					"note": "mix plugin (lab or rgb), tints, shades, tones; harmonies plugin. No multi-stop scale.",
+					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				}
+			}
+		},
+		{
+			"feature": "color-mix() / relative color evaluation",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "resolve() evaluates color-mix(), relative colors with calc(), light-dark() and contrast-color() given a context.",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/src/color/resolve.ts"
+				},
+				"culori": {
+					"value": "no",
+					"note": "No color-mix, light-dark or relative-color code in 4.0.2 src (searched).",
+					"source": "https://github.com/Evercoder/culori/blob/v4.0.2/src"
+				},
+				"colorjs.io": {
+					"value": "no",
+					"note": "Not evaluated in parse; tryColor can ask the browser DOM to resolve them. mix() is a JS function, not color-mix().",
+					"source": "https://github.com/color-js/color.js/blob/v0.7.1/src/tryColor.js"
+				},
+				"chroma-js": {
+					"value": "no",
+					"note": "No color-mix or relative-color code in 3.2.0 src (searched).",
+					"source": "https://github.com/gka/chroma.js/blob/v3.2.0/src"
+				},
+				"@texel/color": {
+					"value": "no",
+					"note": "README says complex CSS color string handling is out of scope.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "yes",
+					"note": "Evaluates color-mix() and relative colors statically when all components are known; light-dark() lowers to a variable fallback.",
+					"source": "https://github.com/parcel-bundler/lightningcss/blob/v1.33.0/website/pages/transpilation.md"
+				},
+				"colord": {
+					"value": "no",
+					"note": "The mix plugin is a JS method, not CSS color-mix(); no relative color parsing in the package.",
+					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				}
+			}
+		},
+		{
+			"feature": "Runs in the browser",
+			"cells": {
+				"color-map": {
+					"value": "yes",
+					"note": "ESM and CJS builds; no node: imports in src outside the CLI.",
+					"source": "https://github.com/cyberuni/color-map/blob/v2.2.0/packages/color-map/package.json"
+				},
+				"culori": {
+					"value": "yes",
+					"note": "ESM source and a bundled build; no node: imports in src.",
+					"source": "https://www.npmjs.com/package/culori/v/4.0.2"
+				},
+				"colorjs.io": {
+					"value": "yes",
+					"note": "ESM source and dist bundles; no node: imports in src.",
+					"source": "https://www.npmjs.com/package/colorjs.io/v/0.7.1"
+				},
+				"chroma-js": {
+					"value": "yes",
+					"note": "ESM source plus UMD builds; no node: imports in src.",
+					"source": "https://www.npmjs.com/package/chroma-js/v/3.2.0"
+				},
+				"@texel/color": {
+					"value": "yes",
+					"note": "README shows Canvas2D use; no node: imports in src.",
+					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
+				},
+				"lightningcss": {
+					"value": "partial",
+					"note": "Native Rust parser, transformer and minifier with a Node API, so not a browser color library. A separate lightningcss-wasm package runs in browsers.",
+					"source": "https://github.com/parcel-bundler/lightningcss/blob/v1.33.0/website/pages/docs.md"
+				},
+				"colord": {
+					"value": "yes",
+					"note": "README says it supports all browsers and Node.js.",
+					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				}
+			}
+		}
+	]
+}

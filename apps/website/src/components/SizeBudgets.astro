@@ -1,0 +1,31 @@
+---
+// Renders color-map's gzip size budgets straight from packages/color-map/package.json
+// ("size-limit"), the same file `size-limit` enforces in CI, so this table cannot drift.
+import pkg from '../../../../packages/color-map/package.json'
+
+interface Entry {
+	name: string
+	import: string
+	limit: string
+}
+const entries = pkg['size-limit'] as Entry[]
+---
+<div class="table-wrap">
+	<table>
+		<thead>
+			<tr><th>Import</th><th>What is measured</th><th style="text-align:right">Budget (gzip)</th></tr>
+		</thead>
+		<tbody>
+			{entries.map((e) => (
+				<tr>
+					<td>{e.name}</td>
+					<td><code>{e.import}</code></td>
+					<td style="text-align:right">{e.limit}</td>
+				</tr>
+			))}
+		</tbody>
+	</table>
+</div>
+<style>
+	.table-wrap { overflow-x: auto; }
+</style>
