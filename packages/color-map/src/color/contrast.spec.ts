@@ -49,8 +49,8 @@ describe('meets', () => {
 	})
 
 	test('names the bad level', () => {
-		expect(() => meets('black', 'white', 'AAAA')).toThrow('Unknown contrast level "AAAA"; use one of AA')
-		expect(() => meets('black', 'white', 'x', () => 1)).toThrow('Unknown contrast level "x"')
+		expect(() => meets('black', 'white', 'AAAA')).toThrow('color-map: unknown contrast level "AAAA"; use one of AA')
+		expect(() => meets('black', 'white', 'x', () => 1)).toThrow(/^color-map: unknown contrast level "x"$/)
 	})
 
 	test('compares a signed measure by magnitude', () => {

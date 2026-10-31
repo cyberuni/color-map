@@ -1,4 +1,4 @@
-import { type ContrastOption, wcag2 } from '../color/contrast.js'
+import { type ContrastOption, pick } from '../color/contrast.js'
 import { type GamutId, inGamut } from '../color/gamut.js'
 import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
@@ -40,7 +40,7 @@ export interface ValidateResult {
  */
 export function validate(palette: PaletteLike, options: ValidateOptions = {}): ValidateResult {
 	const { contrast = 'wcag2', target = 4.5, gamut = 'srgb' } = options
-	const fn = contrast === 'wcag2' ? wcag2 : contrast
+	const fn = pick(contrast)
 	const issues: PaletteIssue[] = []
 	const outside = (path: string, color: Color) => {
 		if (!inGamut(color, gamut)) issues.push({ kind: 'gamut', path, message: `${path} is outside ${gamut}` })

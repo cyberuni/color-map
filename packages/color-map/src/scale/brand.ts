@@ -3,6 +3,7 @@ import { toGamut } from '../color/gamut.js'
 import { toColor } from '../color/parse.js'
 import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
+import { checkMode } from '../color/unknown-name.js'
 
 export interface BrandScaleOptions {
 	/** `light` runs from a near-white step 1 to dark text; `dark` the other way. Default `light`. */
@@ -28,7 +29,7 @@ const CHROMA = [0.04, 0.08, 0.2, 0.32, 0.43, 0.52, 0.6, 0.75]
  */
 export function scaleFromBrand(brand: Color | string, options: BrandScaleOptions = {}): Color[] {
 	const { mode = 'light', gamut = 'srgb' } = options
-	const dark = mode === 'dark'
+	const dark = checkMode(mode) === 'dark'
 	const exact = toColor(brand)
 	const [l9, c9, h9] = componentsIn(exact, 'oklch') as [number, number, number | null]
 	const hue = h9 ?? 0

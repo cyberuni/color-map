@@ -1,8 +1,9 @@
-import { type ContrastOption, findContrast, wcag2 } from '../color/contrast.js'
+import { type ContrastOption, findContrast, pick } from '../color/contrast.js'
 import type { GamutId } from '../color/gamut.js'
 import { toColor } from '../color/parse.js'
 import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
+import { checkMode } from '../color/unknown-name.js'
 import { tonalPalette, toneColor } from '../scale/tone.js'
 import { harmonize } from './harmony.js'
 
@@ -65,8 +66,8 @@ const STATUS = { success: 145, warning: 85, danger: 25, info: 240 } as const
  */
 export function semanticPalette(options: SemanticPaletteOptions): SemanticPalette {
 	const { mode = 'light', contrast = 'wcag2', target = 4.5, gamut = 'srgb' } = options
-	const fn = contrast === 'wcag2' ? wcag2 : contrast
-	const dark = mode === 'dark'
+	const fn = pick(contrast)
+	const dark = checkMode(mode) === 'dark'
 	const i = dark ? 1 : 0
 	const brand = toColor(options.brand)
 	const [, c, h] = componentsIn(brand, 'oklch') as [number, number, number | null]

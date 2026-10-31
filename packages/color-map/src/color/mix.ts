@@ -2,6 +2,7 @@ import { normalizeHue } from './math.js'
 import { toColor } from './parse.js'
 import { convert } from './spaces.js'
 import type { Color, ColorSpaceId } from './types.js'
+import { unknownName } from './unknown-name.js'
 
 /** How `mix` travels around the hue circle (CSS Color 4 section 12.4). */
 export type HueMethod = 'shorter' | 'longer' | 'increasing' | 'decreasing'
@@ -70,6 +71,8 @@ function prepare(color: Color, space: ColorSpaceId): Color {
 	return out
 }
 
+const HUE_METHODS = ['shorter', 'longer', 'increasing', 'decreasing']
+
 /** Fixes up two hues so they interpolate by `method` (section 12.4). */
 function fixHues(h1: number, h2: number, method: HueMethod): [number, number] {
 	let a = normalizeHue(h1)
@@ -83,7 +86,8 @@ function fixHues(h1: number, h2: number, method: HueMethod): [number, number] {
 		else if (d > -180 && d <= 0) b += 360
 	} else if (method === 'increasing') {
 		if (b < a) b += 360
-	} else if (a < b) a += 360
+	} else if (method !== 'decreasing') throw unknownName('hue method', method, HUE_METHODS)
+	else if (a < b) a += 360
 	return [a, b]
 }
 

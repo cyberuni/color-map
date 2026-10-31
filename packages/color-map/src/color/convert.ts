@@ -1,4 +1,5 @@
 import type { Color, ColorSpaceId, Component, Space, Vec3 } from './types.js'
+import { unknownName } from './unknown-name.js'
 
 /** Converts bare components between two spaces, through the XYZ-D65 hub. */
 export function convertComponents(from: Space, to: Space, c: Vec3): Vec3 {
@@ -13,7 +14,7 @@ export function componentsOver(spaces: Space[]): ComponentsIn {
 	const byId = new Map(spaces.map((s) => [s.id, s]))
 	const find = (id: ColorSpaceId): Space => {
 		const space = byId.get(id)
-		if (!space) throw new Error(`color-map: unknown color space "${id}"`)
+		if (!space) throw unknownName('color space', id, [...byId.keys()])
 		return space
 	}
 	return (color, to) => {

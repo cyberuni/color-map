@@ -3,6 +3,7 @@ import { toGamut } from '../color/gamut.js'
 import { toColor } from '../color/parse.js'
 import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
+import { unknownName } from '../color/unknown-name.js'
 import { MATERIAL_TONES, toneColor } from './tone.js'
 
 /** The built-in step curves. */
@@ -88,7 +89,10 @@ function curveOf(steps: ScalePreset | number): Curve {
 		if (!Number.isInteger(steps) || steps < 2) throw new Error(`steps must be an integer of at least 2, got ${steps}`)
 		return even(steps)
 	}
-	return steps === 'even' ? even(11) : PRESETS[steps]
+	if (steps === 'even') return even(11)
+	const curve = PRESETS[steps]
+	if (!curve) throw unknownName('scale preset', steps, [...Object.keys(PRESETS), 'even'])
+	return curve
 }
 
 /**
