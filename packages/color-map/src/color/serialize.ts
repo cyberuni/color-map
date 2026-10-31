@@ -1,5 +1,5 @@
 import { componentsIn } from './spaces.js'
-import type { Color, Component } from './types.js'
+import type { Color, ColorSpaceId, Component } from './types.js'
 
 export interface ToCssOptions {
 	/** Decimal places kept in every number. Default 5. */
@@ -14,8 +14,7 @@ function num(n: number, precision: number): string {
 const part = (c: Component, precision: number, scale = 1, suffix = ''): string =>
 	c === null ? 'none' : num(c * scale, precision) + suffix
 
-/** The spaces with a function of their own: hsl, hwb, lab, lch, oklab, oklch. */
-const RECTANGULAR = /^(?:hsl|hwb|(?:ok)?l(?:ab|ch))$/
+const RECTANGULAR = new Set<ColorSpaceId>(['hsl', 'hwb', 'lab', 'lch', 'oklab', 'oklch'])
 
 /**
  * Serializes a color as CSS. `srgb` and `hsl` print in the comma syntax
@@ -37,7 +36,7 @@ export function toCss(color: Color, options: ToCssOptions = {}): string {
 		const name = id === 'srgb' ? 'rgb' : 'hsl'
 		return a === undefined ? `${name}(${args.join(', ')})` : `${name}a(${args.join(', ')}, ${a})`
 	}
-	const head = id === 'srgb' ? 'rgb(' : RECTANGULAR.test(id) ? `${id}(` : `color(${id} `
+	const head = id === 'srgb' ? 'rgb(' : RECTANGULAR.has(id) ? `${id}(` : `color(${id} `
 	return `${head}${args.join(' ')}${a === undefined ? '' : ` / ${a}`})`
 }
 
