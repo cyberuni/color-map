@@ -1,0 +1,27 @@
+---
+title: Agent skill
+description: The color-map skill teaches an agent to build a validated palette and write tokens by calling the CLI.
+---
+
+The `color-map` skill ships inside `color-map-cli` as a plugin for Claude Code, Cursor, Codex and GitHub Copilot CLI (`plugin.json` and `skills/color-map/SKILL.md` in the package). It tells an agent to call the `color-map` command instead of doing color math by hand.
+
+## One prompt to a valid palette
+
+Ask: "Make a palette for brand color `#3b82f6`, with a dark mode, as a Tailwind theme." The skill steers the agent through these calls:
+
+```sh
+color-map palette '#3b82f6'                 # roles, text colors and ratios
+color-map palette '#3b82f6' --mode dark
+color-map export '#3b82f6' --source palette --to tailwind > theme.css
+color-map export '#3b82f6' --source palette --to tailwind --mode dark > theme-dark.css
+```
+
+The agent reads `failing` and `issues` in the first answer. `failing: 0` means every pair meets its target. If not, it changes `--target` or the brand color and runs the command again; it does not edit hex values by hand.
+
+## Rules the skill gives the agent
+
+- Contrast is WCAG 2; the CLI has no other contrast algorithm.
+- Pass colors as given and do not round-trip them through hex; use `--to oklch` or `--format json` for precision.
+- A coded error names the input to fix; retrying the same call cannot help.
+
+The plugin version is 0.0.0 and follows the package version at release. Like the CLI, it is not published yet.
