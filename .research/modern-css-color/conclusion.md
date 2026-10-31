@@ -214,6 +214,7 @@ The site uses the Astro + Starlight house layout from the `add-website` skill, w
   - a possible trademark in the name "APCA".
 
   Legal review is advisable before the CLI ships APCA.
+  Decision (issue #255): the CLI does not offer `--contrast apca`. No legal check was obtained, so the unverified patent and trademark risks stay unaccepted. The core's `ContrastFn` adapter and the recipe still let people use APCA themselves. Reopen if a legal check clears it.
 - **Q2.** Material tones, open. The two options:
 
   | | A. L* tone with OKLCH hue and chroma | B. Port HCT (CAM16 hue and chroma plus the L* tone solver) |
