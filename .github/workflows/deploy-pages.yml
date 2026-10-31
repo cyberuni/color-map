@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: '22'
           cache: pnpm
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - run: pnpm install --frozen-lockfile
       # Through turbo, not `pnpm web build`: the site imports color-map's subpath exports, which
       # exist only after color-map is built. Turbo builds that dependency first, the same way
