@@ -7,22 +7,24 @@ const libs = ['color-map', 'culori', 'colorjs.io']
 // Only operations all three libraries ran can be compared.
 const ops = Object.keys(speed['color-map']).filter((op) => libs.every((l) => speed[l]?.[op]))
 const fmt = (hz: number) => (hz >= 1e6 ? `${(hz / 1e6).toFixed(1)} M` : `${Math.round(hz / 1e3)} k`)
-const ratio = (op: string) => speed['color-map'][op].hz / speed.culori[op].hz
 const ratioText = (op: string) => {
-	const r = ratio(op)
+	const r = speed['color-map'][op].hz / speed.culori[op].hz
 	if (r >= 1.05) return `${r.toFixed(1)}x faster`
 	if (r <= 0.95) return `${(1 / r).toFixed(1)}x slower`
 	return 'about the same'
 }
+const max = Math.max(...ops.flatMap((op) => libs.map((l) => speed[l][op].hz)))
 ---
+<div class="legend">
+	{libs.map((l) => <span><i class:list={['sw', l === 'color-map' && 'self', l === 'culori' && 'b', l === 'colorjs.io' && 'c']}></i>{l}</span>)}
+	<span>operations per second, longer is faster</span>
+</div>
 <div class="table-wrap">
 	<table>
 		<thead>
 			<tr>
 				<th>Operation</th>
-				<th style="text-align:right">color-map</th>
-				<th style="text-align:right">culori</th>
-				<th style="text-align:right">colorjs.io</th>
+				<th>Speed</th>
 				<th>color-map vs culori</th>
 			</tr>
 		</thead>
@@ -30,9 +32,14 @@ const ratioText = (op: string) => {
 			{ops.map((op) => (
 				<tr>
 					<td>{op}</td>
-					<td style="text-align:right">{fmt(speed['color-map'][op].hz)}</td>
-					<td style="text-align:right">{fmt(speed.culori[op].hz)}</td>
-					<td style="text-align:right">{fmt(speed['colorjs.io'][op].hz)}</td>
+					<td>
+						{libs.map((l) => (
+							<div class="bar-row">
+								<div class="bar"><span class:list={['fill', l === 'color-map' && 'self', l === 'culori' && 'b', l === 'colorjs.io' && 'c']} style={`width:${Math.max(0.5, (speed[l][op].hz / max) * 100).toFixed(1)}%`}></span></div>
+								<span class="val">{fmt(speed[l][op].hz)}</span>
+							</div>
+						))}
+					</td>
 					<td>{ratioText(op)}</td>
 				</tr>
 			))}
@@ -41,4 +48,13 @@ const ratioText = (op: string) => {
 </div>
 <style>
 	.table-wrap { overflow-x: auto; }
+	.bar-row { display: flex; align-items: center; gap: 0.5rem; min-width: 14rem; margin: 0.1rem 0; }
+	.bar { flex: 1; height: 0.5rem; background: var(--sl-color-gray-5); border-radius: 2px; }
+	.fill { display: block; height: 100%; border-radius: 2px; background: var(--sl-color-gray-3); }
+	.fill.self, .sw.self { background: var(--sl-color-accent); }
+	.fill.b, .sw.b { background: var(--sl-color-gray-3); }
+	.fill.c, .sw.c { background: var(--sl-color-gray-4); }
+	.val { min-width: 3.5rem; text-align: right; font-variant-numeric: tabular-nums; }
+	.legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: var(--sl-text-sm); margin-bottom: 0.5rem; }
+	.sw { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 2px; margin-right: 0.3rem; vertical-align: middle; }
 </style>

@@ -14,7 +14,7 @@ export const sp = data.speed
 export const kb = (b) => (b / 1000).toFixed(1)
 export const times = (op) => (sp.culori[op].hz / sp['color-map'][op].hz).toFixed(1)
 
-This page puts `color-map` next to six other color libraries. Every number below is read from a data file that a script writes, and every feature cell links to the page it comes from. Nothing here is typed by hand, so a rerun updates it.
+`color-map` next to six other color libraries. Every number is read from a data file that a script writes, and every feature cell links to its source.
 
 Measured on {data.generatedAt} with color-map {v['color-map']}, culori {v.culori}, colorjs.io {v['colorjs.io']}, chroma-js {v['chroma-js']}, @texel/color {v['@texel/color']}, lightningcss {v.lightningcss} and colord {v.colord}.
 
@@ -27,34 +27,34 @@ Measured on {data.generatedAt} with color-map {v['color-map']}, culori {v.culori
 
 ## Features
 
-Each cell says what the library's own documentation or source shows. "Unverified" means we could not confirm the answer from a primary source, so read it as unknown, not as "no".
+"Unverified" means no primary source confirmed the answer. Read it as unknown, not as "no".
 
 <CompareFeatures />
 
 ## Browser size
 
-Sizes are minified and gzipped bytes of a bundle that contains only what the scenario imports. "Convert one color" parses `#3b82f6`, converts it to `oklch` and writes it back as a string. colord has no `oklch`, so its row converts to `hsl` instead, which is less work than the others do.
+Minified and gzipped, bundling only what each scenario imports. "Convert one color" parses `#3b82f6`, converts it to `oklch` and writes it back. colord has no `oklch`, so it converts to `hsl`, which is less work.
 
 <CompareSizes />
 
-Read the `color-map` rows with care:
+About the `color-map` rows:
 
-- `parse` pulls in the whole CSS parser and every color space it can read. That is why the convert scenario costs {kb(s['color-map'].convert)} kB.
-- When you do not parse strings, `createConverter` with two spaces costs {kb(s['color-map'].narrow)} kB. That is the narrow path, and it is the fairer match for `@texel/color`, which also takes numbers, not strings.
-- `@texel/color` and `colord` are smaller than `color-map` but cover far less. `colord` has no `oklch`, no Display P3 and no gamut mapping in its core. Check the features table before you choose on size alone.
-- Whole-package sizes are the bundle a bundler keeps when you re-export everything. For `color-map` that is `color`, `scale`, `palette` and `export` together.
+- `parse` pulls in the whole CSS parser, so the convert scenario costs {kb(s['color-map'].convert)} kB.
+- Without string parsing, `createConverter` with two spaces costs {kb(s['color-map'].narrow)} kB. That is the fairer match for `@texel/color`, which takes numbers.
+- `@texel/color` and `colord` are smaller but cover far less. Check the features table before choosing on size.
+- Whole package means re-exporting everything: for `color-map`, `color`, `scale`, `palette` and `export`.
 
-The budgets that `color-map` enforces on itself are on the [Library page](/color-map/library/#size-budgets).
+The budgets `color-map` enforces on itself are on the [Library page](/color-map/library/#size-budgets).
 
 ## Speed
 
-Operations per second, higher is better. Each library runs in its own process on 64 varied inputs, and the figure is the median of five samples. colorjs.io is measured through its procedural `colorjs.io/fn` API, its fastest. The benchmark only compares libraries that have the operation, so chroma-js, @texel/color and colord are not in this table.
+Operations per second, longer bar is faster. Each library runs in its own process on 64 inputs; the figure is the median of five samples. colorjs.io uses its fastest API, `colorjs.io/fn`. chroma-js, @texel/color and colord are not here because they lack some of these operations.
 
 <CompareSpeed />
 
-Run on {data.env.cpu}, {data.env.os}, Node {data.env.node}. Absolute numbers change with the machine and Node version. Compare the columns, not the figures.
+Run on {data.env.cpu}, {data.env.os}, Node {data.env.node}. Compare the bars, not the absolute figures.
 
-Where `color-map` is slower: `toCss` and `toHex` are the only large gaps. The conversions are within about 15% of culori's.
+`color-map` is clearly slower only at `toCss` and `toHex`.
 
 ## Method and caveats
 
