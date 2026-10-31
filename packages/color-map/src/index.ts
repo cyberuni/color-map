@@ -20,7 +20,7 @@ export * from './tokens/index.js'
 
 /** @deprecated Import it from `color-map/legacy`. The root stops exporting it in 3.0. */
 export const createColors = legacyCreateColors
-/** @deprecated Import it from `color-map/legacy`. The root stops exporting it in 3.0. */
+/** @deprecated Use `createGradient` from `color-map`, or import it from `color-map/legacy`. The root stops exporting it in 3.0. */
 export const createColorsFromMap = legacyCreateColorsFromMap
 /** @deprecated Import it from `color-map/legacy`, or use `toHex` from `color-map`. The root stops exporting it in 3.0. */
 export const rgbHex = legacyRgbHex
