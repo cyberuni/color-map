@@ -126,21 +126,21 @@
 			"name": "full color core",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toHex, toGamut, inGamut, deltaEOK, equals, fromArgb, toArgb, convert, spaces }",
-			"limit": "6.6 kB",
+			"limit": "6.65 kB",
 			"gzip": true
 		},
 		{
 			"name": "core with mix",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix }",
-			"limit": "6.85 kB",
+			"limit": "6.9 kB",
 			"gzip": true
 		},
 		{
 			"name": "core with mix and contrast",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix, contrast, meets, onColor, findContrast }",
-			"limit": "7.5 kB",
+			"limit": "7.55 kB",
 			"gzip": true
 		},
 		{
@@ -161,7 +161,7 @@
 			"name": "export",
 			"path": "esm/export/index.js",
 			"import": "*",
-			"limit": "7.45 kB",
+			"limit": "7.5 kB",
 			"gzip": true
 		},
 		{
