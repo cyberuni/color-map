@@ -1,0 +1,153 @@
+<div class="demo" id="pb">
+	<div class="row">
+		<label>Brand color
+			<input type="text" id="pb-brand" value="#3b82f6" spellcheck="false" autocomplete="off" />
+		</label>
+		<label>Mode
+			<select id="pb-mode"><option>light</option><option>dark</option></select>
+		</label>
+	</div>
+	<p class="err" id="pb-error" hidden></p>
+	<div id="pb-out" hidden>
+		<h3>Scale (createScale)</h3>
+		<label style="max-width: 16rem">Preset
+			<select id="pb-preset">
+				<option>tailwind-11</option><option>radix-12</option><option>tone-13</option><option>even</option>
+			</select>
+		</label>
+		<div class="strip" id="pb-scale"></div>
+		<label style="max-width: 16rem">Dark variant (darkVariant)
+			<select id="pb-dark"><option>tone-swap</option><option>mirror</option><option>lightness-invert</option></select>
+		</label>
+		<div class="strip" id="pb-darkscale"></div>
+
+		<h3>Scale from the brand (scaleFromBrand)</h3>
+		<div class="strip" id="pb-brandscale"></div>
+
+		<h3>Scale by contrast (createContrastScale)</h3>
+		<div class="row">
+			<label>Background
+				<input type="text" id="pb-bg" value="white" spellcheck="false" autocomplete="off" />
+			</label>
+			<label>Targets (WCAG 2 ratios)
+				<input type="text" id="pb-targets" value="1.5, 3, 4.5, 7, 12" spellcheck="false" autocomplete="off" />
+			</label>
+		</div>
+		<div class="strip" id="pb-contrast"></div>
+
+		<h3>Harmony (harmony)</h3>
+		<div class="row">
+			<label>Scheme
+				<select id="pb-scheme">
+					<option>complementary</option><option>split</option><option>analogous</option><option>triadic</option><option>tetradic</option>
+				</select>
+			</label>
+			<label>Hue space
+				<select id="pb-space"><option>oklch</option><option>lch</option><option>hsl</option><option>hwb</option></select>
+			</label>
+		</div>
+		<div class="strip" id="pb-harmony"></div>
+
+		<h3>Semantic roles (semanticPalette)</h3>
+		<div class="ui" id="pb-ui"></div>
+		<table id="pb-roles"></table>
+		<h3>Validation (validate)</h3>
+		<div id="pb-validate"></div>
+	</div>
+</div>
+
+<script>
+	import { type Color, toCss } from 'color-map/color'
+	import {
+		type DarkStrategy,
+		type HarmonyScheme,
+		type HarmonySpace,
+		darkVariant,
+		harmony,
+		type SemanticRole,
+		semanticPalette,
+		validate
+	} from 'color-map/palette'
+	import { createContrastScale, createScale, type ScalePreset, scaleFromBrand } from 'color-map/scale'
+	import { el, esc, swatch, tryParse } from '../util/ui'
+
+	const root = document.getElementById('pb') as HTMLElement
+	const val = (id: string) => (el(root, id) as HTMLInputElement | HTMLSelectElement).value
+	const strip = (id: string, colors: Color[], labels: string[] = []) => {
+		el(root, id).innerHTML = colors.map((c, i) => swatch(c, labels[i] ?? String(i + 1))).join('')
+	}
+	const guard = (id: string, fn: () => void) => {
+		try {
+			fn()
+		} catch (e) {
+			el(root, id).innerHTML = `<p class="err">${esc(e instanceof Error ? e.message : String(e))}</p>`
+		}
+	}
+
+	function render() {
+		const error = el(root, '#pb-error')
+		const out = el(root, '#pb-out')
+		const brand = tryParse(val('#pb-brand'))
+		if (typeof brand === 'string') {
+			error.textContent = brand
+			error.hidden = false
+			out.hidden = true
+			return
+		}
+		error.hidden = true
+		out.hidden = false
+		const mode = val('#pb-mode') as 'light' | 'dark'
+
+		guard('#pb-scale', () => {
+			const scale = createScale({ seed: brand, steps: val('#pb-preset') as ScalePreset })
+			strip('#pb-scale', scale)
+			strip('#pb-darkscale', darkVariant(scale, val('#pb-dark') as DarkStrategy))
+		})
+		guard('#pb-brandscale', () => strip('#pb-brandscale', scaleFromBrand(brand, { mode })))
+		guard('#pb-contrast', () => {
+			const targets = val('#pb-targets')
+				.split(',')
+				.map((t) => Number(t.trim()))
+				.filter((n) => Number.isFinite(n) && n > 1)
+			const steps = createContrastScale({ seed: brand, background: val('#pb-bg'), targets })
+			el(root, '#pb-contrast').innerHTML = steps
+				.map((s) => swatch(s.color, `${s.target}\n${s.contrast.toFixed(2)}${s.met ? '' : ' (unmet)'}`))
+				.join('')
+		})
+		guard('#pb-harmony', () =>
+			strip(
+				'#pb-harmony',
+				harmony(brand, val('#pb-scheme') as HarmonyScheme, { space: val('#pb-space') as HarmonySpace })
+			)
+		)
+		guard('#pb-roles', () => {
+			const palette = semanticPalette({ brand, mode })
+			const r = palette.roles
+			const pair = (role: SemanticRole) => ({ bg: toCss(r[role].bg), fg: toCss(r[role].fg) })
+			const surface = pair('surface')
+			const chip = (role: SemanticRole) =>
+				`<span style="background:${esc(pair(role).bg)};color:${esc(pair(role).fg)}">${role}</span>`
+			el(root, '#pb-ui').setAttribute('style', `background:${surface.bg};color:${surface.fg}`)
+			el(root, '#pb-ui').innerHTML =
+				`<strong>Sample card (${mode})</strong><p style="margin:0">Body text on the surface role.</p>` +
+				`<div><button style="background:${esc(pair('primary').bg)};color:${esc(pair('primary').fg)}">Primary action</button></div>` +
+				`<div class="tags">${(['primaryContainer', 'success', 'warning', 'danger', 'info', 'surfaceVariant'] as SemanticRole[]).map(chip).join('')}</div>`
+			el(root, '#pb-roles').innerHTML =
+				'<tr><th>Role</th><th>Background</th><th>Foreground</th><th>Contrast</th><th>Target</th></tr>' +
+				(Object.keys(r) as SemanticRole[])
+					.map(
+						(k) =>
+							`<tr><td>${k}</td><td><code>${esc(toCss(r[k].bg))}</code></td><td><code>${esc(toCss(r[k].fg))}</code></td><td>${r[k].ratio.toFixed(2)}</td><td>${r[k].target}</td></tr>`
+					)
+					.join('')
+			const result = validate(palette)
+			el(root, '#pb-validate').innerHTML = result.ok
+				? '<p class="yes">ok: every pair meets its target, every scale is monotonic, every color is in sRGB.</p>'
+				: `<ul>${result.issues.map((i) => `<li><code>${esc(i.path)}</code> ${esc(i.kind)}: ${esc(i.message)}</li>`).join('')}</ul>`
+		})
+	}
+
+	root.addEventListener('input', render)
+	root.addEventListener('change', render)
+	render()
+</script>

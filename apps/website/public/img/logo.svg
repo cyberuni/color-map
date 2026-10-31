@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="color-map">
+  <!-- Family frame: the cyber-* command reticle. Identical in every cyber-* package. -->
+  <path class="s" d="M17 63V17h46"/>
+  <path class="s" d="M111 65v46H65"/>
+  <!-- Glyph slot (32..96): color-map builds scales, light to dark. -->
+  <rect class="f" x="32" y="32" width="16" height="64" rx="4"/>
+  <rect class="f" x="56" y="32" width="16" height="64" rx="4" fill-opacity=".6"/>
+  <rect class="f" x="80" y="32" width="16" height="64" rx="4" fill-opacity=".3"/>
+  <style>.f{fill:#000}.s{fill:none;stroke:#000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round}@media (prefers-color-scheme:dark){.f{fill:#fff}.s{stroke:#fff}}</style>
+</svg>

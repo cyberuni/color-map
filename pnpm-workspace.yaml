@@ -1,4 +1,5 @@
 packages:
+  - apps/*
   - packages/*
 
 # pnpm blocks postinstall scripts unless a package is listed here. These are all

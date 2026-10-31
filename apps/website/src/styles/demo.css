@@ -1,0 +1,140 @@
+.demo {
+	display: grid;
+	gap: 1rem;
+	margin-block: 1.5rem;
+}
+.demo label {
+	display: grid;
+	gap: 0.25rem;
+	font-size: var(--sl-text-sm);
+	color: var(--sl-color-gray-2);
+}
+.demo input[type="text"],
+.demo textarea,
+.demo select {
+	font: inherit;
+	font-family: var(--sl-font-mono);
+	padding: 0.45rem 0.6rem;
+	color: var(--sl-color-white);
+	background: var(--sl-color-gray-6);
+	border: 1px solid var(--sl-color-gray-5);
+	border-radius: 0.4rem;
+	width: 100%;
+	box-sizing: border-box;
+}
+.demo .row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	align-items: end;
+}
+.demo .row > * {
+	flex: 1 1 10rem;
+}
+.demo button {
+	font: inherit;
+	padding: 0.3rem 0.7rem;
+	border-radius: 0.4rem;
+	cursor: pointer;
+	color: var(--sl-color-white);
+	background: var(--sl-color-gray-6);
+	border: 1px solid var(--sl-color-gray-5);
+}
+.demo .chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+.demo .chips button {
+	font-size: var(--sl-text-xs);
+	font-family: var(--sl-font-mono);
+}
+.demo .err {
+	color: var(--sl-color-red-high);
+	font-family: var(--sl-font-mono);
+	font-size: var(--sl-text-sm);
+}
+.demo .strip {
+	display: flex;
+	gap: 2px;
+	flex-wrap: wrap;
+}
+.demo .sw {
+	margin: 0;
+	flex: 1 1 3.5rem;
+	min-width: 3.5rem;
+	font-size: 0.7rem;
+	text-align: center;
+}
+.demo .sw span {
+	display: block;
+	height: 3rem;
+	border-radius: 0.3rem;
+	border: 1px solid color-mix(in srgb, var(--sl-color-gray-3) 40%, transparent);
+}
+.demo .sw figcaption {
+	padding-top: 0.15rem;
+	font-family: var(--sl-font-mono);
+	color: var(--sl-color-gray-2);
+	white-space: pre-line;
+}
+.demo table {
+	width: 100%;
+	font-size: var(--sl-text-sm);
+}
+.demo td code {
+	word-break: break-all;
+}
+.demo .yes {
+	color: var(--sl-color-green-high);
+}
+.demo .no {
+	color: var(--sl-color-orange-high);
+}
+.demo .pair {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+}
+.demo .big {
+	height: 6rem;
+	border-radius: 0.5rem;
+	border: 1px solid var(--sl-color-gray-5);
+	display: grid;
+	place-items: center;
+	font-family: var(--sl-font-mono);
+	font-size: var(--sl-text-xs);
+	padding: 0.5rem;
+	text-align: center;
+}
+.demo h3 {
+	margin: 0;
+	font-size: var(--sl-text-base);
+}
+.demo .ui {
+	border-radius: 0.6rem;
+	padding: 1rem;
+	display: grid;
+	gap: 0.6rem;
+	border: 1px solid var(--sl-color-gray-5);
+}
+.demo .ui button {
+	border: 0;
+	padding: 0.4rem 0.8rem;
+	border-radius: 0.4rem;
+}
+.demo .ui .tags {
+	display: flex;
+	gap: 0.4rem;
+	flex-wrap: wrap;
+}
+.demo .ui .tags span {
+	padding: 0.15rem 0.5rem;
+	border-radius: 999px;
+	font-size: var(--sl-text-xs);
+}
+@media (max-width: 40rem) {
+	.demo .pair {
+		grid-template-columns: 1fr;
+	}
+}

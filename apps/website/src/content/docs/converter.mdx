@@ -1,0 +1,12 @@
+---
+title: Color converter
+description: Paste any CSS color, see it in every color space, and compare clipping with CSS gamut mapping.
+---
+
+import Converter from '../../components/Converter.astro'
+
+Paste any CSS color the library parses: hex, named colors, `rgb()`, `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()` and `color()` with any of the predefined spaces. `none` components are kept.
+
+<Converter />
+
+The gamut flags use `inGamut`. The two panels under them use `toGamut` with `method: 'clip'` and `method: 'css'`: clip clamps each channel, which is what most browsers do today, and the CSS method lowers OKLCH chroma until the result is within a ΔEOK of 0.02 of its clipped self. Your display decides what you can see, so on an sRGB screen the panels for a wide-gamut target can look identical.

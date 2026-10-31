@@ -1,0 +1,98 @@
+<div class="demo" id="mixer">
+	<label>A CSS color expression
+		<textarea id="mx-input" rows="2" spellcheck="false">color-mix(in oklch, red, blue 30%)</textarea>
+	</label>
+	<div class="chips" id="mx-examples"></div>
+	<p class="err" id="mx-error" hidden></p>
+	<div id="mx-out" hidden>
+		<div class="pair">
+			<div><h3>color-map</h3><div class="big" id="mx-lib"></div></div>
+			<div><h3>This browser</h3><div class="big" id="mx-browser"></div></div>
+		</div>
+		<p id="mx-verdict"></p>
+	</div>
+</div>
+
+<script>
+	import { convert, deltaEOK, parse, resolve, toCss } from 'color-map/color'
+	import { el, esc } from '../util/ui'
+
+	const root = document.getElementById('mixer') as HTMLElement
+	const input = el<HTMLTextAreaElement>(root, '#mx-input')
+	const EXAMPLES = [
+		'color-mix(in oklch, red, blue 30%)',
+		'color-mix(in srgb, red, blue)',
+		'color-mix(in hsl longer hue, red, blue)',
+		'color-mix(in oklab, color(display-p3 0 1 0) 40%, white)',
+		'oklch(from #3b82f6 calc(l + 0.1) c h)',
+		'rgb(from rebeccapurple r g b / 50%)',
+		'hsl(from teal calc(h + 180) s l)',
+		'light-dark(white, black)'
+	]
+	el(root, '#mx-examples').innerHTML = EXAMPLES.map(
+		(e) => `<button type="button" data-example="${esc(e)}">${esc(e)}</button>`
+	).join('')
+
+	/** Asks the browser itself: assign the value to a probe element and read back the computed color. */
+	function browserColor(expr: string): string | undefined {
+		if (!CSS.supports('color', expr)) return undefined
+		const probe = document.createElement('span')
+		probe.style.color = expr
+		document.body.append(probe)
+		const computed = getComputedStyle(probe).color
+		probe.remove()
+		return computed
+	}
+
+	function render() {
+		const out = el(root, '#mx-out')
+		const error = el(root, '#mx-error')
+		const expr = input.value.trim()
+		let lib: ReturnType<typeof resolve>
+		try {
+			lib = resolve(expr)
+		} catch (e) {
+			error.textContent = e instanceof Error ? e.message : String(e)
+			error.hidden = false
+			out.hidden = true
+			return
+		}
+		error.hidden = true
+		out.hidden = false
+		const libCss = toCss(lib)
+		const libBox = el(root, '#mx-lib')
+		libBox.style.background = libCss
+		libBox.textContent = libCss
+
+		const browser = browserColor(expr)
+		const browserBox = el(root, '#mx-browser')
+		const verdict = el(root, '#mx-verdict')
+		if (browser === undefined) {
+			browserBox.style.background = ''
+			browserBox.textContent = 'this browser does not support the expression'
+			verdict.textContent = 'No browser value to compare.'
+			return
+		}
+		browserBox.style.background = browser
+		browserBox.textContent = browser
+		try {
+			const delta = deltaEOK(convert(lib, 'oklab'), convert(parse(browser), 'oklab'))
+			verdict.innerHTML =
+				delta < 0.005
+					? `Match: ΔEOK ${delta.toExponential(2)} (below the 0.005 tolerance).`
+					: `Different: ΔEOK ${delta.toFixed(4)}. Browsers clip colors to the display, color-map keeps the exact value.`
+		} catch {
+			verdict.textContent = 'The browser returned a value color-map cannot parse, so only the swatches compare.'
+		}
+	}
+
+	input.addEventListener('input', render)
+	root.addEventListener('click', (event) => {
+		const example = (event.target as HTMLElement).dataset.example
+		if (example) {
+			input.value = example
+			render()
+		}
+	})
+	render()
+</script>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="color-map">
+  <g fill="#f7f8f8">
+    <rect x="32" y="32" width="16" height="64" rx="4"/>
+    <rect x="56" y="32" width="16" height="64" rx="4" fill-opacity=".6"/>
+    <rect x="80" y="32" width="16" height="64" rx="4" fill-opacity=".3"/>
+  </g>
+</svg>
