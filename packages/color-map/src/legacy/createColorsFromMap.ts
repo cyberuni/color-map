@@ -3,6 +3,9 @@ import type { Alpha, ColorMap, RGBA } from './interfaces.js'
 
 /**
  * Create colors with specified color map.
+ *
+ * @deprecated Use `createGradient` from `color-map`. Each of its stops
+ * carries its own alpha, and `{ in: 'srgb' }` comes close to these results.
  */
 export function createColorsFromMap(colormap: ColorMap, shades: number, alpha?: Alpha): RGBA[] {
 	if (shades < colormap.length) {

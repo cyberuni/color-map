@@ -18,7 +18,7 @@ The root re-exports the four subpaths below. With a bundler, importing from the 
 | --- | --- |
 | `color-map` | Everything below. The original API is still here too, deprecated: import it from `color-map/legacy`. |
 | `color-map/color` | The color core: parse, convert, serialize, gamut mapping, `mix`, `resolve`, contrast. |
-| `color-map/scale` | `createScale`, `createContrastScale`, `scaleFromBrand`, `tonalPalette`. |
+| `color-map/scale` | `createScale`, `createContrastScale`, `scaleFromBrand`, `tonalPalette`, `createGradient`. |
 | `color-map/palette` | `harmony`, `harmonize`, `inverse`, `darkVariant`, `semanticPalette`, `validate`. |
 | `color-map/tokens` | The output formats: `toDTCG`, `toCssVariables`, `toTailwindTheme`. |
 | `color-map/legacy` | The original API: `createColors`, `createColorsFromMap`, `rgbHex`, `rgbaString`. Unchanged. |
@@ -65,6 +65,7 @@ const css = toTailwindTheme(palette)     // an @theme { ... } block
 - `createContrastScale({ seed, background, targets })` returns one step per WCAG 2 target, each with its measured ratio and whether it was met.
 - `scaleFromBrand(brand, { mode })` puts the brand color exactly at step 9, with a Radix-like shape.
 - `tonalPalette(hue, chroma, tones)` holds an OKLCH hue and chroma across CIE L\* tones, with Material's 13 tones by default.
+- `createGradient(stops, count, { in, hue })` returns `count` colors along a gradient through color stops. See [Gradients](#gradients).
 
 ### `color-map/palette`
 
@@ -89,8 +90,47 @@ The original API works only in sRGB, interpolates in gamma-encoded sRGB, rounds 
 | --- | --- |
 | `rgbHex(rgb)` | `toHex(color)` |
 | `rgbaString(rgba)` | `toCss(color)` |
-| `createColors(from, to, shades, alpha)` | `mix(from, to, t)` in a loop. The results differ: `mix` interpolates in `oklab` by default and does not round. |
-| `createColorsFromMap(colormap, shades, alpha)` | No equivalent yet. |
+| `createColors(from, to, shades, alpha)` | `createGradient([from, to], shades, { in: 'srgb' })`. The results differ: `createGradient` does not round. |
+| `createColorsFromMap(colormap, shades, alpha)` | `createGradient(stops, shades, { in: 'srgb' })`. See [From `createColorsFromMap`](#from-createcolorsfrommap). |
+
+## Gradients
+
+`createGradient` samples a gradient through color stops, the way a CSS gradient blends them. Use it for data-visualization color maps, such as blue to lime to yellow for a heatmap:
+
+```ts
+import { createGradient } from 'color-map'
+
+const heatmap = createGradient(
+  [{ color: 'blue', at: 0 }, { color: 'lime', at: 0.6 }, { color: 'yellow', at: 1 }],
+  72,
+  { in: 'oklab' }
+)
+```
+
+- A stop is `{ color, at? }`, or a bare color. The color is a CSS color string or a color object.
+- `at` runs from 0 at the start to 1 at the end. Stops without `at` spread evenly between their neighbors, as in CSS. A position before an earlier stop's moves up to it, and two stops at one position switch color there.
+- The `count` colors are evenly spaced from 0 to 1, so the first and last fall on the ends. Before the first stop and after the last, the color holds.
+- `in` and `hue` work as they do in `mix()`. The default space is `oklab`, and the colors come back in that space.
+- Alpha comes from each stop's color, and is 1 when the color has none. Alpha changes linearly between stops, and the other channels are premultiplied by it, so a transparent stop does not tint its neighbor.
+
+### From `createColorsFromMap`
+
+`createColorsFromMap` is deprecated. Turn its color map into stops and interpolate in `srgb`:
+
+```ts
+import { createGradient, toCss } from 'color-map'
+
+const summer = [{ index: 0, rgb: [0, 128, 102] }, { index: 1, rgb: [255, 255, 102] }]
+
+const stops = summer.map(({ index, rgb: [r, g, b, a = 1] }) => ({ color: `rgb(${r} ${g} ${b} / ${a})`, at: index }))
+const colors = createGradient(stops, 60, { in: 'srgb' }).map((c) => toCss(c))
+```
+
+The results come close to the old ones, but do not match them:
+
+- Channels run from 0 to 1 and are not rounded to whole numbers. With two stops, each channel is within 0.5 of the old 0 to 255 value.
+- The old function started a new run at each inner stop, so it repeated that stop's color. `createGradient` places every color on one even spacing.
+- The old `alpha` argument set alpha for the whole map. Here each stop carries its own alpha in its color.
 
 ## Contrast guarantees
 

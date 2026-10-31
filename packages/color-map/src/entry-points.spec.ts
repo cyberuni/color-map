@@ -62,6 +62,7 @@ describe('entry point names', () => {
 			[
 			  "MATERIAL_TONES",
 			  "createContrastScale",
+			  "createGradient",
 			  "createScale",
 			  "lstar",
 			  "scaleFromBrand",

@@ -160,7 +160,7 @@
 			"name": "scales",
 			"path": "esm/scale/index.js",
 			"import": "*",
-			"limit": "8.05 kB",
+			"limit": "9 kB",
 			"gzip": true
 		},
 		{
