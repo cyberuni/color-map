@@ -30,11 +30,11 @@
 			"require": "./cjs/color/index.js",
 			"default": "./cjs/color/index.js"
 		},
-		"./export": {
-			"types": "./esm/export/index.d.ts",
-			"import": "./esm/export/index.js",
-			"require": "./cjs/export/index.js",
-			"default": "./cjs/export/index.js"
+		"./legacy": {
+			"types": "./esm/legacy/index.d.ts",
+			"import": "./esm/legacy/index.js",
+			"require": "./cjs/legacy/index.js",
+			"default": "./cjs/legacy/index.js"
 		},
 		"./palette": {
 			"types": "./esm/palette/index.d.ts",
@@ -47,6 +47,12 @@
 			"import": "./esm/scale/index.js",
 			"require": "./cjs/scale/index.js",
 			"default": "./cjs/scale/index.js"
+		},
+		"./tokens": {
+			"types": "./esm/tokens/index.d.ts",
+			"import": "./esm/tokens/index.js",
+			"require": "./cjs/tokens/index.js",
+			"default": "./cjs/tokens/index.js"
 		},
 		"./schemas/*": "./schemas/*",
 		"./package.json": "./package.json"
@@ -110,6 +116,13 @@
 	"size-limit": [
 		{
 			"name": "existing API",
+			"path": "esm/legacy/index.js",
+			"import": "{ createColors, createColorsFromMap, rgbHex, rgbaString }",
+			"limit": "0.45 kB",
+			"gzip": true
+		},
+		{
+			"name": "existing API from the root",
 			"path": "esm/index.js",
 			"import": "{ createColors, createColorsFromMap, rgbHex, rgbaString }",
 			"limit": "0.45 kB",
@@ -158,8 +171,8 @@
 			"gzip": true
 		},
 		{
-			"name": "export",
-			"path": "esm/export/index.js",
+			"name": "tokens",
+			"path": "esm/tokens/index.js",
 			"import": "*",
 			"limit": "7.55 kB",
 			"gzip": true

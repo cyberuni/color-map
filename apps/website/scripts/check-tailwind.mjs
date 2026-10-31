@@ -2,9 +2,9 @@
 // utilities carry the exported colors. Runs before `astro build`, so a theme block
 // Tailwind rejects or ignores fails the site build.
 
-import { toTailwindTheme } from 'color-map/export'
 import { semanticPalette } from 'color-map/palette'
 import { createScale } from 'color-map/scale'
+import { toTailwindTheme } from 'color-map/tokens'
 import { compile } from 'tailwindcss'
 
 const scale = createScale({ seed: '#3b82f6' })

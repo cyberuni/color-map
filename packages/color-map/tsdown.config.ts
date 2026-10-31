@@ -6,7 +6,8 @@ const entry = [
 	'src/color/index.ts',
 	'src/scale/index.ts',
 	'src/palette/index.ts',
-	'src/export/index.ts'
+	'src/legacy/index.ts',
+	'src/tokens/index.ts'
 ]
 
 // Three outputs, each pinned to the path it already publishes at, so replacing
@@ -57,7 +58,9 @@ export default defineConfig([
 	{
 		// Named entry plus an explicit entryFileNames: tsdown would otherwise infix
 		// the format and emit color-map.iife.es5.js, moving a published path.
-		entry: { 'color-map': 'src/index.ts' },
+		// Built from the legacy API, which is what the `ColorMap` global has always
+		// held. Built from the root, it would carry the whole library (36 kB).
+		entry: { 'color-map': 'src/legacy/index.ts' },
 		format: 'iife',
 		globalName: 'ColorMap',
 		outDir: 'dist',

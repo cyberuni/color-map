@@ -4,9 +4,9 @@ import { join } from 'node:path'
 import { describe, expect, test } from 'vitest'
 import { run } from './cli/testing.js'
 import { contrast, findContrast, meets, mix, parse, parseExpr, resolve } from './color/index.js'
-import { toCssVariables, toDTCG, toTailwindTheme } from './export/index.js'
 import { darkVariant, harmony, semanticPalette, validate } from './palette/index.js'
 import { createContrastScale, createScale, scaleFromBrand } from './scale/index.js'
+import { toCssVariables, toDTCG, toTailwindTheme } from './tokens/index.js'
 
 // A name that a caller writes must be looked up as a name, never as a property
 // of Object.prototype. Each of these is an inherited property of every object.
