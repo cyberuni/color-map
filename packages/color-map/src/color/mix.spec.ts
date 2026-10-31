@@ -164,6 +164,19 @@ describe('serializes mix results', () => {
 			)
 		})
 
+		test.each(['hsl', 'hwb'] as const)('a converted gray takes the other hue in %s', (space) => {
+			const blue = convert(parse('blue'), space).components[0] as number
+			for (const gray of ['white', 'black', 'gray']) {
+				expect(mix(gray, 'blue', 0.5, { in: space }).components[0]).toBeCloseTo(blue, 9)
+				expect(mix('blue', gray, 0.5, { in: space }).components[0]).toBeCloseTo(blue, 9)
+			}
+		})
+
+		test('a chromatic hsl or hwb keeps its hue', () => {
+			expect(mix('red', 'blue', 0.5, { in: 'hsl' }).components[0]).toBeCloseTo(300, 6)
+			expect(mix('red', 'blue', 0.5, { in: 'hwb' }).components[0]).toBeCloseTo(300, 6)
+		})
+
 		test('matches colorjs.io', () => {
 			const c = new Colorjs('white').mix('blue', 0.5, { space: 'oklch', outputSpace: 'oklch' })
 			expect(hue('white', 'blue', 'oklch')).toBeCloseTo(c.coords[2] as number, 6)
