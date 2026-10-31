@@ -67,7 +67,12 @@ const POWERLESS: Partial<Record<ColorSpaceId, number>> = { oklch: 8e-6, lch: 0.0
 function prepare(color: Color, space: ColorSpaceId): Color {
 	const out = convertKeepingNone(color, space)
 	const epsilon = POWERLESS[space]
-	if (epsilon !== undefined && color.colorSpace !== space && typeof out.components[1] === 'number' && out.components[1] < epsilon)
+	if (
+		epsilon !== undefined &&
+		color.colorSpace !== space &&
+		typeof out.components[1] === 'number' &&
+		out.components[1] < epsilon
+	)
 		out.components[2] = null
 	return out
 }
