@@ -1,0 +1,46 @@
+---
+type Cell = { value: string; note: string; source: string }
+const label: Record<string, string> = { yes: 'Yes', partial: 'Partial', no: 'No', unverified: 'Unverified' }
+---
+<div class="table-wrap">
+	<table>
+		<thead>
+			<tr>
+				<th>Feature</th>
+				{data.libraries.map((l) => <th>{l}</th>)}
+			</tr>
+		</thead>
+		<tbody>
+			{data.rows.map((row) => (
+				<tr>
+					<th scope="row">{row.feature}</th>
+					{data.libraries.map((l) => {
+						const c = (row.cells as Record<string, Cell>)[l]
+						return (
+							<td>
+								{c ? (
+									<>
+										<strong>{label[c.value] ?? c.value}</strong>
+										{c.note && <span class="note"> {c.note}</span>}
+										{c.source && (
+											<>
+												{' '}
+												<a href={c.source} rel="noopener">source</a>
+											</>
+										)}
+									</>
+								) : '—'}
+							</td>
+						)
+					})}
+				</tr>
+			))}
+		</tbody>
+	</table>
+</div>
+<style>
+	.table-wrap { overflow-x: auto; }
+	.note { font-size: 0.85em; color: var(--sl-color-gray-2); }
+	td, th { vertical-align: top; min-width: 9rem; }
+	th[scope='row'] { min-width: 8rem; }
+</style>

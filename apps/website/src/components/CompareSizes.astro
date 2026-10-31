@@ -1,0 +1,52 @@
+---
+import data from '../data/compare.json'
+
+const kb = (b: number) => `${(b / 1000).toFixed(1)} kB`
+const fmt = (b?: number) => (b === undefined ? 'n/a' : `${b.toLocaleString('en-US')} B (${kb(b)})`)
+const rows: [string, string][] = [
+	['color-map', 'color-map'],
+	['culori', 'culori'],
+	['colorjs.io', 'colorjs.io (fn build)'],
+	['chroma-js', 'chroma-js'],
+	['@texel/color', '@texel/color'],
+	['colord', 'colord']
+]
+const sizes = data.sizes as Record<string, Record<string, number>>
+const ver = data.versions as Record<string, string>
+---
+<div class="table-wrap">
+	<table>
+		<thead>
+			<tr>
+				<th>Library</th>
+				<th>Version</th>
+				<th style="text-align:right">Convert one color</th>
+				<th style="text-align:right">Whole package</th>
+			</tr>
+		</thead>
+		<tbody>
+			{rows.map(([key, label]) => (
+				<tr>
+					<td>{label}</td>
+					<td>{ver[key]}</td>
+					<td style="text-align:right">{fmt(sizes[key]?.convert)}</td>
+					<td style="text-align:right">{key === 'chroma-js' ? 'one import, not tree-shakeable' : fmt(sizes[key]?.whole)}</td>
+				</tr>
+			))}
+			<tr>
+				<td>color-map, narrow path</td>
+				<td>{ver['color-map']}</td>
+				<td style="text-align:right">{fmt(sizes['color-map']?.narrow)}</td>
+				<td style="text-align:right">n/a</td>
+			</tr>
+			<tr>
+				<td>lightningcss</td>
+				<td>{ver.lightningcss}</td>
+				<td style="text-align:right" colspan="2">not measured: a native Rust build tool, not a browser library</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<style>
+	.table-wrap { overflow-x: auto; }
+</style>
