@@ -30,7 +30,8 @@ export function srgbToHsl([r, g, b]: Vec3, flipNegative = true): Vec3 {
 	const d = max - min
 	let h = 0
 	let s = 0
-	if (d !== 0) {
+	// A spread of rounding noise is a gray: a round trip leaves white at 1 - 1e-16.
+	if (d > 1e-9) {
 		s = l === 0 || l === 1 ? 0 : (max - l) / Math.min(l, 1 - l)
 		h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4
 		h *= 60

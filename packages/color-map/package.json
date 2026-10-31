@@ -29,6 +29,12 @@
 			"import": "./esm/color/index.js",
 			"require": "./cjs/color/index.js",
 			"default": "./cjs/color/index.js"
+		},
+		"./scale": {
+			"types": "./esm/scale/index.d.ts",
+			"import": "./esm/scale/index.js",
+			"require": "./cjs/scale/index.js",
+			"default": "./cjs/scale/index.js"
 		}
 	},
 	"main": "./cjs/index.js",
@@ -107,6 +113,13 @@
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix, contrast, meets, onColor, findContrast }",
 			"limit": "12 kB",
+			"gzip": true
+		},
+		{
+			"name": "scales",
+			"path": "esm/scale/index.js",
+			"import": "*",
+			"limit": "9 kB",
 			"gzip": true
 		},
 		{

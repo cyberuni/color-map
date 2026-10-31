@@ -57,7 +57,7 @@ export function convertKeepingNone(color: Color, space: ColorSpaceId): Color {
  * axes are under 1/100000 of their reference extent: 0.8 for Oklab (a, b in
  * -0.4 to 0.4) gives 8e-6, 250 for Lab (-125 to 125) gives 0.0025.
  */
-const POWERLESS: Partial<Record<ColorSpaceId, number>> = { oklch: 8e-6, lch: 0.0025 }
+const POWERLESS: Partial<Record<ColorSpaceId, number>> = { oklch: 8e-6, lch: 0.0025, hsl: 1e-4 }
 
 /**
  * Converts for interpolation. A hue that conversion produced for a gray
@@ -66,14 +66,13 @@ const POWERLESS: Partial<Record<ColorSpaceId, number>> = { oklch: 8e-6, lch: 0.0
  */
 function prepare(color: Color, space: ColorSpaceId): Color {
 	const out = convertKeepingNone(color, space)
+	if (color.colorSpace === space) return out
+	const [, x, y] = out.components
 	const epsilon = POWERLESS[space]
-	if (
-		epsilon !== undefined &&
-		color.colorSpace !== space &&
-		typeof out.components[1] === 'number' &&
-		out.components[1] < epsilon
-	)
-		out.components[2] = null
+	const gray =
+		typeof x === 'number' &&
+		(space === 'hwb' ? typeof y === 'number' && x + y > 100 - 1e-4 : epsilon !== undefined && x < epsilon)
+	if (gray) out.components[HUE_AT[space] as number] = null
 	return out
 }
 
@@ -106,7 +105,7 @@ function carry(x: number | null, y: number | null): [number | null, number | nul
  * extrapolates). Strings are parsed with `parse`.
  *
  * A hue that conversion makes powerless (chroma under 8e-6 in `oklch`, 0.0025
- * in `lch`, for example white) becomes `none`, so it takes the other color's
+ * in `lch`, saturation under 1e-4 in `hsl`, whiteness plus blackness filling `hwb`; for example white) becomes `none`, so it takes the other color's
  * hue. A hue you wrote in the target space stays as written.
  */
 export function mix(a: Color | string, b: Color | string, t = 0.5, options: MixOptions = {}): Color {

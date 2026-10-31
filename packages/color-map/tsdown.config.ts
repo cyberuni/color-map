@@ -1,7 +1,7 @@
 import { writeFile } from 'node:fs/promises'
 import { defineConfig } from 'tsdown'
 
-const entry = ['src/index.ts', 'src/color/index.ts']
+const entry = ['src/index.ts', 'src/color/index.ts', 'src/scale/index.ts']
 
 // Three outputs, each pinned to the path it already publishes at, so replacing
 // webpack/tsc with tsdown stays invisible to consumers:
