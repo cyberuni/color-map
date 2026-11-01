@@ -5,6 +5,7 @@
 	"description": "Measures color-map against other color libraries for the website's Compare page. Not published.",
 	"type": "module",
 	"scripts": {
+		"check": "node scripts/check.mjs",
 		"measure": "node scripts/measure.mjs"
 	},
 	"dependencies": {},
