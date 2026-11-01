@@ -38,8 +38,8 @@ const changed = run('git', ['log', '--oneline', `${last}..HEAD`, '--', 'packages
 if (changed) stale.push(`color-map source changed since the data was committed:\n  ${changed.split('\n').join('\n  ')}`)
 
 if (stale.length === 0) {
-	console.log(`compare data (${data.generatedAt}) is current.`)
+	console.error(`compare data (${data.generatedAt}) is current.`)
 } else {
-	console.log(`compare data (${data.generatedAt}) is stale:\n- ${stale.join('\n- ')}`)
+	console.error(`compare data (${data.generatedAt}) is stale:\n- ${stale.join('\n- ')}`)
 	process.exitCode = 1
 }
