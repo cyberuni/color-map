@@ -59,6 +59,15 @@ const css = toTailwindTheme(palette)     // an @theme { ... } block
 - **Color 5:** `mix` follows CSS Color 5 §13 and `resolve` evaluates `color-mix()`, relative colors with a `calc()` subset, `light-dark()` and `contrast-color()`.
 - **Contrast:** `contrast`, `meets`, `onColor`, `findContrast`, and the `ContrastFn` type for supplying another measure. The default is WCAG 2.
 
+`convert` takes a space by name, so it bundles all 15 spaces. To parse and convert with only the spaces you use, pass them to `createConverter`. The converter throws for a space it was not given. See [Size budgets](#size-budgets) for the difference.
+
+```ts
+import { parse, toCss, createConverter, srgb, oklch } from 'color-map/color'
+
+const convert = createConverter(srgb, oklch)
+toCss(convert(parse('#3b82f6'), 'oklch')) // oklch(0.62308 0.18801 259.81453)
+```
+
 ### `color-map/scale`
 
 - `createScale({ seed, steps })` with the presets `tailwind-11`, `radix-12`, `tone-13` and `even`, or a number of steps.
