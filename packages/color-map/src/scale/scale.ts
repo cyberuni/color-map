@@ -65,6 +65,7 @@ const PRESETS: Record<string, Curve> = {
 	}
 }
 
+/** Options for `createScale`. Only `seed` is required. */
 export interface ScaleOptions {
 	/** The color the scale is built around. Its hue and chroma set the anchor step. */
 	seed: Color | string

@@ -3,6 +3,7 @@ import { convert } from '../color/spaces.js'
 import type { ColorSpaceId } from '../color/types.js'
 import { cssNames, flatten, type TokenTree } from './tokens.js'
 
+/** Options for `toCssVariables`. It also takes the options of `toCss`. */
 export interface CssVariablesOptions extends ToCssOptions {
 	/** The first part of every name. Default `color`, so `primary.500` becomes `--color-primary-500`. */
 	prefix?: string

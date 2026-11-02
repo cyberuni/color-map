@@ -4,6 +4,7 @@ import { convert } from '../color/spaces.js'
 import type { Color, ColorSpaceId, Component } from '../color/types.js'
 import { flatten, type TokenTree } from './tokens.js'
 
+/** Options for `toDtcg` and `toDtcgValue`. */
 export interface DtcgOptions {
 	/** Add the `hex` fallback (an sRGB `#rrggbb`, gamut-mapped when the color is outside sRGB). Default `true`. */
 	hex?: boolean
@@ -17,11 +18,13 @@ export interface DtcgColorValue {
 	hex?: string
 }
 
+/** A DTCG color token: a `$type` of `color` and its {@link DtcgColorValue}. */
 export interface DtcgToken {
 	$type: 'color'
 	$value: DtcgColorValue
 }
 
+/** A DTCG group: named tokens and nested groups, as `toDtcg` returns for a token tree. */
 export interface DtcgGroup {
 	[name: string]: DtcgToken | DtcgGroup
 }
