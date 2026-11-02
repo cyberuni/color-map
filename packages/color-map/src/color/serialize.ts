@@ -3,6 +3,7 @@ import { componentsIn } from './spaces.js'
 import { srgb } from './srgb.js'
 import type { Color, ColorSpaceId, Component, Space } from './types.js'
 
+/** Options for `toCss`. */
 export interface ToCssOptions {
 	/** Decimal places kept in every number. Default 5. */
 	precision?: number

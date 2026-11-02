@@ -9,6 +9,7 @@ import { unknownName } from './unknown-name.js'
 /** How `mix` travels around the hue circle (CSS Color 4 section 12.4). */
 export type HueMethod = 'shorter' | 'longer' | 'increasing' | 'decreasing'
 
+/** Options for `mix` and the function `createMix` returns. */
 export interface MixOptions {
 	/** The space to interpolate in. Default `oklab`, which is what `color-mix()` uses. */
 	in?: ColorSpaceId

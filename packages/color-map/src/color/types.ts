@@ -30,6 +30,7 @@ export interface Color {
 	alpha?: Component
 }
 
+/** Three numbers: the components of a color without alpha, or a point in XYZ. */
 export type Vec3 = [number, number, number]
 
 /** A color space, defined by its conversion to and from the XYZ-D65 hub. */
