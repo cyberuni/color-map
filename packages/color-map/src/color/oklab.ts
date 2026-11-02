@@ -2,6 +2,10 @@ import { multiply } from './math.js'
 import { lmsToOklab, lmsToXyz, oklabToLms, xyzToLms } from './matrices.js'
 import type { Space } from './types.js'
 
+/**
+ * The CSS `oklab` space. Components are lightness in 0 to 1, then the a and b axes, which stay within about -0.4 to 0.4 for real colors.
+ * Pass it to `createConverter` and to the narrow helpers such as `createMix` and `createToGamut`.
+ */
 export const oklab: Space = {
 	id: 'oklab',
 	toXyz: (c) => {

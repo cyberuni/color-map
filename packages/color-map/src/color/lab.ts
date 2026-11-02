@@ -8,6 +8,10 @@ const KAPPA = 24389 / 27
 const finv = (f: number): number => (f ** 3 > EPSILON ? f ** 3 : (116 * f - 16) / KAPPA)
 const forward = (v: number): number => (v > EPSILON ? Math.cbrt(v) : (KAPPA * v + 16) / 116)
 
+/**
+ * The CSS `lab` space (CIE Lab, D50 white). Components are lightness in 0 to 100, then the a and b axes, which are not bounded but stay near -125 to 125 for real colors.
+ * Pass it to `createConverter` and to the narrow helpers such as `createMix` and `createToGamut`.
+ */
 export const lab: Space = {
 	id: 'lab',
 	toXyz: ([l, a, b]) => {
