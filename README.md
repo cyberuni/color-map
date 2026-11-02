@@ -89,6 +89,10 @@ pnpm web build   # static build into apps/website/dist
 
 Internal links in the site's Markdown need the `/color-map/` base prefix, and new pages need a `sidebar` entry in `apps/website/astro.config.mjs`.
 
+## Acknowledgements
+
+`color-map` follows CSS Color 4 and 5 (W3C), uses [Björn Ottosson's OKLab](https://bottosson.github.io/posts/oklab/), and writes [Design Tokens](https://www.designtokens.org/) color values. Its scales and palettes learn from [Radix Colors](https://www.radix-ui.com/colors), [Material Design 3](https://m3.material.io/styles/color/system/overview) and [Tailwind CSS](https://tailwindcss.com/). It started from [`colormap`](https://github.com/bpostlethwaite/colormap). The [Compare page](https://cyberuni.github.io/color-map/compare/) measures it against culori, Color.js, chroma-js, @texel/color, @colordx/core, lightningcss and colord. No third-party source code is bundled. The [Credits page](https://cyberuni.github.io/color-map/credits/) says what each one contributed and under which license.
+
 ## Contribute
 
 ```sh
