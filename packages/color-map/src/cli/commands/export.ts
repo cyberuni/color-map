@@ -4,7 +4,7 @@ import { CliError, document, exitCodes, isCliError } from 'clibuilder/axi'
 import type { ColorSpaceId } from '../../color/index.js'
 import { semanticPalette } from '../../palette/index.js'
 import { createScale } from '../../scale/index.js'
-import { toCssVariables, toDTCG, toTailwindTheme } from '../../tokens/index.js'
+import { toCssVariables, toDtcg, toTailwindTheme } from '../../tokens/index.js'
 import { EXPORT_SOURCES, EXPORT_TARGETS, MODES, readColor, SPACES } from '../shared.js'
 
 function usage(code: string, message: string, help: string, details: CliError.Details = {}) {
@@ -70,7 +70,7 @@ const definition = command({
 			)
 		try {
 			const space = args.space as ColorSpaceId | undefined
-			let tree: Parameters<typeof toDTCG>[0]
+			let tree: Parameters<typeof toDtcg>[0]
 			if (args.tokens !== undefined) tree = readTokens(args.tokens) as typeof tree
 			else {
 				const color = readColor(args.color as string)
@@ -79,7 +79,7 @@ const definition = command({
 						? { primary: createScale({ seed: color }) }
 						: semanticPalette({ brand: color, mode: args.mode })
 			}
-			if (args.to === 'dtcg') return document(`${JSON.stringify(toDTCG(tree, { hex: args.hex }), null, 2)}\n`)
+			if (args.to === 'dtcg') return document(`${JSON.stringify(toDtcg(tree, { hex: args.hex }), null, 2)}\n`)
 			if (args.to === 'css')
 				return document(
 					toCssVariables(tree, { space, prefix: args.prefix, selector: args.selector, precision: args.precision })

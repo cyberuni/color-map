@@ -1,6 +1,6 @@
 import Colorjs from 'colorjs.io'
 import { toGamut as culoriGamut } from 'culori'
-import { convert, deltaEOK, equals, fromArgb, inGamut, parse, toArgb, toGamut } from './index.js'
+import { convert, deltaEOk, equals, fromArgb, inGamut, parse, toArgb, toGamut } from './index.js'
 import type { Color } from './types.js'
 
 describe('inGamut', () => {
@@ -100,23 +100,23 @@ describe('toGamut', () => {
 	})
 })
 
-describe('deltaEOK', () => {
+describe('deltaEOk', () => {
 	test('is 0 for the same color and symmetric', () => {
 		const a = parse('#336699')
 		const b = parse('#336698')
-		expect(deltaEOK(a, a)).toBe(0)
-		expect(deltaEOK(a, b)).toBeCloseTo(deltaEOK(b, a), 12)
-		expect(deltaEOK(a, b)).toBeGreaterThan(0)
+		expect(deltaEOk(a, a)).toBe(0)
+		expect(deltaEOk(a, b)).toBeCloseTo(deltaEOk(b, a), 12)
+		expect(deltaEOk(a, b)).toBeGreaterThan(0)
 	})
 
 	test('measures across spaces', () => {
-		expect(deltaEOK(parse('white'), parse('oklab(1 0 0)'))).toBeLessThan(1e-6)
-		expect(deltaEOK(parse('black'), parse('white'))).toBeCloseTo(1, 4)
+		expect(deltaEOk(parse('white'), parse('oklab(1 0 0)'))).toBeLessThan(1e-6)
+		expect(deltaEOk(parse('black'), parse('white'))).toBeCloseTo(1, 4)
 	})
 
 	test('agrees with colorjs.io', () => {
 		const theirs = new Colorjs('#336699').deltaE(new Colorjs('#aa5500'), 'OK')
-		expect(deltaEOK(parse('#336699'), parse('#aa5500'))).toBeCloseTo(theirs, 6)
+		expect(deltaEOk(parse('#336699'), parse('#aa5500'))).toBeCloseTo(theirs, 6)
 	})
 })
 

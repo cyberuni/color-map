@@ -1,9 +1,9 @@
-import { type Color, deltaEOK, mix, parse } from '../color/index.js'
+import { type Color, deltaEOk, mix, parse } from '../color/index.js'
 import { createColorsFromMap } from '../legacy/index.js'
 import { createGradient } from './index.js'
 
 const near = (a: Color, b: Color | string) =>
-	expect(deltaEOK(a, typeof b === 'string' ? parse(b) : b)).toBeLessThan(1e-6)
+	expect(deltaEOk(a, typeof b === 'string' ? parse(b) : b)).toBeLessThan(1e-6)
 
 describe('createGradient', () => {
 	test('the issue example: 72 oklab colors from blue through lime at 0.6 to yellow', () => {

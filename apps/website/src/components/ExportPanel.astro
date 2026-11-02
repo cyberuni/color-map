@@ -13,7 +13,7 @@
 			<select id="ep-format">
 				<option value="tailwind">Tailwind v4 theme (toTailwindTheme)</option>
 				<option value="css">CSS variables (toCssVariables)</option>
-				<option value="dtcg">DTCG tokens (toDTCG)</option>
+				<option value="dtcg">DTCG tokens (toDtcg)</option>
 			</select>
 		</label>
 		<label>Color space
@@ -35,7 +35,7 @@
 
 <script>
 	import type { ColorSpaceId } from 'color-map/color'
-	import { toCssVariables, toDTCG, toTailwindTheme } from 'color-map/tokens'
+	import { toCssVariables, toDtcg, toTailwindTheme } from 'color-map/tokens'
 	import { semanticPalette } from 'color-map/palette'
 	import { createScale } from 'color-map/scale'
 	import { el, swatch, tryParse } from '../util/ui'
@@ -65,7 +65,7 @@
 					? toTailwindTheme(tree, { space })
 					: format === 'css'
 						? toCssVariables(tree, { space })
-						: `${JSON.stringify(toDTCG(tree), null, '\t')}\n`
+						: `${JSON.stringify(toDtcg(tree), null, '\t')}\n`
 			el(root, '#ep-code').textContent = text
 			el(root, '#ep-strip').innerHTML = scale
 				.map((c, i) => swatch(c, String(i + 1)))

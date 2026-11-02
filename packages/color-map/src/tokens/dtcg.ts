@@ -46,7 +46,7 @@ export function toDtcgValue(color: Color, options: DtcgOptions = {}): DtcgColorV
  * `none` components print as `"none"`, as the format asks. The result is plain
  * JSON, so `JSON.stringify` writes the file.
  */
-export function toDTCG(tree: TokenTree, options: DtcgOptions = {}): DtcgGroup {
+export function toDtcg(tree: TokenTree, options: DtcgOptions = {}): DtcgGroup {
 	// Groups have no prototype, so a token named `__proto__` or `constructor` is an ordinary key.
 	const root: DtcgGroup = Object.create(null)
 	for (const { path, color } of flatten(tree)) {

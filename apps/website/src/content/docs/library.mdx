@@ -20,7 +20,7 @@ The root re-exports the four subpaths below. With a bundler, importing from the 
 | `color-map/color` | The color core: parse, convert, serialize, gamut mapping, `mix`, `resolve`, contrast. |
 | `color-map/scale` | `createScale`, `createContrastScale`, `scaleFromBrand`, `tonalPalette`, `createGradient`. |
 | `color-map/palette` | `harmony`, `harmonize`, `inverse`, `darkVariant`, `semanticPalette`, `validate`. |
-| `color-map/tokens` | The output formats: `toDTCG`, `toCssVariables`, `toTailwindTheme`. |
+| `color-map/tokens` | The output formats: `toDtcg`, `toCssVariables`, `toTailwindTheme`. |
 | `color-map/legacy` | The original API: `createColors`, `createColorsFromMap`, `rgbHex`, `rgbaString`. Unchanged. |
 
 ## Usage
@@ -55,10 +55,10 @@ const css = toTailwindTheme(palette)     // an @theme { ... } block
 - **Read and write:** `parse`, `parseExpr`, `toCss`, `toHex`, `fromArgb`, `toArgb`.
 - **Convert:** `convert`, `convertComponents`, `createConverter`, `spaces`.
 - **Gamut:** `inGamut`, `toGamut` (the CSS Color 4 algorithm, or clip).
-- **Compare:** `equals`, `deltaEOK`.
+- **Compare:** `equals`, `deltaEOk`.
 - **Color 5:** `mix` follows CSS Color 5 §13 and `resolve` evaluates `color-mix()`, relative colors with a `calc()` subset, `light-dark()` and `contrast-color()`.
 - **Contrast:** `contrast`, `meets`, `onColor`, `findContrast`, and the `ContrastFn` type for supplying another measure. The default is WCAG 2.
-- **Narrow forms:** `createToHex`, `createInGamut`, `createToGamut`, `createDeltaEOK`, `createEquals`, `createMix`, `createContrast`, `createMeets`, `createOnColor`, `createFindContrast`, each over only the spaces you give it. See below.
+- **Narrow forms:** `createToHex`, `createInGamut`, `createToGamut`, `createDeltaEOk`, `createEquals`, `createMix`, `createContrast`, `createMeets`, `createOnColor`, `createFindContrast`, each over only the spaces you give it. See below.
 
 `convert` takes a space by name, so it bundles all 15 spaces. To parse and convert with only the spaces you use, pass them to `createConverter`. The converter throws for a space it was not given. See [Size budgets](#size-budgets) for the difference; for example `toHex` costs about 3 kB, and `createToHex(oklch)` about 1.3 kB.
 
@@ -69,7 +69,7 @@ const convert = createConverter(srgb, oklch)
 toCss(convert(parse('#3b82f6'), 'oklch')) // oklch(0.62308 0.18801 259.81453)
 ```
 
-The helpers that convert inside also reach all 15 spaces: `toHex`, `inGamut`, `toGamut`, `deltaEOK`, `equals`, `mix`, `contrast`, `meets`, `onColor` and `findContrast`. Each has a narrow form, named `create` plus the helper's name, that takes the spaces your colors are in and returns the helper over just those. The narrow helper takes the same arguments, except that it takes color objects, not CSS strings, so it does not carry `parse`. Run strings through `parse` first.
+The helpers that convert inside also reach all 15 spaces: `toHex`, `inGamut`, `toGamut`, `deltaEOk`, `equals`, `mix`, `contrast`, `meets`, `onColor` and `findContrast`. Each has a narrow form, named `create` plus the helper's name, that takes the spaces your colors are in and returns the helper over just those. The narrow helper takes the same arguments, except that it takes color objects, not CSS strings, so it does not carry `parse`. Run strings through `parse` first.
 
 ```ts
 import { parse, createToGamut, createToHex, oklch } from 'color-map/color'
@@ -86,7 +86,7 @@ Each factory adds the spaces the helper works in, so you list only the spaces of
 | `createToHex` | `srgb` |
 | `createInGamut` | `srgb` |
 | `createToGamut` | `srgb`, `oklch`, `oklab` |
-| `createDeltaEOK` | `oklab` |
+| `createDeltaEOk` | `oklab` |
 | `createEquals` | nothing |
 | `createMix` | `oklab` |
 | `createContrast`, `createMeets` | `srgb`, `xyzD65` |
@@ -113,7 +113,7 @@ A narrow helper throws for a space it was not given, and the error names that sp
 
 Each exporter takes a token tree: a color, a CSS color string, an array (a scale), an object of these nested to any depth, or a `SemanticPalette` as is. An array of 11 colors gets the keys 50 to 950; any other length gets 1 to N.
 
-- `toDTCG(tree)` returns a W3C design-token (2025.10) group; write it with `JSON.stringify`.
+- `toDtcg(tree)` returns a W3C design-token (2025.10) group; write it with `JSON.stringify`.
 - `toCssVariables(tree, { selector, prefix, space })` returns one rule of custom properties.
 - `toTailwindTheme(tree, { namespace, inline, space })` returns a Tailwind v4 `@theme` block. The default space is `oklch`. The [export panel](/color-map/export/) shows each output, and this site's build compiles the Tailwind output with Tailwind v4.
 

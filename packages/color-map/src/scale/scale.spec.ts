@@ -1,4 +1,4 @@
-import { contrast, deltaEOK, inGamut, parse } from '../color/index.js'
+import { contrast, deltaEOk, inGamut, parse } from '../color/index.js'
 import {
 	createContrastScale,
 	createScale,
@@ -25,15 +25,15 @@ const TAILWIND_BLUE = [
 ]
 
 describe('createScale', () => {
-	test('tailwind-11 rebuilds Tailwind blue within deltaEOK 0.02 per step', () => {
+	test('tailwind-11 rebuilds Tailwind blue within deltaEOk 0.02 per step', () => {
 		const scale = createScale({ seed: TAILWIND_BLUE[5] as string })
 		expect(scale).toHaveLength(11)
-		for (const [i, c] of scale.entries()) expect(deltaEOK(c, parse(TAILWIND_BLUE[i] as string))).toBeLessThan(0.02)
+		for (const [i, c] of scale.entries()) expect(deltaEOk(c, parse(TAILWIND_BLUE[i] as string))).toBeLessThan(0.02)
 	})
 
 	test('a nearby seed (the v3 blue-500) still stays close to Tailwind blue', () => {
 		const scale = createScale({ seed: '#3b82f6' })
-		for (const [i, c] of scale.entries()) expect(deltaEOK(c, parse(TAILWIND_BLUE[i] as string))).toBeLessThan(0.05)
+		for (const [i, c] of scale.entries()) expect(deltaEOk(c, parse(TAILWIND_BLUE[i] as string))).toBeLessThan(0.05)
 	})
 
 	test.each([

@@ -14,7 +14,7 @@
 </div>
 
 <script>
-	import { convert, deltaEOK, parse, resolve, toCss } from 'color-map/color'
+	import { convert, deltaEOk, parse, resolve, toCss } from 'color-map/color'
 	import { el, esc } from '../util/ui'
 
 	const root = document.getElementById('mixer') as HTMLElement
@@ -76,7 +76,7 @@
 		browserBox.style.background = browser
 		browserBox.textContent = browser
 		try {
-			const delta = deltaEOK(convert(lib, 'oklab'), convert(parse(browser), 'oklab'))
+			const delta = deltaEOk(convert(lib, 'oklab'), convert(parse(browser), 'oklab'))
 			verdict.innerHTML =
 				delta < 0.005
 					? `Match: ΔEOK ${delta.toExponential(2)} (below the 0.005 tolerance).`

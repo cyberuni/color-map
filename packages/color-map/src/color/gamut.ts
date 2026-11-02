@@ -1,4 +1,4 @@
-import { deltaEOKWith } from './compare.js'
+import { deltaEOkWith } from './compare.js'
 import { type ComponentsIn, componentsOver, convertWith } from './convert.js'
 import { oklab } from './oklab.js'
 import { oklch } from './oklch.js'
@@ -71,7 +71,7 @@ export function createToGamut(...spaces: Space[]): (color: Color, options?: ToGa
 /** {@link toGamut} over the spaces `componentsIn` knows, which must include `oklch` and `oklab`. */
 export function toGamutWith(componentsIn: ComponentsIn, color: Color, options: ToGamutOptions): Color {
 	const { gamut = 'srgb', method = 'css' } = options
-	const deltaEOK = (a: Color, b: Color): number => deltaEOKWith(componentsIn, a, b)
+	const deltaEOk = (a: Color, b: Color): number => deltaEOkWith(componentsIn, a, b)
 	const back = (c: Color): Color => convertWith(componentsIn, c, color.colorSpace as ColorSpaceId)
 	// Each candidate is converted to the gamut once, then tested and clipped from that.
 	const fit = componentsIn(color, gamut)
@@ -89,7 +89,7 @@ export function toGamutWith(componentsIn: ComponentsIn, color: Color, options: T
 	let max = chroma
 	let minInGamut = true
 	let clip = clipped(origin, gamut, componentsIn(origin, gamut))
-	if (deltaEOK(clip, origin) < JND) return back(clip)
+	if (deltaEOk(clip, origin) < JND) return back(clip)
 	while (max - min > EPSILON) {
 		const mid = (min + max) / 2
 		const current = withAlpha({ colorSpace: 'oklch', components: [lightness, mid, hue] }, origin)
@@ -99,7 +99,7 @@ export function toGamutWith(componentsIn: ComponentsIn, color: Color, options: T
 			continue
 		}
 		clip = clipped(current, gamut, inGamutSpace)
-		const e = deltaEOK(clip, current)
+		const e = deltaEOk(clip, current)
 		if (e < JND) {
 			if (JND - e < EPSILON) return back(clip)
 			minInGamut = false

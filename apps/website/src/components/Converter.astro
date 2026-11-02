@@ -26,7 +26,7 @@
 <script>
 	import {
 		convert,
-		deltaEOK,
+		deltaEOk,
 		type GamutId,
 		inGamut,
 		spaces,
@@ -82,7 +82,7 @@
 		const mapped = toGamut(color, { gamut, method: 'css' })
 		const panel = (title: string, c: typeof color) =>
 			`<div><h3>${title}</h3><div class="big" style="background:${esc(toCss(c))}">${esc(toCss(c))}</div>` +
-			`<p>ΔEOK from original: ${deltaEOK(color, c).toFixed(4)}</p></div>`
+			`<p>ΔEOK from original: ${deltaEOk(color, c).toFixed(4)}</p></div>`
 		el(root, '#cv-compare').innerHTML =
 			panel('Clip (what most browsers do)', clipped) + panel('Map (CSS Color 4 §13.2)', mapped)
 
