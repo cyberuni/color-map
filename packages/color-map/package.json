@@ -175,14 +175,14 @@
 			"name": "mix over every space",
 			"path": "esm/color/index.js",
 			"import": "{ mix }",
-			"limit": "6.26 kB",
+			"limit": "6.31 kB",
 			"gzip": true
 		},
 		{
 			"name": "mix, narrow",
 			"path": "esm/color/index.js",
 			"import": "{ createMix }",
-			"limit": "1.52 kB",
+			"limit": "1.57 kB",
 			"gzip": true
 		},
 		{
@@ -203,14 +203,14 @@
 			"name": "every converting helper over every space",
 			"path": "esm/color/index.js",
 			"import": "{ toHex, toGamut, inGamut, deltaEOk, equals, mix, contrast, meets, onColor, findContrast }",
-			"limit": "7.63 kB",
+			"limit": "7.67 kB",
 			"gzip": true
 		},
 		{
 			"name": "every converting helper, narrow",
 			"path": "esm/color/index.js",
 			"import": "{ createToHex, createToGamut, createInGamut, createDeltaEOk, createEquals, createMix, createContrast, createMeets, createOnColor, createFindContrast }",
-			"limit": "3.29 kB",
+			"limit": "3.33 kB",
 			"gzip": true
 		},
 		{
@@ -224,21 +224,21 @@
 			"name": "core with mix",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix }",
-			"limit": "7.04 kB",
+			"limit": "7.08 kB",
 			"gzip": true
 		},
 		{
 			"name": "core with mix and contrast",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix, contrast, meets, onColor, findContrast }",
-			"limit": "7.77 kB",
+			"limit": "7.81 kB",
 			"gzip": true
 		},
 		{
 			"name": "scales",
 			"path": "esm/scale/index.js",
 			"import": "*",
-			"limit": "9.1 kB",
+			"limit": "9.13 kB",
 			"gzip": true
 		},
 		{
@@ -259,7 +259,7 @@
 			"name": "everything",
 			"path": "esm/color/index.js",
 			"import": "*",
-			"limit": "10.71 kB",
+			"limit": "10.74 kB",
 			"gzip": true
 		}
 	],
