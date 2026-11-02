@@ -4,6 +4,10 @@
 
 November 2026
 
+## Status
+
+M1, M2 and M3 were adopted in #293. Measured after the change: parse 1.31M to 3.11M ops/s, toGamut 274k to 1.25M, mix 1.11M to 3.28M. Colordx is now level on gamut, color-map is 1.2x ahead on mix, and colordx is still 1.6x ahead on parse. The findings below are the record from before that change and are kept as written.
+
 ## Question
 
 Why is @colordx/core 7.3.0 about 3.7x faster at parse, 4.7x at gamut mapping and 2.5x at mix than color-map, while color-map is about 2x faster at toCss?
