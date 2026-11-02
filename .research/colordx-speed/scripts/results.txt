@@ -1,0 +1,25 @@
+colordx rejects 4 of 64 [ 'rebeccapurple', 'tomato', 'cornflowerblue', 'darkolivegreen' ]
+parse: max |diff| in sRGB 0-255 over accepted strings 1.7763568394002505e-13
+gamut: 39 out-of-sRGB of 64; max |dRGB| (0-255)=0.000 mean=0.000; max dEOK=1.07e-15
+mix oklab: max |dRGB| 0-255 = 2.70e-13
+shape cm.mix: {"colorSpace":"oklab","components":[0.6384157708668805,0.09590670489995629,-0.08590654318756832]}  colordx mixOklab: {"r":172.02476785006752,"g":112.77765882549372,"b":189.83084171112728,"alpha":1}
+gamut sample cm [0,193.96,71.664] colordx {"r":0,"g":193.96041162133207,"b":71.6639820653998,"alpha":1}
+## parse by kind (ops/s)  color-map | colordx | ratio
+hex       6.29M 28.57M 4.5x
+rgb()     0.89M 5.34M 6.0x
+oklch()   1.05M 3.52M 3.4x
+hsl()     1.25M 6.61M 5.3x
+## gamut
+color-map toGamut 0.29M  colordx mapSrgb 1.21M 4.2x
+avg bisection iterations per call (all 64 inputs): 5.91
+scratch port of color-map algorithm, specialised linear-sRGB, preallocated scratch, oklch output: 1.67M 5.7x of color-map  colordx is 0.73x of port
+port vs color-map toGamut max component diff 2.27e-13
+## mix oklab
+color-map mix 1.15M colordx mixOklab 3.00M 2.6x
+color-map mix with inputs already in oklab (no conversion) 5.61M
+color-map convert srgb->oklab 8.90M  oklab->srgb 8.15M
+colordx  toOklab (incl. constructor) 7.43M
+hex  color-map 6.46M  charCode port 54.59M  colordx 28.54M
+  hex port equal? max diff 0
+mix  color-map 1.07M  port(convert x2 + math, no none/powerless) 4.45M
+  mix port equal? max diff 0
