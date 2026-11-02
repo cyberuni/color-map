@@ -269,6 +269,9 @@ importers:
       size-limit:
         specifier: ^14.3.0
         version: 14.3.0
+      ts-6.0:
+        specifier: npm:typescript@6.0.3
+        version: typescript@6.0.3
       tsdown:
         specifier: ^0.23.0
         version: 0.23.0(typescript@7.0.2)

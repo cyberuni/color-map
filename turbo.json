@@ -21,6 +21,10 @@
 			"cache": false,
 			"persistent": true
 		},
+		"llms:check": {
+			"dependsOn": ["build"],
+			"cache": false
+		},
 		"nuke": {
 			"cache": false
 		},
