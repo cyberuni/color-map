@@ -1,4 +1,4 @@
-// Runtime benchmark: color-map against culori and colorjs.io on the same
+// Runtime benchmark: color-map against culori, colorjs.io and @colordx/core on the same
 // operations and the same inputs. Run `pnpm build` first, then `pnpm bench`.
 //
 //   node scripts/bench.mjs                 all libraries, all operations
@@ -23,7 +23,7 @@ const opt = (name) => {
 	const i = args.indexOf(name)
 	return i === -1 ? undefined : args[i + 1]
 }
-const LIBS = ['color-map', 'culori', 'colorjs.io']
+const LIBS = ['color-map', 'culori', 'colorjs.io', '@colordx/core']
 const SAMPLES = 5
 const SAMPLE_MS = 300
 const WARMUP_MS = 300
@@ -128,6 +128,40 @@ async function adapters(name, lib) {
 				// culori has no one-call mix: an interpolator is built per pair, as color-mix() would.
 				'mix oklab': (x, y) => k.interpolate([x, y], 'oklab')(0.5),
 				'contrast wcag2': (x, y) => k.wcagContrast(x, y)
+			}
+		}
+	}
+	if (name === '@colordx/core') {
+		const k = await import('@colordx/core')
+		// Plugins add the spaces and tools the other libraries have in their core.
+		for (const p of ['lab', 'p3', 'mix', 'a11y']) k.extend([(await import(`@colordx/core/plugins/${p}`)).default])
+		// A Colordx instance converts to sRGB when it is made, so toRgb() on a pre-made one only reads a
+		// field. Inputs are plain objects and every call wraps them with colordx(), which puts the
+		// conversion inside the timed call, as it is for the other libraries.
+		const c = k.colordx
+		return {
+			make: {
+				srgb: (v) => ({ r: v[0] * 255, g: v[1] * 255, b: v[2] * 255 }),
+				oklch: (v) => ({ l: v[0], c: v[1], h: v[2] }),
+				oklab: (v) => ({ l: v[0], a: v[1], b: v[2] }),
+				lab: (v) => ({ l: v[0], a: v[1], b: v[2], colorSpace: 'lab' }),
+				p3: (v) => ({ r: v[0], g: v[1], b: v[2], colorSpace: 'display-p3' })
+			},
+			ops: {
+				parse: (s) => c(s),
+				'srgb -> oklch': (x) => c(x).toOklch(),
+				'oklch -> srgb': (x) => c(x).toRgb(),
+				'srgb -> oklab': (x) => c(x).toOklab(),
+				'oklab -> srgb': (x) => c(x).toRgb(),
+				'srgb -> lab': (x) => c(x).toLab(),
+				'lab -> srgb': (x) => c(x).toRgb(),
+				'srgb -> display-p3': (x) => c(x).toP3(),
+				'display-p3 -> srgb': (x) => c(x).toRgb(),
+				'toCss (oklch)': (x) => c(x).toOklchString(),
+				'toHex (srgb)': (x) => c(x).toHex(),
+				'toGamut css (oklch)': (x) => c(x).mapSrgb(),
+				'mix oklab': (x, y) => c(x).mixOklab(y, 0.5),
+				'contrast wcag2': (x, y) => c(x).contrast(y)
 			}
 		}
 	}

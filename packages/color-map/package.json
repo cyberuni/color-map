@@ -94,6 +94,7 @@
 		"watch": "vitest"
 	},
 	"devDependencies": {
+		"@colordx/core": "7.3.0",
 		"@size-limit/preset-small-lib": "^14.3.0",
 		"@types/culori": "^4.0.1",
 		"@types/node": "^26.2.0",

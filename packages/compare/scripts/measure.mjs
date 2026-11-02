@@ -57,6 +57,11 @@ console.log(chroma('#3b82f6').oklch())`
 console.log(convert([0.23, 0.51, 0.96], sRGB, OKLCH))`,
 		whole: `export * from '@texel/color'`
 	},
+	'@colordx/core': {
+		convert: `import { colordx } from '@colordx/core'
+console.log(colordx('#3b82f6').toOklchString())`,
+		whole: `export * from '@colordx/core'`
+	},
 	colord: {
 		convert: `import { colord } from 'colord'
 console.log(colord('#3b82f6').toHslString())`,
@@ -103,12 +108,14 @@ const sizeLimitVersion = installed('size-limit')
 const data = {
 	generatedAt: new Date().toISOString().slice(0, 10),
 	versions: Object.fromEntries(
-		['color-map', 'culori', 'colorjs.io', 'chroma-js', '@texel/color', 'colord', 'lightningcss'].map((n) => [
-			n,
-			n === 'color-map'
-				? JSON.parse(readFileSync(join(root, 'packages/color-map/package.json'), 'utf8')).version
-				: installed(n)
-		])
+		['color-map', 'culori', 'colorjs.io', 'chroma-js', '@texel/color', 'colord', '@colordx/core', 'lightningcss'].map(
+			(n) => [
+				n,
+				n === 'color-map'
+					? JSON.parse(readFileSync(join(root, 'packages/color-map/package.json'), 'utf8')).version
+					: installed(n)
+			]
+		)
 	),
 	method: {
 		sizeTool: `size-limit ${sizeLimitVersion} with @size-limit/preset-small-lib (minified, gzip)`,

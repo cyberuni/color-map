@@ -230,6 +230,9 @@ importers:
 
   packages/color-map:
     devDependencies:
+      '@colordx/core':
+        specifier: 7.3.0
+        version: 7.3.0
       '@size-limit/preset-small-lib':
         specifier: ^14.3.0
         version: 14.3.0(size-limit@14.3.0)
@@ -278,6 +281,9 @@ importers:
 
   packages/compare:
     devDependencies:
+      '@colordx/core':
+        specifier: 7.3.0
+        version: 7.3.0
       '@size-limit/preset-small-lib':
         specifier: ^14.3.0
         version: 14.3.0(size-limit@14.3.0)
@@ -674,6 +680,9 @@ packages:
   '@clack/prompts@1.8.1':
     resolution: {integrity: sha512-dlT1m5e/0yUL0kRNcQn7yGLVThkgbB0Ga/1AmfDDC/8ik6AIiSf2QLQO2zPYvefsHP0aFgxO93cVLCCfDp7kzQ==}
     engines: {node: '>= 20.12.0'}
+
+  '@colordx/core@7.3.0':
+    resolution: {integrity: sha512-LVzTTPhX7wpy7TkGjouA9zbbCBIw92RGm7ZQqSKFE0oYE3sMx2FGXz90eVpgw7k/+wrrY+qJ86nHXifZWMS5jA==}
 
   '@commitlint/cli@21.2.1':
     resolution: {integrity: sha512-blsZGe29hJ72VGEFVl72IVYX+1vsfINpjA9yWQA6i7OKD/McGEOXg08sKIRKjFk4JvzhV/9n0l3i6NooPLTNfg==}
@@ -4432,6 +4441,8 @@ snapshots:
       fast-string-width: 3.0.2
       fast-wrap-ansi: 0.2.2
       sisteransi: 1.0.5
+
+  '@colordx/core@7.3.0': {}
 
   '@commitlint/cli@21.2.1(@types/node@26.2.0)(conventional-commits-parser@7.1.2)(typescript@7.0.2)':
     dependencies:
