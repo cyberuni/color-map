@@ -346,7 +346,7 @@
 				},
 				"@texel/color": {
 					"value": "no",
-					"note": "No contrast or luminance function in src or README; only deltaEOk for color difference.",
+					"note": "No contrast or luminance function in src or README; only deltaEOK for color difference.",
 					"source": "https://github.com/texel-org/color/blob/v1.1.11/README.md"
 				},
 				"lightningcss": {
