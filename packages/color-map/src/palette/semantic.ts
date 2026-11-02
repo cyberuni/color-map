@@ -17,6 +17,7 @@ export interface RolePair {
 	target: number
 }
 
+/** Options for `semanticPalette`. Only `brand` is required. */
 export interface SemanticPaletteOptions {
 	/** The brand color; it sets the hue of the primary, the neutrals and the harmonized status colors. */
 	brand: Color | string
@@ -30,6 +31,7 @@ export interface SemanticPaletteOptions {
 	gamut?: GamutId
 }
 
+/** A role in a {@link SemanticPalette}. Each role holds a {@link RolePair}. */
 export type SemanticRole =
 	| 'primary'
 	| 'primaryContainer'
@@ -41,6 +43,7 @@ export type SemanticRole =
 	| 'surfaceVariant'
 	| 'outline'
 
+/** What `semanticPalette` returns: the settings it used, the tonal scales it built from, and a pair for each role. */
 export interface SemanticPalette {
 	meta: { mode: 'light' | 'dark'; contrast: string; target: number; gamut: GamutId }
 	/** Material's 13 tones, dark to light, in the brand's hue (`primary`) and a faint tint of it (`neutral`). */

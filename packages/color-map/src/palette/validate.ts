@@ -10,6 +10,7 @@ export interface PaletteLike {
 	scales?: Record<string, readonly Color[]>
 }
 
+/** Options for `validate`. */
 export interface ValidateOptions {
 	/** The measure used to re-check each pair. Default `wcag2`. */
 	contrast?: ContrastOption
@@ -19,6 +20,7 @@ export interface ValidateOptions {
 	gamut?: GamutId
 }
 
+/** One problem `validate` found in a palette. */
 export interface PaletteIssue {
 	kind: 'contrast' | 'lightness' | 'gamut'
 	/** Where: `roles.danger`, `scales.primary[3]`. */
@@ -26,6 +28,7 @@ export interface PaletteIssue {
 	message: string
 }
 
+/** What `validate` returns: `ok` is true when `issues` is empty. */
 export interface ValidateResult {
 	ok: boolean
 	issues: PaletteIssue[]

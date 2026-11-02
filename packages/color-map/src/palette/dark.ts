@@ -4,10 +4,12 @@ import type { Color } from '../color/types.js'
 import { unknownName } from '../color/unknown-name.js'
 import { lstar, toneColor } from '../scale/tone.js'
 
+/** How `darkVariant` builds a dark scale from a light one: `mirror`, `tone-swap` or `lightness-invert`. */
 export type DarkStrategy = 'mirror' | 'tone-swap' | 'lightness-invert'
 
 const STRATEGIES: readonly string[] = ['mirror', 'tone-swap', 'lightness-invert']
 
+/** Options for `darkVariant`. */
 export interface DarkVariantOptions {
 	/** The gamut every color must fit. Default `srgb`. */
 	gamut?: GamutId
