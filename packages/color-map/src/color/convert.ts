@@ -26,15 +26,18 @@ export function componentsOver(spaces: Space[]): ComponentsIn {
 	}
 }
 
+/** `convert` over the spaces `componentsIn` knows: the color in `to`, keeping its alpha. */
+export function convertWith(componentsIn: ComponentsIn, color: Color, to: ColorSpaceId): Color {
+	const result: Color = { colorSpace: to, components: componentsIn(color, to) }
+	if (color.alpha !== undefined) result.alpha = color.alpha
+	return result
+}
+
 /**
  * Builds `convert` over just the spaces given, so a bundle contains only those.
  * `none` components become 0 when the space changes.
  */
 export function createConverter(...spaces: Space[]): (color: Color, to: ColorSpaceId) => Color {
 	const componentsIn = componentsOver(spaces)
-	return (color, to) => {
-		const result: Color = { colorSpace: to, components: componentsIn(color, to) }
-		if (color.alpha !== undefined) result.alpha = color.alpha
-		return result
-	}
+	return (color, to) => convertWith(componentsIn, color, to)
 }

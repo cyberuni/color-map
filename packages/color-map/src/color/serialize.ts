@@ -1,5 +1,7 @@
+import { type ComponentsIn, componentsOver } from './convert.js'
 import { componentsIn } from './spaces.js'
-import type { Color, ColorSpaceId, Component } from './types.js'
+import { srgb } from './srgb.js'
+import type { Color, ColorSpaceId, Component, Space } from './types.js'
 
 export interface ToCssOptions {
 	/** Decimal places kept in every number. Default 5. */
@@ -74,7 +76,20 @@ const hexByte = (n: number): string =>
  * Colors outside sRGB are converted and clipped, so map them with `toGamut` first.
  */
 export function toHex(color: Color): string {
+	return hexWith(componentsIn, color)
+}
+
+function hexWith(componentsIn: ComponentsIn, color: Color): string {
 	const [r, g, b] = componentsIn(color, 'srgb') as number[]
 	const alpha = color.alpha ?? 1
 	return `#${hexByte(r)}${hexByte(g)}${hexByte(b)}${alpha === 1 ? '' : hexByte(alpha)}`
+}
+
+/**
+ * Builds {@link toHex} over the spaces given, plus `srgb`, so a bundle contains
+ * only those. A color in a space not given throws, naming that space.
+ */
+export function createToHex(...spaces: Space[]): (color: Color) => string {
+	const over = componentsOver([srgb, ...spaces])
+	return (color) => hexWith(over, color)
 }

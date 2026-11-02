@@ -1,7 +1,9 @@
+import { type ComponentsIn, componentsOver, convertWith } from './convert.js'
 import { normalizeHue } from './math.js'
+import { oklab } from './oklab.js'
 import { toColor } from './parse.js'
-import { convert } from './spaces.js'
-import type { Color, ColorSpaceId } from './types.js'
+import { componentsIn } from './spaces.js'
+import type { Color, ColorSpaceId, Space } from './types.js'
 import { unknownName } from './unknown-name.js'
 
 /** How `mix` travels around the hue circle (CSS Color 4 section 12.4). */
@@ -36,8 +38,8 @@ const ANALOGOUS: Record<string, string> = {
 const analogous = (id: ColorSpaceId): string => ANALOGOUS[id] ?? 'RGB'
 
 /** Converts, keeping `none` on components that have an analogous one in the source. */
-export function convertKeepingNone(color: Color, space: ColorSpaceId): Color {
-	const out = convert(color, space)
+function convertKeepingNone(componentsIn: ComponentsIn, color: Color, space: ColorSpaceId): Color {
+	const out = convertWith(componentsIn, color, space)
 	if (color.colorSpace !== space) {
 		const from = analogous(color.colorSpace)
 		const to = analogous(space)
@@ -59,8 +61,8 @@ const POWERLESS: Record<string, number> = { __proto__: null as never, oklch: 8e-
  * becomes `none`, so it takes the other color's hue; a hue the author wrote
  * (the color already in `space`) stays as written.
  */
-function prepare(color: Color, space: ColorSpaceId): Color {
-	const out = convertKeepingNone(color, space)
+function prepare(componentsIn: ComponentsIn, color: Color, space: ColorSpaceId): Color {
+	const out = convertKeepingNone(componentsIn, color, space)
 	if (color.colorSpace === space) return out
 	const [, x, y] = out.components
 	const epsilon = POWERLESS[space]
@@ -107,9 +109,26 @@ function carry(x: number | null, y: number | null): [number | null, number | nul
  * hue. A hue you wrote in the target space stays as written.
  */
 export function mix(a: Color | string, b: Color | string, t = 0.5, options: MixOptions = {}): Color {
+	return mixWith(componentsIn, toColor(a), toColor(b), t, options)
+}
+
+/**
+ * Builds {@link mix} over the spaces given, plus `oklab`, the default `in`, so
+ * a bundle contains only those. Give the `in` space too when it is not
+ * `oklab`. It takes color objects, not strings, so it does not carry `parse`;
+ * pass strings through `parse` first. A color in a space not given throws,
+ * naming that space.
+ */
+export function createMix(...spaces: Space[]): (a: Color, b: Color, t?: number, options?: MixOptions) => Color {
+	const over = componentsOver([oklab, ...spaces])
+	return (a, b, t = 0.5, options = {}) => mixWith(over, a, b, t, options)
+}
+
+/** {@link mix} of two colors over the spaces `componentsIn` knows. */
+function mixWith(componentsIn: ComponentsIn, a: Color, b: Color, t: number, options: MixOptions): Color {
 	const space = options.in ?? 'oklab'
-	const c1 = prepare(toColor(a), space)
-	const c2 = prepare(toColor(b), space)
+	const c1 = prepare(componentsIn, a, space)
+	const c2 = prepare(componentsIn, b, space)
 	const [a1, a2] = carry(c1.alpha === undefined ? 1 : c1.alpha, c2.alpha === undefined ? 1 : c2.alpha)
 	const p1 = a1 ?? 1
 	const p2 = a2 ?? 1

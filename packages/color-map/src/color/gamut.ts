@@ -1,6 +1,10 @@
-import { deltaEOK } from './compare.js'
-import { componentsIn, convert } from './spaces.js'
-import type { Color, ColorSpaceId, Component } from './types.js'
+import { deltaEOKWith } from './compare.js'
+import { type ComponentsIn, componentsOver, convertWith } from './convert.js'
+import { oklab } from './oklab.js'
+import { oklch } from './oklch.js'
+import { componentsIn } from './spaces.js'
+import { srgb } from './srgb.js'
+import type { Color, ColorSpaceId, Component, Space } from './types.js'
 
 /** The bounded RGB spaces a color can be tested or mapped against. */
 export type GamutId =
@@ -18,6 +22,16 @@ const within = (components: Component[], epsilon: number): boolean =>
 /** True when every channel of `color`, seen in `gamut`, is within 0 to 1 (± `epsilon`). */
 export function inGamut(color: Color, gamut: GamutId = 'srgb', epsilon = 1e-6): boolean {
 	return within(componentsIn(color, gamut), epsilon)
+}
+
+/**
+ * Builds {@link inGamut} over the spaces given, plus `srgb`, so a bundle
+ * contains only those. Give the gamut too when it is not `srgb`. A color or
+ * gamut in a space not given throws, naming that space.
+ */
+export function createInGamut(...spaces: Space[]): (color: Color, gamut?: GamutId, epsilon?: number) => boolean {
+	const over = componentsOver([srgb, ...spaces])
+	return (color, gamut = 'srgb', epsilon = 1e-6) => within(over(color, gamut), epsilon)
 }
 
 export interface ToGamutOptions {
@@ -41,14 +55,30 @@ function clipped(color: Color, gamut: GamutId, components: Component[]): Color {
  * within a just-noticeable ΔEOK of 0.02.
  */
 export function toGamut(color: Color, options: ToGamutOptions = {}): Color {
+	return toGamutWith(componentsIn, color, options)
+}
+
+/**
+ * Builds {@link toGamut} over the spaces given, plus `srgb`, `oklch` and
+ * `oklab`, which the CSS method works in. Give the gamut too when it is not
+ * `srgb`. A color or gamut in a space not given throws, naming that space.
+ */
+export function createToGamut(...spaces: Space[]): (color: Color, options?: ToGamutOptions) => Color {
+	const over = componentsOver([srgb, oklch, oklab, ...spaces])
+	return (color, options = {}) => toGamutWith(over, color, options)
+}
+
+/** {@link toGamut} over the spaces `componentsIn` knows, which must include `oklch` and `oklab`. */
+export function toGamutWith(componentsIn: ComponentsIn, color: Color, options: ToGamutOptions): Color {
 	const { gamut = 'srgb', method = 'css' } = options
-	const back = (c: Color): Color => convert(c, color.colorSpace as ColorSpaceId)
+	const deltaEOK = (a: Color, b: Color): number => deltaEOKWith(componentsIn, a, b)
+	const back = (c: Color): Color => convertWith(componentsIn, c, color.colorSpace as ColorSpaceId)
 	// Each candidate is converted to the gamut once, then tested and clipped from that.
 	const fit = componentsIn(color, gamut)
 	if (within(fit, 1e-6)) return color
 	if (method === 'clip') return back(clipped(color, gamut, fit))
 
-	const origin = convert(color, 'oklch')
+	const origin = convertWith(componentsIn, color, 'oklch')
 	const [lightness, chroma, hue] = origin.components as [number, number, Component]
 	if (lightness >= 1) return back(withAlpha({ colorSpace: gamut, components: [1, 1, 1] }, color))
 	if (lightness <= 0) return back(withAlpha({ colorSpace: gamut, components: [0, 0, 0] }, color))

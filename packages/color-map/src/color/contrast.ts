@@ -1,8 +1,13 @@
-import { toGamut } from './gamut.js'
+import { type ComponentsIn, componentsOver } from './convert.js'
+import { toGamutWith } from './gamut.js'
+import { oklab } from './oklab.js'
+import { oklch } from './oklch.js'
 import { toColor } from './parse.js'
 import { componentsIn } from './spaces.js'
-import type { Color } from './types.js'
+import { srgb } from './srgb.js'
+import type { Color, Space } from './types.js'
 import { unknownName } from './unknown-name.js'
+import { xyzD65 } from './xyz-d65.js'
 
 /**
  * A contrast measure: `(fg, bg) => number`, plus what a caller needs to use it
@@ -28,12 +33,12 @@ export type ContrastOption = ContrastAlgorithm | ContrastFn
 type ColorInput = Color | string
 
 /** Relative luminance (WCAG 2): the Y of the color in XYZ-D65, with white at 1. */
-function luminance(color: Color): number {
+function luminance(componentsIn: ComponentsIn, color: Color): number {
 	return Math.max(0, componentsIn(color, 'xyz-d65')[1] as number)
 }
 
 /** Lays a translucent color over `bg`, in `srgb`, the way a browser paints it. */
-function flatten(fg: Color, bg: Color): Color {
+function flatten(componentsIn: ComponentsIn, fg: Color, bg: Color): Color {
 	const alpha = fg.alpha === null ? 0 : (fg.alpha ?? 1)
 	if (alpha >= 1) return fg
 	const f = componentsIn(fg, 'srgb')
@@ -45,24 +50,46 @@ function flatten(fg: Color, bg: Color): Color {
  * WCAG 2 contrast ratio, 1 to 21. A translucent `fg` is laid over `bg` first;
  * `bg` is taken as opaque.
  */
-export const wcag2: ContrastFn = Object.assign(
-	(fg: Color, bg: Color): number => {
-		const a = luminance(flatten(fg, bg)) + 0.05
-		const b = luminance(bg) + 0.05
-		return a > b ? a / b : b / a
-	},
-	{
-		algorithm: 'wcag2',
-		thresholds: { AA: 4.5, 'AA-large': 3, AAA: 7, 'AAA-large': 4.5, 'non-text': 3 },
-		polarity: 'symmetric'
-	} as const
-)
+export const wcag2: ContrastFn = /* @__PURE__ */ wcag2Over(componentsIn)
+
+/** WCAG 2 over the spaces `componentsIn` knows, which must include `srgb` and `xyz-d65`. */
+function wcag2Over(componentsIn: ComponentsIn): ContrastFn {
+	return Object.assign(
+		(fg: Color, bg: Color): number => {
+			const a = luminance(componentsIn, flatten(componentsIn, fg, bg)) + 0.05
+			const b = luminance(componentsIn, bg) + 0.05
+			return a > b ? a / b : b / a
+		},
+		{
+			algorithm: 'wcag2',
+			thresholds: { AA: 4.5, 'AA-large': 3, AAA: 7, 'AAA-large': 4.5, 'non-text': 3 },
+			polarity: 'symmetric'
+		} as const
+	)
+}
 
 /** The measure `algo` names: `wcag2` or a function; anything else is an unknown name. */
 export function pick(algo: ContrastOption): ContrastFn {
-	if (algo === 'wcag2') return wcag2
+	return pickFrom(wcag2, algo)
+}
+
+/** {@link pick}, with `builtin` as what `wcag2` names. */
+function pickFrom(builtin: ContrastFn, algo: ContrastOption): ContrastFn {
+	if (algo === 'wcag2') return builtin
 	if (typeof algo !== 'function') throw unknownName('contrast algorithm', algo, ['wcag2'])
 	return algo
+}
+
+/** What a narrow contrast helper works over: its spaces and its own `wcag2`. */
+interface ContrastKit {
+	componentsIn: ComponentsIn
+	wcag2: ContrastFn
+}
+
+/** A {@link ContrastKit} over `needed` and `spaces`. */
+function contrastKit(needed: Space[], spaces: Space[]): ContrastKit {
+	const over = componentsOver([...needed, ...spaces])
+	return { componentsIn: over, wcag2: wcag2Over(over) }
 }
 
 /**
@@ -74,17 +101,50 @@ export function contrast(fg: ColorInput, bg: ColorInput, algo: ContrastOption = 
 }
 
 /**
+ * Builds {@link contrast} over the spaces given, plus `srgb` and `xyz-d65`,
+ * which WCAG 2 works in, so a bundle contains only those. It takes color
+ * objects, not strings, so it does not carry `parse`. A color in a space not
+ * given throws, naming that space.
+ */
+export function createContrast(...spaces: Space[]): (fg: Color, bg: Color, algo?: ContrastOption) => number {
+	const kit = contrastKit([srgb, xyzD65], spaces)
+	return (fg, bg, algo = 'wcag2') => pickFrom(kit.wcag2, algo)(fg, bg)
+}
+
+/**
  * True when `fg` on `bg` reaches `level`: a number, or a name from the
  * algorithm's thresholds (WCAG 2: `AA`, `AA-large`, `AAA`, `AAA-large`,
  * `non-text`). A signed measure such as APCA is compared by magnitude.
  */
 export function meets(fg: ColorInput, bg: ColorInput, level: number | string, algo: ContrastOption = 'wcag2'): boolean {
 	const fn = pick(algo)
+	const target = levelOf(fn, level)
+	return Math.abs(fn(toColor(fg), toColor(bg))) >= target
+}
+
+/**
+ * Builds {@link meets} over the spaces given, plus `srgb` and `xyz-d65`, which
+ * WCAG 2 works in, so a bundle contains only those. It takes color objects,
+ * not strings, so it does not carry `parse`. A color in a space not given
+ * throws, naming that space.
+ */
+export function createMeets(
+	...spaces: Space[]
+): (fg: Color, bg: Color, level: number | string, algo?: ContrastOption) => boolean {
+	const kit = contrastKit([srgb, xyzD65], spaces)
+	return (fg, bg, level, algo = 'wcag2') => {
+		const fn = pickFrom(kit.wcag2, algo)
+		return Math.abs(fn(fg, bg)) >= levelOf(fn, level)
+	}
+}
+
+/** The contrast `level` stands for under `fn`: the number itself, or one of its thresholds by name. */
+function levelOf(fn: ContrastFn, level: number | string): number {
 	const named = typeof level === 'number' ? level : fn.thresholds?.[level]
 	// A name that is not the algorithm's own (`constructor`) finds something that is not a number.
 	const target = typeof named === 'number' ? named : undefined
 	if (target === undefined) throw unknownName('contrast level', level, Object.keys(fn.thresholds ?? {}))
-	return Math.abs(fn(toColor(fg), toColor(bg))) >= target
+	return target
 }
 
 export interface FindContrastOptions {
@@ -116,14 +176,35 @@ const STEPS = 32
  * on the final, gamut-mapped color, and `met` says whether it reaches `target`.
  */
 export function findContrast(bg: ColorInput, target: number, options: FindContrastOptions = {}): FoundContrast {
-	const back = toColor(bg)
-	const fn = pick(options.contrast ?? 'wcag2')
+	return findContrastWith({ componentsIn, wcag2 }, toColor(bg), target, options)
+}
+
+/**
+ * Builds {@link findContrast} over the spaces given, plus `srgb`, `xyz-d65`,
+ * `oklch` and `oklab`, which WCAG 2 and gamut mapping work in, so a bundle
+ * contains only those. It takes a color object, not a string, so it does not
+ * carry `parse`. A color in a space not given throws, naming that space.
+ */
+export function createFindContrast(
+	...spaces: Space[]
+): (bg: Color, target: number, options?: FindContrastOptions) => FoundContrast {
+	const kit = contrastKit([srgb, xyzD65, oklch, oklab], spaces)
+	return (bg, target, options = {}) => findContrastWith(kit, bg, target, options)
+}
+
+function findContrastWith(
+	{ componentsIn, wcag2 }: ContrastKit,
+	back: Color,
+	target: number,
+	options: FindContrastOptions
+): FoundContrast {
+	const fn = pickFrom(wcag2, options.contrast ?? 'wcag2')
 	const lch = componentsIn(back, 'oklch')
 	const l0 = lch[0] as number
 	const hue = options.hue ?? (lch[2] as number)
 	const chroma = options.chroma ?? 0
 	const at = (l: number): FoundContrast => {
-		const color = toGamut({ colorSpace: 'oklch', components: [l, chroma, hue] })
+		const color = toGamutWith(componentsIn, { colorSpace: 'oklch', components: [l, chroma, hue] }, {})
 		const value = fn(color, back)
 		return { color, contrast: value, met: Math.abs(value) >= target }
 	}
@@ -167,13 +248,27 @@ export interface OnColorOptions {
  * (OKLCH lightness 0.2). When neither reaches `target`, whichever contrasts more.
  */
 export function onColor(bg: ColorInput, options: OnColorOptions = {}): Color {
-	const back = toColor(bg)
-	const fn = pick(options.contrast ?? 'wcag2')
+	return onColorWith({ componentsIn, wcag2 }, toColor(bg), options)
+}
+
+/**
+ * Builds {@link onColor} over the spaces given, plus `srgb`, `xyz-d65`,
+ * `oklch` and `oklab`, which WCAG 2 and gamut mapping work in, so a bundle
+ * contains only those. It takes a color object, not a string, so it does not
+ * carry `parse`. A color in a space not given throws, naming that space.
+ */
+export function createOnColor(...spaces: Space[]): (bg: Color, options?: OnColorOptions) => Color {
+	const kit = contrastKit([srgb, xyzD65, oklch, oklab], spaces)
+	return (bg, options = {}) => onColorWith(kit, bg, options)
+}
+
+function onColorWith({ componentsIn, wcag2 }: ContrastKit, back: Color, options: OnColorOptions): Color {
+	const fn = pickFrom(wcag2, options.contrast ?? 'wcag2')
 	const target = options.target ?? 4.5
 	const white: Color = { colorSpace: 'srgb', components: [1, 1, 1] }
 	const whiteScore = Math.abs(fn(white, back))
 	if (whiteScore >= target) return white
 	const hue = componentsIn(back, 'oklch')[2] as number
-	const dark = toGamut({ colorSpace: 'oklch', components: [0.2, options.chroma ?? 0.03, hue] })
+	const dark = toGamutWith(componentsIn, { colorSpace: 'oklch', components: [0.2, options.chroma ?? 0.03, hue] }, {})
 	return Math.abs(fn(dark, back)) >= whiteScore ? dark : white
 }
