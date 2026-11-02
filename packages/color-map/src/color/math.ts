@@ -18,3 +18,13 @@ export function normalizeHue(h: number): number {
 }
 
 export const D50: Vec3 = [0.3457 / 0.3585, 1, (1 - 0.3457 - 0.3585) / 0.3585]
+
+/** The product of 3x3 matrices, left to right: `product(a, b)` applies `b` first. */
+export function product(...ms: Matrix[]): Matrix {
+	return ms.reduce((a, b) => {
+		const out: number[] = []
+		for (let i = 0; i < 3; i++)
+			for (let j = 0; j < 3; j++) out.push(a[i * 3] * b[j] + a[i * 3 + 1] * b[3 + j] + a[i * 3 + 2] * b[6 + j])
+		return out as unknown as Matrix
+	})
+}

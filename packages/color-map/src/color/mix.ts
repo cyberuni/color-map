@@ -3,7 +3,7 @@ import { normalizeHue } from './math.js'
 import { oklab } from './oklab.js'
 import { toColor } from './parse.js'
 import { componentsIn } from './spaces.js'
-import type { Color, ColorSpaceId, Space } from './types.js'
+import type { Color, ColorSpaceId, Component, Space } from './types.js'
 import { unknownName } from './unknown-name.js'
 
 /** How `mix` travels around the hue circle (CSS Color 4 section 12.4). */
@@ -41,7 +41,8 @@ const analogous = (id: ColorSpaceId): string => ANALOGOUS[id] ?? 'RGB'
 /** Converts, keeping `none` on components that have an analogous one in the source. */
 function convertKeepingNone(componentsIn: ComponentsIn, color: Color, space: ColorSpaceId): Color {
 	const out = convertWith(componentsIn, color, space)
-	if (color.colorSpace !== space) {
+	// Nothing to carry when no component is `none`, the common case.
+	if (color.colorSpace !== space && color.components.includes(null)) {
 		const from = analogous(color.colorSpace)
 		const to = analogous(space)
 		out.components = out.components.map((c, i) => (color.components[from.indexOf(to[i])] === null ? null : c))
@@ -64,7 +65,8 @@ const POWERLESS: Record<string, number> = { __proto__: null as never, oklch: 8e-
  */
 function prepare(componentsIn: ComponentsIn, color: Color, space: ColorSpaceId): Color {
 	const out = convertKeepingNone(componentsIn, color, space)
-	if (color.colorSpace === space) return out
+	// A space with no powerless entry (and not `hwb`) has no hue to lose.
+	if (color.colorSpace === space || (space !== 'hwb' && POWERLESS[space] === undefined)) return out
 	const [, x, y] = out.components
 	const epsilon = POWERLESS[space]
 	const gray =
@@ -92,11 +94,6 @@ function fixHues(h1: number, h2: number, method: HueMethod): [number, number] {
 	} else if (method !== 'decreasing') throw unknownName('hue method', method, HUE_METHODS)
 	else if (a < b) a += 360
 	return [a, b]
-}
-
-/** A `none` takes the other side's value; both `none` stays `none`. */
-function carry(x: number | null, y: number | null): [number | null, number | null] {
-	return [x ?? y, y ?? x]
 }
 
 /**
@@ -130,21 +127,31 @@ function mixWith(componentsIn: ComponentsIn, a: Color, b: Color, t: number, opti
 	const space = options.in ?? 'oklab'
 	const c1 = prepare(componentsIn, a, space)
 	const c2 = prepare(componentsIn, b, space)
-	const [a1, a2] = carry(c1.alpha === undefined ? 1 : c1.alpha, c2.alpha === undefined ? 1 : c2.alpha)
+	// A `none` takes the other side's value; both `none` stays `none`.
+	const alpha1 = c1.alpha === undefined ? 1 : c1.alpha
+	const alpha2 = c2.alpha === undefined ? 1 : c2.alpha
+	const a1 = alpha1 ?? alpha2
 	const p1 = a1 ?? 1
-	const p2 = a2 ?? 1
+	const p2 = alpha2 ?? alpha1 ?? 1
 	const alpha = p1 * (1 - t) + p2 * t
 	const hueAt = HUE_AT[space]
-	const components = c1.components.map((x, i) => {
-		const [u, v] = carry(x, c2.components[i])
-		if (u === null || v === null) return null
-		if (i === hueAt) {
-			const [h1, h2] = fixHues(u, v, options.hue ?? 'shorter')
-			return normalizeHue(h1 * (1 - t) + h2 * t)
+	const method = options.hue ?? 'shorter'
+	const components: Component[] = []
+	for (let i = 0; i < c1.components.length; i++) {
+		const x = c1.components[i] as Component
+		const y = c2.components[i] as Component
+		const u = x ?? y
+		const v = y ?? x
+		if (u === null || v === null) {
+			components.push(null)
+		} else if (i === hueAt) {
+			const [h1, h2] = fixHues(u, v, method)
+			components.push(normalizeHue(h1 * (1 - t) + h2 * t))
+		} else {
+			const premultiplied = u * p1 * (1 - t) + v * p2 * t
+			components.push(alpha === 0 ? premultiplied : premultiplied / alpha)
 		}
-		const premultiplied = u * p1 * (1 - t) + v * p2 * t
-		return alpha === 0 ? premultiplied : premultiplied / alpha
-	})
+	}
 	const result: Color = { colorSpace: space, components }
 	if (a1 === null || alpha !== 1) result.alpha = a1 === null ? null : alpha
 	return result

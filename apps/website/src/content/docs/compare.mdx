@@ -14,6 +14,11 @@ export const sp = data.speed
 export const kb = (b) => (b / 1000).toFixed(1)
 export const times = (op) => (sp.culori[op].hz / sp['color-map'][op].hz).toFixed(1)
 export const dxTimes = (op) => (sp['@colordx/core'][op].hz / sp['color-map'][op].hz).toFixed(1)
+export const cmTimes = (op) => (sp['color-map'][op].hz / sp['@colordx/core'][op].hz).toFixed(1)
+export const dxSize = (() => {
+	const d = (s['@colordx/core'].convert / s['color-map'].convert - 1) * 100
+	return `${Math.abs(d).toFixed(0)}% ${d < 0 ? 'smaller' : 'larger'}`
+})()
 
 `color-map` next to seven other color libraries. Every number is read from a data file that a script writes, and every feature cell links to its source.
 
@@ -21,9 +26,9 @@ Measured on {data.generatedAt} with color-map {v['color-map']}, culori {v.culori
 
 ## Summary
 
-- `color-map` is smaller than culori, colorjs.io and chroma-js for the same job, and larger than `@texel/color` and `colord`. Those two cover far less. `@colordx/core` is about {((s['@colordx/core'].convert / s['color-map'].convert - 1) * 100).toFixed(0)}% larger than `color-map` for the convert job, but its whole package ({kb(s['@colordx/core'].whole)} kB) is smaller than `color-map`'s ({kb(s['color-map'].whole)} kB). Its plugins are not in that figure.
+- `color-map` is smaller than culori, colorjs.io and chroma-js for the same job, and larger than `@texel/color` and `colord`. Those two cover far less. `@colordx/core` is {dxSize} than `color-map` for the convert job, and its whole package ({kb(s['@colordx/core'].whole)} kB) is smaller than `color-map`'s ({kb(s['color-map'].whole)} kB). Its plugins are not in that figure.
 - `color-map` converts between spaces at roughly culori's speed (within about 15% of it, depending on the pair), and is faster at parsing, mixing and gamut mapping. It is about {times('toCss (oklch)')} times slower at `toCss` and about {times('toHex (srgb)')} times slower at `toHex`.
-- `@colordx/core` is faster than `color-map` at parsing (about {dxTimes('parse')} times), gamut mapping (about {dxTimes('toGamut css (oklch)')} times) and mixing (about {dxTimes('mix oklab')} times). `color-map` is faster at `toCss` (about {(sp['color-map']['toCss (oklch)'].hz / sp['@colordx/core']['toCss (oklch)'].hz).toFixed(1)} times), at WCAG contrast and at conversions to Lab and Display-P3. Conversions back to sRGB favor `@colordx/core` by up to about 30%.
+- `@colordx/core` is faster than `color-map` at parsing (about {dxTimes('parse')} times). The two are level at gamut mapping (`@colordx/core` at {dxTimes('toGamut css (oklch)')} times `color-map`), and `color-map` is faster at mixing (about {cmTimes('mix oklab')} times). `color-map` is faster at `toCss` (about {(sp['color-map']['toCss (oklch)'].hz / sp['@colordx/core']['toCss (oklch)'].hz).toFixed(1)} times), at WCAG contrast and at conversions to Lab and Display-P3. Conversions back to sRGB favor `@colordx/core` by up to about 35%.
 - colorjs.io and `@colordx/core` have APCA contrast. `color-map` has no APCA yet (issue [#255](https://github.com/cyberuni/color-map/issues/255)). colorjs.io also has more color spaces.
 - lightningcss is a native Rust CSS tool for build time. It is not a browser library, so it has no browser size.
 

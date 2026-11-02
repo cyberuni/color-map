@@ -140,6 +140,15 @@ function functional(rawName: string, body: string, input: string): Color {
  */
 export function parse(input: string): Color {
 	const text = input.trim().toLowerCase()
+	return scan(text) ?? parseGeneric(input, text)
+}
+
+/**
+ * The regex-based parser: every accepted form, and every error message. `parse`
+ * tries {@link scan} first, which takes only the plain valid forms and leaves
+ * the rest, including every error, to this.
+ */
+export function parseGeneric(input: string, text: string): Color {
 	if (text.startsWith('#')) return hex(text)
 	const fn = /^([a-z]+)\((.*)\)$/s.exec(text)
 	if (fn) return functional(fn[1], fn[2], input)
@@ -154,3 +163,193 @@ export function parse(input: string): Color {
 
 /** A color as given, or parsed with {@link parse} when it is a string. */
 export const toColor = (c: Color | string): Color => (typeof c === 'string' ? parse(c) : c)
+
+// --- The scanner: a char-code fast path for hex and the functional forms ---
+
+const isSpace = (c: number): boolean => c === 32 || c === 9 || c === 10 || c === 13 || c === 12
+const isDigit = (c: number): boolean => c >= 48 && c <= 57
+const hexValue = (c: number): number => (c >= 48 && c <= 57 ? c - 48 : c >= 97 && c <= 102 ? c - 87 : -1)
+
+// Scanner state, shared across calls: `parse` is synchronous and does not re-enter.
+let at = 0
+let percent = false
+
+function scanHex(text: string): Color | undefined {
+	const len = text.length
+	if (len !== 4 && len !== 5 && len !== 7 && len !== 9) return undefined
+	const short = len < 6
+	const count = short ? len - 1 : (len - 1) / 2
+	const bytes: number[] = []
+	for (let i = 0; i < count; i++) {
+		let value: number
+		if (short) {
+			const d = hexValue(text.charCodeAt(1 + i))
+			value = d * 17
+			if (d < 0) return undefined
+		} else {
+			const hi = hexValue(text.charCodeAt(1 + i * 2))
+			const lo = hexValue(text.charCodeAt(2 + i * 2))
+			if (hi < 0 || lo < 0) return undefined
+			value = hi * 16 + lo
+		}
+		bytes.push(value / 255)
+	}
+	const color: Color = { colorSpace: 'srgb', components: [bytes[0], bytes[1], bytes[2]] }
+	if (count === 4) color.alpha = bytes[3]
+	return color
+}
+
+/** Skips whitespace from `at` up to `end`. */
+function skip(text: string, end: number): void {
+	while (at < end && isSpace(text.charCodeAt(at))) at++
+}
+
+/** The end of the token that starts at `at`: it runs to whitespace, a comma, a slash or `end`. */
+function tokenEnd(text: string, end: number): number {
+	let j = at
+	while (j < end) {
+		const c = text.charCodeAt(j)
+		if (isSpace(c) || c === 44 || c === 47) break
+		j++
+	}
+	return j
+}
+
+/**
+ * Reads the token at `at` as {@link channel} would, or returns `undefined` when
+ * it is anything but a plain valid one. Leaves `at` after the token.
+ */
+function scanChannel(text: string, end: number, spec: Channel): Component | undefined {
+	const s = at
+	const e = tokenEnd(text, end)
+	at = e
+	if (e === s) return undefined
+	if (e - s === 4 && text.startsWith('none', s)) return null
+	let j = s
+	let c = text.charCodeAt(j)
+	if (c === 43 || c === 45) c = text.charCodeAt(++j)
+	let digits = 0
+	while (isDigit(c)) {
+		c = text.charCodeAt(++j)
+		digits++
+	}
+	if (c === 46) {
+		c = text.charCodeAt(++j)
+		while (isDigit(c)) {
+			c = text.charCodeAt(++j)
+			digits++
+		}
+	}
+	if (digits === 0) return undefined
+	if (c === 101) {
+		let k = j + 1
+		let x = text.charCodeAt(k)
+		if (x === 43 || x === 45) x = text.charCodeAt(++k)
+		if (isDigit(x)) {
+			while (isDigit(text.charCodeAt(k))) k++
+			j = k
+		}
+	}
+	const n = Number(text.slice(s, j))
+	if (spec.hue) {
+		const unit = j === e ? 1 : UNITS[text.slice(j, e)]
+		return unit === undefined ? undefined : n * unit
+	}
+	let value: number
+	if (j === e) value = n / (spec.div ?? 1)
+	else if (e - j === 1 && text.charCodeAt(j) === 37) {
+		percent = true
+		value = (n * spec.pct) / 100
+	} else return undefined
+	return Math.min(spec.max ?? Number.POSITIVE_INFINITY, Math.max(spec.min ?? Number.NEGATIVE_INFINITY, value))
+}
+
+/**
+ * Parses the plain valid forms (hex, and the comma or space forms of the
+ * functions) by char code, with no regex, split or per-token array. Anything
+ * else returns `undefined`, so that {@link parseGeneric} handles it and says
+ * why it is wrong.
+ */
+function scan(text: string): Color | undefined {
+	if (text.charCodeAt(0) === 35) return scanHex(text)
+	const end = text.length - 1
+	if (text.charCodeAt(end) !== 41) return undefined
+	let open = 0
+	while (open < end) {
+		const c = text.charCodeAt(open)
+		if (c < 97 || c > 122) break
+		open++
+	}
+	if (open === 0 || text.charCodeAt(open) !== 40) return undefined
+	const rawName = text.slice(0, open)
+	const name = ALIASES[rawName] ?? rawName
+	let space: ColorSpaceId
+	let channels: [Channel, Channel, Channel]
+	at = open + 1
+	skip(text, end)
+	if (name === 'color') {
+		const s = at
+		while (at < end && !isSpace(text.charCodeAt(at))) at++
+		const id = COLOR_SPACES[text.slice(s, at)]
+		if (!id) return undefined
+		space = id
+		channels = [UNIT, UNIT, UNIT]
+		skip(text, end)
+	} else {
+		const fn = FUNCTIONS[name]
+		if (!fn) return undefined
+		;({ space, channels } = fn)
+	}
+	percent = false
+	const c0 = scanChannel(text, end, channels[0])
+	if (c0 === undefined) return undefined
+	const p0 = percent
+	skip(text, end)
+	const comma = text.charCodeAt(at) === 44
+	if (comma && name !== 'rgb' && name !== 'hsl') return undefined
+	let alpha: Component | undefined
+	let c1: Component | undefined
+	let c2: Component | undefined
+	let p1 = false
+	let p2 = false
+	if (comma) {
+		at++
+		skip(text, end)
+		percent = false
+		c1 = scanChannel(text, end, channels[1])
+		p1 = percent
+		skip(text, end)
+		if (text.charCodeAt(at++) !== 44) return undefined
+		skip(text, end)
+		percent = false
+		c2 = scanChannel(text, end, channels[2])
+		p2 = percent
+		skip(text, end)
+		if (c0 === null || c1 === undefined || c1 === null || c2 === undefined || c2 === null) return undefined
+		const ok = space === 'hsl' ? !p0 && p1 && p2 : p0 === p1 && p1 === p2
+		if (!ok) return undefined
+		if (at < end) {
+			if (text.charCodeAt(at++) !== 44) return undefined
+			skip(text, end)
+			alpha = scanChannel(text, end, ALPHA)
+			if (alpha === undefined || alpha === null) return undefined
+			skip(text, end)
+		}
+	} else {
+		c1 = scanChannel(text, end, channels[1])
+		skip(text, end)
+		c2 = scanChannel(text, end, channels[2])
+		skip(text, end)
+		if (at < end) {
+			if (text.charCodeAt(at++) !== 47) return undefined
+			skip(text, end)
+			alpha = scanChannel(text, end, ALPHA)
+			if (alpha === undefined) return undefined
+			skip(text, end)
+		}
+	}
+	if (at !== end || c1 === undefined || c2 === undefined) return undefined
+	const color: Color = { colorSpace: space, components: [c0, c1, c2] }
+	if (alpha !== undefined) color.alpha = alpha
+	return color
+}
