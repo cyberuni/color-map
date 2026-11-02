@@ -1,6 +1,6 @@
 export { a98Rgb } from './a98-rgb.js'
 export { fromArgb, toArgb } from './argb.js'
-export { createDeltaEOK, createEquals, deltaEOK, equals } from './compare.js'
+export { createDeltaEOk, createEquals, deltaEOk, equals } from './compare.js'
 export {
 	type ContrastAlgorithm,
 	type ContrastFn,

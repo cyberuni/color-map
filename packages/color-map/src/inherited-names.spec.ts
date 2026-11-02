@@ -6,7 +6,7 @@ import { run } from './cli/testing.js'
 import { contrast, findContrast, meets, mix, parse, parseExpr, resolve } from './color/index.js'
 import { darkVariant, harmony, semanticPalette, validate } from './palette/index.js'
 import { createContrastScale, createScale, scaleFromBrand } from './scale/index.js'
-import { toCssVariables, toDTCG, toTailwindTheme } from './tokens/index.js'
+import { toCssVariables, toDtcg, toTailwindTheme } from './tokens/index.js'
 
 // A name that a caller writes must be looked up as a name, never as a property
 // of Object.prototype. Each of these is an inherited property of every object.
@@ -110,7 +110,7 @@ describe.each(NAMES)('the name "%s"', (name) => {
 	describe('in the exporters', () => {
 		const tree = JSON.parse(`{"${name}": {"${name}": "red"}, "other": "blue"}`)
 		test('as a token or group name, DTCG writes it as an ordinary key', () => {
-			const dtcg = toDTCG(tree)
+			const dtcg = toDtcg(tree)
 			expect(Object.keys(dtcg).sort()).toEqual([name, 'other'].sort())
 			expect(Object.keys(dtcg[name] as object)).toEqual([name])
 			expect(JSON.parse(JSON.stringify(dtcg))[name][name].$value.colorSpace).toBe('srgb')

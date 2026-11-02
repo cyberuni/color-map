@@ -2,7 +2,7 @@ import {
 	type Color,
 	contrast,
 	createContrast,
-	createDeltaEOK,
+	createDeltaEOk,
 	createEquals,
 	createFindContrast,
 	createInGamut,
@@ -11,7 +11,7 @@ import {
 	createOnColor,
 	createToGamut,
 	createToHex,
-	deltaEOK,
+	deltaEOk,
 	displayP3,
 	equals,
 	findContrast,
@@ -100,23 +100,23 @@ describe('createToGamut', () => {
 	})
 })
 
-describe('createDeltaEOK and createEquals', () => {
-	test('match deltaEOK and equals', () => {
-		const distance = createDeltaEOK(srgb, hsl, oklch, displayP3, lch)
+describe('createDeltaEOk and createEquals', () => {
+	test('match deltaEOk and equals', () => {
+		const distance = createDeltaEOk(srgb, hsl, oklch, displayP3, lch)
 		const same = createEquals(srgb, hsl, oklch, displayP3, lch)
 		for (const a of samples)
 			for (const b of samples) {
-				expect(distance(a, b)).toBe(deltaEOK(a, b))
+				expect(distance(a, b)).toBe(deltaEOk(a, b))
 				expect(same(a, b)).toBe(equals(a, b))
 				expect(same(a, b, 0.1)).toBe(equals(a, b, 0.1))
 			}
 	})
 
-	test('createDeltaEOK adds oklab itself; createEquals adds nothing', () => {
+	test('createDeltaEOk adds oklab itself; createEquals adds nothing', () => {
 		const a = parse('oklab(0.5 0.1 0.1)')
 		const b = parse('oklab(0.6 0 0.1)')
-		expect(createDeltaEOK()(a, b)).toBe(deltaEOK(a, b))
-		expect(() => createDeltaEOK()(parse('#336699'), b)).toThrow(/unknown color space "srgb"/)
+		expect(createDeltaEOk()(a, b)).toBe(deltaEOk(a, b))
+		expect(() => createDeltaEOk()(parse('#336699'), b)).toThrow(/unknown color space "srgb"/)
 		expect(createEquals()(a, a)).toBe(true)
 		expect(() => createEquals()(parse('oklch(0.7 0.1 40)'), a)).toThrow(/unknown color space "oklab"/)
 	})

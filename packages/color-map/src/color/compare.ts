@@ -4,24 +4,24 @@ import { componentsIn } from './spaces.js'
 import type { Color, Space } from './types.js'
 
 /** Euclidean distance in OKLab, the ΔEOK of CSS Color 4 gamut mapping. */
-export function deltaEOK(a: Color, b: Color): number {
-	return deltaEOKWith(componentsIn, a, b)
+export function deltaEOk(a: Color, b: Color): number {
+	return deltaEOkWith(componentsIn, a, b)
 }
 
-/** {@link deltaEOK} over the spaces `componentsIn` knows, which must include `oklab`. */
-export function deltaEOKWith(componentsIn: ComponentsIn, a: Color, b: Color): number {
+/** {@link deltaEOk} over the spaces `componentsIn` knows, which must include `oklab`. */
+export function deltaEOkWith(componentsIn: ComponentsIn, a: Color, b: Color): number {
 	const [l1, a1, b1] = componentsIn(a, 'oklab') as number[]
 	const [l2, a2, b2] = componentsIn(b, 'oklab') as number[]
 	return Math.hypot(l1 - l2, a1 - a2, b1 - b2)
 }
 
 /**
- * Builds {@link deltaEOK} over the spaces given, plus `oklab`, so a bundle
+ * Builds {@link deltaEOk} over the spaces given, plus `oklab`, so a bundle
  * contains only those. A color in a space not given throws, naming that space.
  */
-export function createDeltaEOK(...spaces: Space[]): (a: Color, b: Color) => number {
+export function createDeltaEOk(...spaces: Space[]): (a: Color, b: Color) => number {
 	const over = componentsOver([oklab, ...spaces])
-	return (a, b) => deltaEOKWith(over, a, b)
+	return (a, b) => deltaEOkWith(over, a, b)
 }
 
 const same = (x: number | null | undefined, y: number | null | undefined, epsilon: number): boolean =>

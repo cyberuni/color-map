@@ -24,7 +24,7 @@ describe('entry point names', () => {
 			  "convertComponents",
 			  "createContrast",
 			  "createConverter",
-			  "createDeltaEOK",
+			  "createDeltaEOk",
 			  "createEquals",
 			  "createFindContrast",
 			  "createInGamut",
@@ -33,7 +33,7 @@ describe('entry point names', () => {
 			  "createOnColor",
 			  "createToGamut",
 			  "createToHex",
-			  "deltaEOK",
+			  "deltaEOk",
 			  "displayP3",
 			  "displayP3Linear",
 			  "equals",
@@ -97,7 +97,7 @@ describe('entry point names', () => {
 		expect(names(tokens)).toMatchInlineSnapshot(`
 			[
 			  "toCssVariables",
-			  "toDTCG",
+			  "toDtcg",
 			  "toDtcgValue",
 			  "toTailwindTheme",
 			]

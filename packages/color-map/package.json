@@ -201,21 +201,21 @@
 		{
 			"name": "every converting helper over every space",
 			"path": "esm/color/index.js",
-			"import": "{ toHex, toGamut, inGamut, deltaEOK, equals, mix, contrast, meets, onColor, findContrast }",
+			"import": "{ toHex, toGamut, inGamut, deltaEOk, equals, mix, contrast, meets, onColor, findContrast }",
 			"limit": "7.63 kB",
 			"gzip": true
 		},
 		{
 			"name": "every converting helper, narrow",
 			"path": "esm/color/index.js",
-			"import": "{ createToHex, createToGamut, createInGamut, createDeltaEOK, createEquals, createMix, createContrast, createMeets, createOnColor, createFindContrast }",
+			"import": "{ createToHex, createToGamut, createInGamut, createDeltaEOk, createEquals, createMix, createContrast, createMeets, createOnColor, createFindContrast }",
 			"limit": "3.29 kB",
 			"gzip": true
 		},
 		{
 			"name": "full color core",
 			"path": "esm/color/index.js",
-			"import": "{ parse, toCss, toHex, toGamut, inGamut, deltaEOK, equals, fromArgb, toArgb, convert, spaces }",
+			"import": "{ parse, toCss, toHex, toGamut, inGamut, deltaEOk, equals, fromArgb, toArgb, convert, spaces }",
 			"limit": "6.76 kB",
 			"gzip": true
 		},

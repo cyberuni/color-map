@@ -1,4 +1,4 @@
-import { contrast, convert, deltaEOK, inGamut, parse, wcag2 } from '../color/index.js'
+import { contrast, convert, deltaEOk, inGamut, parse, wcag2 } from '../color/index.js'
 import type { Color } from '../color/types.js'
 import { createScale, tonalPalette } from '../scale/index.js'
 import { darkVariant, harmonize, harmony, inverse, semanticPalette, validate } from './index.js'
@@ -80,7 +80,7 @@ describe('inverse', () => {
 		expect(inverse('#ff8000', 'rgb')).toEqual({ colorSpace: 'srgb', components: [0, 127 / 255, 1] })
 	})
 	test('black and white swap', () => {
-		expect(deltaEOK(inverse('#000'), parse('#fff'))).toBeLessThan(1e-3)
+		expect(deltaEOk(inverse('#000'), parse('#fff'))).toBeLessThan(1e-3)
 	})
 })
 

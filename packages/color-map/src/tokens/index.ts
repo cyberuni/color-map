@@ -4,7 +4,7 @@ export {
 	type DtcgGroup,
 	type DtcgOptions,
 	type DtcgToken,
-	toDTCG,
+	toDtcg,
 	toDtcgValue
 } from './dtcg.js'
 export { type TailwindThemeOptions, toTailwindTheme } from './tailwind.js'

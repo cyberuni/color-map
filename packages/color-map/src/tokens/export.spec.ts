@@ -2,7 +2,7 @@ import { parse } from '../color/index.js'
 import type { Color } from '../color/types.js'
 import { semanticPalette } from '../palette/index.js'
 import { createScale } from '../scale/index.js'
-import { type DtcgColorValue, type DtcgGroup, toCssVariables, toDTCG, toDtcgValue, toTailwindTheme } from './index.js'
+import { type DtcgColorValue, type DtcgGroup, toCssVariables, toDtcg, toDtcgValue, toTailwindTheme } from './index.js'
 import { kebab } from './tokens.js'
 
 // DTCG 2025.10 §color: the component count, and for each space which components are angles or ranges.
@@ -69,26 +69,26 @@ describe('toDtcgValue', () => {
 	})
 })
 
-describe('toDTCG', () => {
+describe('toDtcg', () => {
 	test('nests groups and marks each leaf as a color', () => {
-		const out = toDTCG({ brand: { main: '#336699' }, text: blue })
+		const out = toDtcg({ brand: { main: '#336699' }, text: blue })
 		expect(Object.keys(out)).toEqual(['brand', 'text'])
 		expect((out.brand as DtcgGroup).main).toMatchObject({ $type: 'color', $value: { colorSpace: 'srgb' } })
 		expect(check(out)).toBe(2)
 	})
 	test('survives JSON', () => {
-		const out = toDTCG({ a: { colorSpace: 'oklch', components: [0.5, 0.1, null] } })
+		const out = toDtcg({ a: { colorSpace: 'oklch', components: [0.5, 0.1, null] } })
 		expect(JSON.parse(JSON.stringify(out))).toEqual(out)
 	})
 	test('a semantic palette exports its scales and role pairs, not its measures', () => {
-		const out = toDTCG(semanticPalette({ brand: '#3b82f6' }))
+		const out = toDtcg(semanticPalette({ brand: '#3b82f6' }))
 		expect(Object.keys(out).sort()).toEqual(['neutral', 'primary', 'roles'])
 		expect(Object.keys((out.roles as DtcgGroup).danger as DtcgGroup)).toEqual(['bg', 'fg'])
 		expect(Object.keys(out.primary as DtcgGroup)).toHaveLength(13)
 		expect(check(out)).toBe(13 * 2 + 9 * 2)
 	})
 	test('an 11-color scale gets the Tailwind keys', () => {
-		const out = toDTCG({ blue: createScale({ seed: '#3b82f6' }) })
+		const out = toDtcg({ blue: createScale({ seed: '#3b82f6' }) })
 		expect(Object.keys(out.blue as DtcgGroup)).toEqual([
 			'50',
 			'100',
@@ -104,17 +104,17 @@ describe('toDTCG', () => {
 		])
 	})
 	test('any other array is numbered from 1', () => {
-		expect(Object.keys(toDTCG({ s: ['#000', '#fff'] }).s as DtcgGroup)).toEqual(['1', '2'])
+		expect(Object.keys(toDtcg({ s: ['#000', '#fff'] }).s as DtcgGroup)).toEqual(['1', '2'])
 	})
 	test('a value that is not a color throws with its path', () => {
-		expect(() => toDTCG({ a: { b: 5 } } as never)).toThrow('a.b is not a color')
-		expect(() => toDTCG(null as never)).toThrow('(root) is not a color')
+		expect(() => toDtcg({ a: { b: 5 } } as never)).toThrow('a.b is not a color')
+		expect(() => toDtcg(null as never)).toThrow('(root) is not a color')
 	})
 	test('a single color has no name, so it throws', () => {
-		expect(() => toDTCG('#fff')).toThrow('needs a name')
+		expect(() => toDtcg('#fff')).toThrow('needs a name')
 	})
 	test('an empty tree is an empty file', () => {
-		expect(toDTCG({})).toEqual({})
+		expect(toDtcg({})).toEqual({})
 	})
 })
 
