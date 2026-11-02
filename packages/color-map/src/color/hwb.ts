@@ -2,6 +2,10 @@ import { hslToSrgb, srgbToHsl } from './hsl.js'
 import { srgb } from './srgb.js'
 import type { Space } from './types.js'
 
+/**
+ * The CSS `hwb` space. Components are hue in degrees, then whiteness and blackness in 0 to 100.
+ * Pass it to `createConverter` and to the narrow helpers such as `createMix` and `createToGamut`.
+ */
 export const hwb: Space = {
 	id: 'hwb',
 	toXyz: ([h, w, b]) => {

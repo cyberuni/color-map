@@ -6,6 +6,7 @@ import { ALPHA, channel, FUNCTIONS, fail, UNIT } from './parse.js'
 import { componentsIn } from './spaces.js'
 import type { Color, Component } from './types.js'
 
+/** What `resolve` needs from its surroundings to settle `currentcolor`, `light-dark()` and system colors. */
 export interface ResolveContext {
 	/** What `currentcolor` means. */
 	currentColor?: string | ColorExpr

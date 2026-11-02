@@ -1,5 +1,11 @@
 import type { Alpha, RGB, RGBA } from './interfaces.js'
 
+/**
+ * Creates `shades` colors that step evenly from `from` to `to`. Red, green and
+ * blue are rounded to whole numbers. Without `alpha`, the alpha of each end
+ * comes from its own fourth value, then from the other end, then is 1.
+ * Every result is an `RGBA`.
+ */
 export function createColors(
 	from: RGB | RGBA,
 	to: RGB | RGBA,

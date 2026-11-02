@@ -34,6 +34,7 @@ export function createInGamut(...spaces: Space[]): (color: Color, gamut?: GamutI
 	return (color, gamut = 'srgb', epsilon = 1e-6) => within(over(color, gamut), epsilon)
 }
 
+/** Options for `toGamut` and the function `createToGamut` returns. */
 export interface ToGamutOptions {
 	/** The gamut to fit into. Default `srgb`. */
 	gamut?: GamutId

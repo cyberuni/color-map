@@ -3,6 +3,7 @@ import { toColor } from '../color/parse.js'
 import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 
+/** Options for `createContrastScale`. */
 export interface ContrastScaleOptions {
 	/** The color the scale is built around: its hue and chroma carry to every step. */
 	seed: Color | string
@@ -16,6 +17,7 @@ export interface ContrastScaleOptions {
 	direction?: 'lighter' | 'darker'
 }
 
+/** One step of a contrast scale: the target it was given and the color and contrast it got. */
 export interface ContrastStep {
 	/** The key in a record of targets; otherwise the step's index as a string. */
 	name: string

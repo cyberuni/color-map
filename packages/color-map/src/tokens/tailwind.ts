@@ -2,6 +2,7 @@ import type { ColorSpaceId } from '../color/types.js'
 import { type CssVariablesOptions, declarations } from './css.js'
 import type { TokenTree } from './tokens.js'
 
+/** Options for `toTailwindTheme`. It also takes the options of `toCss`. */
 export interface TailwindThemeOptions extends Omit<CssVariablesOptions, 'selector' | 'prefix'> {
 	/** The theme variable namespace. Default `color`, which makes `bg-primary-500` and `text-primary-500` work. */
 	namespace?: string

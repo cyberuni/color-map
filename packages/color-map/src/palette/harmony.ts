@@ -17,11 +17,13 @@ const SCHEMES = {
 	tetradic: [0, 90, 180, 270]
 } as const
 
+/** A harmony scheme `harmony` accepts: `complementary`, `split`, `analogous`, `triadic` or `tetradic`. */
 export type HarmonyScheme = keyof typeof SCHEMES
 
 /** Spaces with a hue channel that a scheme can rotate in. */
 export type HarmonySpace = 'oklch' | 'lch' | 'hsl' | 'hwb'
 
+/** Options for `harmony`. */
 export interface HarmonyOptions {
 	/** The space whose hue is rotated. Default `oklch`, which keeps perceived lightness steady. */
 	space?: HarmonySpace
@@ -58,6 +60,7 @@ export function harmony(color: ColorInput, scheme: HarmonyScheme, options: Harmo
 	})
 }
 
+/** Options for `harmonize`. */
 export interface HarmonizeOptions {
 	/** The most the hue may move, in degrees. Default 15. */
 	max?: number

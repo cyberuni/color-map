@@ -147,6 +147,7 @@ function levelOf(fn: ContrastFn, level: number | string): number {
 	return target
 }
 
+/** Options for `findContrast` and the function `createFindContrast` returns. */
 export interface FindContrastOptions {
 	/** Hue of the result, in OKLCH degrees. Default: the hue of `bg`. */
 	hue?: number
@@ -158,6 +159,7 @@ export interface FindContrastOptions {
 	contrast?: ContrastOption
 }
 
+/** What `findContrast` returns: the color it found and whether it reached the target. */
 export interface FoundContrast {
 	/** The color, in `srgb` and inside the gamut. */
 	color: Color
@@ -233,6 +235,7 @@ function findContrastWith(
 	return { ...(best as FoundContrast), met: false }
 }
 
+/** Options for `onColor` and the function `createOnColor` returns. */
 export interface OnColorOptions {
 	/** The contrast the text needs. Default 4.5 for WCAG 2. */
 	target?: number

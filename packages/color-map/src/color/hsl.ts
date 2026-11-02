@@ -43,6 +43,10 @@ export function srgbToHsl([r, g, b]: Vec3, flipNegative = true): Vec3 {
 	return [normalizeHue(h), s, l]
 }
 
+/**
+ * The CSS `hsl` space. Components are hue in degrees, then saturation and lightness in 0 to 100.
+ * Pass it to `createConverter` and to the narrow helpers such as `createMix` and `createToGamut`.
+ */
 export const hsl: Space = {
 	id: 'hsl',
 	toXyz: ([h, s, l]) => srgb.toXyz(hslToSrgb(h, s / 100, l / 100)),

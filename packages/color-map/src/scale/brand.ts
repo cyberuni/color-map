@@ -5,6 +5,7 @@ import { componentsIn } from '../color/spaces.js'
 import type { Color } from '../color/types.js'
 import { checkMode } from '../color/unknown-name.js'
 
+/** Options for `scaleFromBrand`. */
 export interface BrandScaleOptions {
 	/** `light` runs from a near-white step 1 to dark text; `dark` the other way. Default `light`. */
 	mode?: 'light' | 'dark'

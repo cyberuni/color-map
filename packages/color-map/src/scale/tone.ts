@@ -11,6 +11,7 @@ export function lstar(color: Color): number {
 /** Material's tones: 0 is black, 100 is white. */
 export const MATERIAL_TONES: readonly number[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100]
 
+/** Options for `tonalPalette`. */
 export interface TonalPaletteOptions {
 	/** The gamut the colors must fit. Default `srgb`. */
 	gamut?: GamutId
