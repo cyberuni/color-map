@@ -161,14 +161,14 @@
 			"name": "toGamut over every space",
 			"path": "esm/color/index.js",
 			"import": "{ toGamut }",
-			"limit": "3.27 kB",
+			"limit": "3.86 kB",
 			"gzip": true
 		},
 		{
 			"name": "toGamut, narrow",
 			"path": "esm/color/index.js",
 			"import": "{ createToGamut }",
-			"limit": "1.61 kB",
+			"limit": "2.19 kB",
 			"gzip": true
 		},
 		{
@@ -189,77 +189,77 @@
 			"name": "contrast helpers over every space",
 			"path": "esm/color/index.js",
 			"import": "{ contrast, meets, onColor, findContrast }",
-			"limit": "6.77 kB",
+			"limit": "7.35 kB",
 			"gzip": true
 		},
 		{
 			"name": "contrast helpers, narrow",
 			"path": "esm/color/index.js",
 			"import": "{ createContrast, createMeets, createOnColor, createFindContrast }",
-			"limit": "2.39 kB",
+			"limit": "2.96 kB",
 			"gzip": true
 		},
 		{
 			"name": "every converting helper over every space",
 			"path": "esm/color/index.js",
 			"import": "{ toHex, toGamut, inGamut, deltaEOk, equals, mix, contrast, meets, onColor, findContrast }",
-			"limit": "7.67 kB",
+			"limit": "8.24 kB",
 			"gzip": true
 		},
 		{
 			"name": "every converting helper, narrow",
 			"path": "esm/color/index.js",
 			"import": "{ createToHex, createToGamut, createInGamut, createDeltaEOk, createEquals, createMix, createContrast, createMeets, createOnColor, createFindContrast }",
-			"limit": "3.33 kB",
+			"limit": "3.89 kB",
 			"gzip": true
 		},
 		{
 			"name": "full color core",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toHex, toGamut, inGamut, deltaEOk, equals, fromArgb, toArgb, convert, spaces }",
-			"limit": "6.76 kB",
+			"limit": "7.35 kB",
 			"gzip": true
 		},
 		{
 			"name": "core with mix",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix }",
-			"limit": "7.08 kB",
+			"limit": "7.66 kB",
 			"gzip": true
 		},
 		{
 			"name": "core with mix and contrast",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toGamut, mix, contrast, meets, onColor, findContrast }",
-			"limit": "7.81 kB",
+			"limit": "8.37 kB",
 			"gzip": true
 		},
 		{
 			"name": "scales",
 			"path": "esm/scale/index.js",
 			"import": "*",
-			"limit": "9.13 kB",
+			"limit": "9.69 kB",
 			"gzip": true
 		},
 		{
 			"name": "palette",
 			"path": "esm/palette/index.js",
 			"import": "*",
-			"limit": "8.46 kB",
+			"limit": "9.02 kB",
 			"gzip": true
 		},
 		{
 			"name": "tokens",
 			"path": "esm/tokens/index.js",
 			"import": "*",
-			"limit": "7.59 kB",
+			"limit": "8.16 kB",
 			"gzip": true
 		},
 		{
 			"name": "everything",
 			"path": "esm/color/index.js",
 			"import": "*",
-			"limit": "10.74 kB",
+			"limit": "11.29 kB",
 			"gzip": true
 		}
 	],
