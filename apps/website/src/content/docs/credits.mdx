@@ -1,0 +1,44 @@
+---
+title: Credits
+description: The specifications, projects and people whose work color-map follows, learned from or measures itself against.
+---
+
+`color-map` builds on published specifications and on other people's open-source work. This page names each one and says what `color-map` took from it. The licenses below are the ones each project declares on npm or in its repository, read on 2026-11-02.
+
+No third-party source code is bundled into `color-map`. It has no runtime dependencies. Where a project below is MIT, BSD, Apache or MPL licensed, `color-map` uses it as a reference or as a measurement target, not as copied code, so no license notice travels with the package.
+
+## Specifications
+
+- [CSS Color Module Level 4](https://www.w3.org/TR/css-color-4/) and [Level 5](https://www.w3.org/TR/css-color-5/), by the W3C CSS Working Group. `color-map` follows them for parsing, the named colors, the conversion matrices in section 19, hue interpolation, `none` handling, gamut mapping (section 13.2), `color-mix()`, relative color, `light-dark()` and `contrast-color()`.
+- [A perceptual color space for image processing](https://bottosson.github.io/posts/oklab/), by Björn Ottosson, the author of OKLab and OKLCH. `color-map` uses the matrices that CSS Color 4 publishes instead of the ones on that page, because the specification recalculated them for a consistent white point.
+- [Design Tokens Format Module](https://www.designtokens.org/) from the Design Tokens Community Group. `toDtcg` writes the 2025.10 color value.
+- [WCAG 2](https://www.w3.org/TR/WCAG22/), by the W3C Web Accessibility Initiative, defines the contrast ratio that `contrast` and the palette builder check.
+- [APCA](https://github.com/Myndex/apca-w3), by Myndex. `color-map` does not include it. The package accepts a contrast function, and the repository's tests show an APCA recipe that runs through colorjs.io. apca-w3 carries its own license terms, so its code is not copied.
+
+## Palettes and scales
+
+- [Radix Colors](https://www.radix-ui.com/colors), by the Radix team (MIT). The 12 step purposes, the rule that step 9 is the brand color, and the white-or-dark text rule in `onColor` follow their [documentation](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale) and custom palette generator. `scaleFromBrand` uses one fixed lightness and chroma curve of its own. No Radix scale data is included.
+- [Material Design 3](https://m3.material.io/styles/color/system/overview) and [Material Color Utilities](https://github.com/material-foundation/material-color-utilities) (Apache-2.0), by Google. The 13 tones, the dark-mode swap of tone 40 for tone 80 and the role tone assignments follow them. `color-map` sets tone as CIE L* in OKLCH hue and chroma and does not port the HCT color space.
+- [Tailwind CSS](https://tailwindcss.com/) (MIT). The `tailwind-11` scale preset, its 50 to 950 keys and the `@theme` block that `toTailwindTheme` writes follow Tailwind v4.
+
+## Where color-map started
+
+[`colormap`](https://github.com/bpostlethwaite/colormap) by bpostlethwaite (MIT) inspired the original `createColors` and `createColorsFromMap`, now in `color-map/legacy`. A legacy test checks that the output matches `colormap`'s.
+
+## Libraries measured on the Compare page
+
+The [Compare page](/color-map/compare/) reads each project's documentation and source and runs its published build next to `color-map`. These projects also taught `color-map` which APIs and defaults users expect. The page's [method section](/color-map/compare/#method-and-caveats) says how the numbers are produced and where they are weak.
+
+- [culori](https://culorijs.org/) by Dan Burzo and contributors (MIT). A reference for gamut mapping behavior and the benchmark baseline in the repository.
+- [Color.js](https://colorjs.io/) by Lea Verou, Chris Lilley and contributors (MIT). A reference for the specification's edge cases, and the cross-check in `color-map`'s tests.
+- [chroma-js](https://github.com/gka/chroma.js) by Gregor Aisch (BSD-3-Clause and Apache-2.0). A reference for scale and interpolation APIs.
+- [@texel/color](https://github.com/texel-org/color) by Matt DesLauriers (MIT). A reference for a small, OKLCH-focused converter.
+- [@colordx/core](https://colordx.dev/) by Dmitrii Kriaklin (MIT). A reference for a fast, plugin-based color API, and the fastest library in the speed table at parsing, gamut mapping and mixing.
+- [lightningcss](https://lightningcss.dev/) by the Parcel team (MPL-2.0). A native CSS transformer that evaluates `color-mix()` at build time.
+- [colord](https://github.com/omgovich/colord) by Vlad Shilov (MIT). A reference for a very small color API.
+
+These libraries are devDependencies of the private `color-map-compare` package, so they never reach `color-map`'s published dependencies.
+
+## Corrections
+
+Corrections are welcome. Open an issue at [cyberuni/color-map](https://github.com/cyberuni/color-map/issues) if a source is missing or described wrongly.

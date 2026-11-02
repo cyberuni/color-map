@@ -58,7 +58,8 @@ export default defineConfig({
 						{ label: 'Library', slug: 'library' },
 						{ label: 'Compare', slug: 'compare' },
 						{ label: 'CLI', slug: 'cli' },
-						{ label: 'Agent skill', slug: 'agent-skill' }
+						{ label: 'Agent skill', slug: 'agent-skill' },
+						{ label: 'Credits', slug: 'credits' }
 					]
 				}
 			]
