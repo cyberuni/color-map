@@ -1,6 +1,6 @@
 ---
 title: Compare
-description: How color-map compares with culori, Color.js, chroma-js, @texel/color, lightningcss and colord on features, browser size and speed.
+description: How color-map compares with culori, Color.js, chroma-js, @texel/color, @colordx/core, lightningcss and colord on features, browser size and speed.
 ---
 
 import data from '../../data/compare.json'
@@ -13,16 +13,18 @@ export const v = data.versions
 export const sp = data.speed
 export const kb = (b) => (b / 1000).toFixed(1)
 export const times = (op) => (sp.culori[op].hz / sp['color-map'][op].hz).toFixed(1)
+export const dxTimes = (op) => (sp['@colordx/core'][op].hz / sp['color-map'][op].hz).toFixed(1)
 
-`color-map` next to six other color libraries. Every number is read from a data file that a script writes, and every feature cell links to its source.
+`color-map` next to seven other color libraries. Every number is read from a data file that a script writes, and every feature cell links to its source.
 
-Measured on {data.generatedAt} with color-map {v['color-map']}, culori {v.culori}, colorjs.io {v['colorjs.io']}, chroma-js {v['chroma-js']}, @texel/color {v['@texel/color']}, lightningcss {v.lightningcss} and colord {v.colord}.
+Measured on {data.generatedAt} with color-map {v['color-map']}, culori {v.culori}, colorjs.io {v['colorjs.io']}, chroma-js {v['chroma-js']}, @texel/color {v['@texel/color']}, @colordx/core {v['@colordx/core']}, lightningcss {v.lightningcss} and colord {v.colord}.
 
 ## Summary
 
-- `color-map` is smaller than culori, colorjs.io and chroma-js for the same job, and larger than `@texel/color` and `colord`. Those two cover far less.
+- `color-map` is smaller than culori, colorjs.io and chroma-js for the same job, and larger than `@texel/color` and `colord`. Those two cover far less. `@colordx/core` is about {((s['@colordx/core'].convert / s['color-map'].convert - 1) * 100).toFixed(0)}% larger than `color-map` for the convert job, but its whole package ({kb(s['@colordx/core'].whole)} kB) is smaller than `color-map`'s ({kb(s['color-map'].whole)} kB). Its plugins are not in that figure.
 - `color-map` converts between spaces at roughly culori's speed (within about 15% of it, depending on the pair), and is faster at parsing, mixing and gamut mapping. It is about {times('toCss (oklch)')} times slower at `toCss` and about {times('toHex (srgb)')} times slower at `toHex`.
-- colorjs.io has more color spaces and more contrast algorithms, including APCA. `color-map` has no APCA yet (issue [#255](https://github.com/cyberuni/color-map/issues/255)).
+- `@colordx/core` is faster than `color-map` at parsing (about {dxTimes('parse')} times), gamut mapping (about {dxTimes('toGamut css (oklch)')} times) and mixing (about {dxTimes('mix oklab')} times). `color-map` is faster at `toCss` (about {(sp['color-map']['toCss (oklch)'].hz / sp['@colordx/core']['toCss (oklch)'].hz).toFixed(1)} times), at WCAG contrast and at conversions to Lab and Display-P3. Conversions back to sRGB favor `@colordx/core` by up to about 30%.
+- colorjs.io and `@colordx/core` have APCA contrast. `color-map` has no APCA yet (issue [#255](https://github.com/cyberuni/color-map/issues/255)). colorjs.io also has more color spaces.
 - lightningcss is a native Rust CSS tool for build time. It is not a browser library, so it has no browser size.
 
 ## Features
@@ -48,13 +50,13 @@ The budgets `color-map` enforces on itself are on the [Library page](/color-map/
 
 ## Speed
 
-Operations per second, longer bar is faster. Each library runs in its own process on 64 inputs; the figure is the median of five samples. colorjs.io uses its fastest API, `colorjs.io/fn`. chroma-js, @texel/color and colord are not here because they lack some of these operations.
+Operations per second, longer bar is faster. Each library runs in its own process on 64 inputs; the figure is the median of five samples. colorjs.io uses its fastest API, `colorjs.io/fn`. chroma-js, @texel/color and colord are not here because they lack some of these operations. `@colordx/core` runs with its `lab`, `p3`, `mix` and `a11y` plugins loaded, through the `colordx()` class, wrapping a plain object on every call so the conversion is inside the timed work.
 
 <CompareSpeed />
 
 Run on {data.env.cpu}, {data.env.os}, Node {data.env.node}. Compare the bars, not the absolute figures.
 
-`color-map` is clearly slower only at `toCss` and `toHex`.
+Against culori, `color-map` is clearly slower only at `toCss` and `toHex`.
 
 ## Method and caveats
 

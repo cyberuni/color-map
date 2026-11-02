@@ -1,5 +1,14 @@
 {
-	"libraries": ["color-map", "culori", "colorjs.io", "chroma-js", "@texel/color", "lightningcss", "colord"],
+	"libraries": [
+		"color-map",
+		"culori",
+		"colorjs.io",
+		"chroma-js",
+		"@texel/color",
+		"@colordx/core",
+		"lightningcss",
+		"colord"
+	],
 	"rows": [
 		{
 			"feature": "License",
@@ -38,6 +47,11 @@
 					"value": "yes",
 					"note": "MIT.",
 					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "MIT.",
+					"source": "https://www.npmjs.com/package/@colordx/core/v/7.3.0"
 				}
 			}
 		},
@@ -78,6 +92,11 @@
 					"value": "yes",
 					"note": "None; package.json lists no dependencies.",
 					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "None; the README badge says 0 dependencies and package.json has no dependencies field.",
+					"source": "https://www.npmjs.com/package/@colordx/core/v/7.3.0"
 				}
 			}
 		},
@@ -118,6 +137,11 @@
 					"value": "yes",
 					"note": "types field points to index.d.ts; plugins ship .d.ts files.",
 					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "Types field and per-subpath .d.ts files in the exports map.",
+					"source": "https://www.npmjs.com/package/@colordx/core/v/7.3.0"
 				}
 			}
 		},
@@ -158,6 +182,11 @@
 					"value": "yes",
 					"note": "sideEffects false; plugins are separate subpath exports.",
 					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "sideEffects false; plugins and the functional API are separate subpath exports.",
+					"source": "https://www.npmjs.com/package/@colordx/core/v/7.3.0"
 				}
 			}
 		},
@@ -198,6 +227,11 @@
 					"value": "partial",
 					"note": "Core: rgb, hsl, hsv. Plugins add hwb, cmyk, lab, lch, xyz and names. No oklab, oklch or P3 in the package.",
 					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "Core: sRGB, HSL, OKLab, OKLCH. Plugins add HSV, HWB, CMYK, CIE Lab/LCH, XYZ, Okhsl/Okhsv, Display-P3, Rec.2020, A98, ProPhoto and linear sRGB.",
+					"source": "https://github.com/dkryaklin/colordx/blob/%40colordx%2Fcore%407.3.0/README.md#plugins"
 				}
 			}
 		},
@@ -238,6 +272,11 @@
 					"value": "partial",
 					"note": "Core parses hex, rgb, hsl; plugins add names, hwb, lch, cmyk. No oklab, oklch, color(), none, relative colors or color-mix().",
 					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				},
+				"@colordx/core": {
+					"value": "partial",
+					"note": "Core parses hex, rgb(), hsl(), oklab(), oklch() and color(srgb); plugins add lab, lch, hwb, color(display-p3 ...) and names. Handles none in color(). color-mix() and relative color are on its roadmap, not shipped.",
+					"source": "https://github.com/dkryaklin/colordx/blob/%40colordx%2Fcore%407.3.0/README.md#parsing"
 				}
 			}
 		},
@@ -278,6 +317,11 @@
 					"value": "partial",
 					"note": "Prints hex, rgb, hsl, plus hwb, cmyk, lch via plugins. No oklch() or color() output.",
 					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "toOklchString() and toOklabString() in core; toP3String(), toLabString() and toSrgbLinearString() with plugins.",
+					"source": "https://github.com/dkryaklin/colordx/blob/%40colordx%2Fcore%407.3.0/README.md#conversion"
 				}
 			}
 		},
@@ -318,6 +362,11 @@
 					"value": "no",
 					"note": "No gamut or wide-gamut code in the 2.10.0 package (searched for gamut, oklab, oklch, display-p3).",
 					"source": "https://www.npmjs.com/package/colord/v/2.10.0"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "mapSrgb() implements CSS Color 4 gamut mapping; plugins map into P3, Rec.2020, A98 and ProPhoto.",
+					"source": "https://github.com/dkryaklin/colordx/blob/%40colordx%2Fcore%407.3.0/README.md#gamut"
 				}
 			}
 		},
@@ -358,6 +407,11 @@
 					"value": "partial",
 					"note": "WCAG 2.0 luminance, contrast and isReadable via the a11y plugin; no APCA.",
 					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "a11y plugin: WCAG 2 contrast() and APCA apcaContrast(), plus readability gates and fixContrast().",
+					"source": "https://github.com/dkryaklin/colordx/blob/%40colordx%2Fcore%407.3.0/README.md#a11y-plugin"
 				}
 			}
 		},
@@ -398,6 +452,11 @@
 					"value": "partial",
 					"note": "mix plugin (lab or rgb), tints, shades, tones; harmonies plugin. No multi-stop scale.",
 					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				},
+				"@colordx/core": {
+					"value": "partial",
+					"note": "mix plugin: mix, mixOklab, mixLab, tints, shades, tones and palette(n, target); harmonies plugin. No multi-stop scale or easing.",
+					"source": "https://github.com/dkryaklin/colordx/blob/%40colordx%2Fcore%407.3.0/README.md#mix-plugin"
 				}
 			}
 		},
@@ -438,6 +497,11 @@
 					"value": "no",
 					"note": "The mix plugin is a JS method, not CSS color-mix(); no relative color parsing in the package.",
 					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				},
+				"@colordx/core": {
+					"value": "no",
+					"note": "Listed under Roadmap as not yet built: color-mix() strings and relative color syntax. mix() is a JS method.",
+					"source": "https://github.com/dkryaklin/colordx/blob/%40colordx%2Fcore%407.3.0/README.md#css-color-45-completeness"
 				}
 			}
 		},
@@ -478,6 +542,11 @@
 					"value": "yes",
 					"note": "README says it supports all browsers and Node.js.",
 					"source": "https://github.com/omgovich/colord/blob/master/README.md"
+				},
+				"@colordx/core": {
+					"value": "yes",
+					"note": "Zero dependencies; the README publishes a gzipped bundle size and names oklch-picker, a browser app, as a user. The installed dist has no node: imports (searched).",
+					"source": "https://github.com/dkryaklin/colordx/blob/%40colordx%2Fcore%407.3.0/README.md"
 				}
 			}
 		}
