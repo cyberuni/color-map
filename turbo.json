@@ -25,6 +25,14 @@
 			"dependsOn": ["build"],
 			"cache": false
 		},
+		"pack:check": {
+			"dependsOn": ["build"],
+			"cache": false
+		},
+		"size": {
+			"dependsOn": ["build"],
+			"cache": false
+		},
 		"nuke": {
 			"cache": false
 		},
