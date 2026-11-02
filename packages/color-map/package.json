@@ -136,6 +136,13 @@
 			"gzip": true
 		},
 		{
+			"name": "parse and convert between two spaces",
+			"path": "esm/color/index.js",
+			"import": "{ parse, createConverter, srgb, oklch }",
+			"limit": "3.95 kB",
+			"gzip": true
+		},
+		{
 			"name": "full color core",
 			"path": "esm/color/index.js",
 			"import": "{ parse, toCss, toHex, toGamut, inGamut, deltaEOK, equals, fromArgb, toArgb, convert, spaces }",
