@@ -33,7 +33,7 @@ The [Compare page](/color-map/compare/) reads each project's documentation and s
 - [Color.js](https://colorjs.io/) by Lea Verou, Chris Lilley and contributors (MIT). A reference for the specification's edge cases, and the cross-check in `color-map`'s tests.
 - [chroma-js](https://github.com/gka/chroma.js) by Gregor Aisch (BSD-3-Clause and Apache-2.0). A reference for scale and interpolation APIs.
 - [@texel/color](https://github.com/texel-org/color) by Matt DesLauriers (MIT). A reference for a small, OKLCH-focused converter.
-- [@colordx/core](https://colordx.dev/) by Dmitrii Kriaklin (MIT). A reference for a fast, plugin-based color API, and the fastest library in the speed table at parsing, gamut mapping and mixing.
+- [@colordx/core](https://colordx.dev/) by Dmitrii Kriaklin (MIT). Its approach (a single sRGB representation, a gamut search in linear sRGB and parsing by character code) informed the speedups to `color-map`'s parsing, gamut mapping and mixing. The [Compare page](/color-map/compare/#speed) shows the current numbers.
 - [lightningcss](https://lightningcss.dev/) by the Parcel team (MPL-2.0). A native CSS transformer that evaluates `color-mix()` at build time.
 - [colord](https://github.com/omgovich/colord) by Vlad Shilov (MIT). A reference for a very small color API.
 
