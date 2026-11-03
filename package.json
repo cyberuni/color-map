@@ -18,7 +18,7 @@
 		"test": "turbo run test",
 		"typecheck": "turbo run typecheck",
 		"verify": "run-p lint verify:pkg",
-		"verify:pkg": "turbo run build coverage depcheck typecheck llms:check",
+		"verify:pkg": "turbo run build coverage depcheck typecheck llms:check size pack:check",
 		"version": "changeset version && pnpm --filter color-map exec node scripts/sync-plugin-version.mjs",
 		"watch": "turbo run watch",
 		"web": "pnpm --filter=website"

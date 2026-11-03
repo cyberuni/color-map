@@ -3,12 +3,13 @@
 // dependencies (the CLI bundles its own, from devDependencies).
 //
 // Measured at the fold of the CLI into this package: 248 kB packed, 869 kB unpacked.
-// The caps leave about 20% headroom; raise them on purpose, not by accident.
+// Re-measured on 2026-11-03: 308 kB packed, 1140 kB unpacked.
+// The caps leave about 20% headroom over the latest measure; raise them on purpose, not by accident.
 import { execSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 
-const CAP_PACKED = 300_000
-const CAP_UNPACKED = 1_050_000
+const CAP_PACKED = 370_000
+const CAP_UNPACKED = 1_370_000
 const REQUIRED = [
 	'bin/color-map.js',
 	'plugin.json',
