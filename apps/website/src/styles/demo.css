@@ -45,7 +45,11 @@
 	flex-wrap: wrap;
 	gap: 0.4rem;
 }
+.demo .chips {
+	align-items: flex-start;
+}
 .demo .chips button {
+	line-height: 1.4;
 	font-size: var(--sl-text-xs);
 	font-family: var(--sl-font-mono);
 }
@@ -79,6 +83,7 @@
 	white-space: pre-line;
 }
 .demo table {
+	display: table;
 	width: 100%;
 	font-size: var(--sl-text-sm);
 }
@@ -94,6 +99,24 @@
 .demo .pair {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+	align-items: start;
+}
+.demo .pair > * {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	min-width: 0;
+}
+.demo .pair > *,
+.demo .pair > * > *,
+.demo #cv-out > *,
+.demo .chips > * {
+	margin: 0 !important; /* beats Starlight's sibling-margin rule */
+}
+.demo #cv-out {
+	display: flex;
+	flex-direction: column;
 	gap: 1rem;
 }
 .demo .big {
