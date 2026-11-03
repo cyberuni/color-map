@@ -1,5 +1,11 @@
 # color-map
 
+## 2.3.1
+
+### Patch Changes
+
+- 764413e: `llms.txt` now maps the library as well as the commands: each entry point with its exports, the conventions that hold across them, and the `schema` command, which it had left out. The docs site serves the same file at `/color-map/llms.txt`.
+
 ## 2.3.0
 
 ### Minor Changes
