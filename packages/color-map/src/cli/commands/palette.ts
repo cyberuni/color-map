@@ -8,6 +8,9 @@ const definition = command({
 	name: 'palette',
 	description:
 		'A semantic palette from one brand color: primary, status colors, surface and outline, each with a text color and its WCAG 2 ratio',
+	examples: [
+		{ command: "color-map palette '#3b82f6' --mode dark", description: 'A dark semantic palette from a brand blue' }
+	],
 	arguments: [{ name: 'brand', description: 'The brand color', type: t.string() }],
 	options: {
 		mode: { description: 'light or dark', type: t.enum([...MODES]), default: 'light' },

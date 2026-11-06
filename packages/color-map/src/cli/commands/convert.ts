@@ -6,6 +6,9 @@ import { describe, GAMUTS, readColor, SPACES } from '../shared.js'
 const definition = command({
 	name: 'convert',
 	description: 'Convert a CSS color to another color space',
+	examples: [
+		{ command: "color-map convert '#3b82f6' --to oklch", description: 'Convert a hex color to OKLCH' }
+	],
 	arguments: [
 		{ name: 'color', description: 'Any CSS color, such as "#3b82f6" or "oklch(0.7 0.15 250)"', type: t.string() }
 	],

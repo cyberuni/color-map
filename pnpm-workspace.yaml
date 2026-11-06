@@ -22,3 +22,6 @@ minimumReleaseAgeStrict: true
 minimumReleaseAgeExclude:
   # Renovate security update: vitest@4.1.11
   - vitest@4.1.11
+  # Fresh clibuilder 12.2.0 release; remove once it is older than 24h
+  - clibuilder@12.2.0
+  - args-minus@0.2.3

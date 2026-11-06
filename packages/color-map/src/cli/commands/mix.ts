@@ -6,6 +6,9 @@ import { describe, HUE_METHODS, readColor, SPACES } from '../shared.js'
 const definition = command({
 	name: 'mix',
 	description: 'Mix two CSS colors, as color-mix() does',
+	examples: [
+		{ command: "color-map mix '#3b82f6' '#ef4444' --amount 0.25", description: 'Blend a quarter of the way from blue to red' }
+	],
 	arguments: [
 		{ name: 'a', description: 'The first color', type: t.string() },
 		{ name: 'b', description: 'The second color', type: t.string() }

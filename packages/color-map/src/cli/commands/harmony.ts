@@ -9,6 +9,9 @@ export const SCHEMES = ['complementary', 'split', 'analogous', 'triadic', 'tetra
 const definition = command({
 	name: 'harmony',
 	description: 'The colors of a harmony scheme: the color rotated around the hue wheel',
+	examples: [
+		{ command: "color-map harmony '#3b82f6' --scheme triadic", description: 'The triadic partners of a blue' }
+	],
 	arguments: [{ name: 'color', description: 'The base color', type: t.string() }],
 	options: {
 		scheme: { description: 'The harmony scheme', type: t.enum([...SCHEMES]), default: 'complementary' },

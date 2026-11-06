@@ -7,6 +7,7 @@ export function schemaCommand(sources: readonly SchemaSource[]): cli.Command {
 	const definition = command({
 		name: 'schema',
 		description: "Print the JSON Schema of a command's arguments and options",
+		examples: [{ command: "color-map schema convert", description: 'The JSON Schema of the convert command' }],
 		arguments: [
 			{ name: 'command', description: 'The command to describe; leave out to list them', type: t.string().optional() }
 		],

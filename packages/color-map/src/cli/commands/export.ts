@@ -38,6 +38,9 @@ function readTokens(path: string): unknown {
 const definition = command({
 	name: 'export',
 	description: 'Write a palette, a scale or your own tokens as DTCG JSON, CSS variables or a Tailwind v4 theme',
+	examples: [
+		{ command: "color-map export '#3b82f6' --source palette --to css", description: 'A palette as CSS variables' }
+	],
 	arguments: [
 		{
 			name: 'color',
