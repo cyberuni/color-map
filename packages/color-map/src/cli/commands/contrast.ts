@@ -6,6 +6,9 @@ import { readColor, round } from '../shared.js'
 const definition = command({
 	name: 'contrast',
 	description: 'WCAG 2 contrast ratio of a text color on a background, with the AA and AAA verdicts',
+	examples: [
+		{ command: "color-map contrast '#777777' '#ffffff'", description: 'Check gray text on white against WCAG 2' }
+	],
 	arguments: [
 		{ name: 'fg', description: 'The text (foreground) color', type: t.string() },
 		{ name: 'bg', description: 'The background color', type: t.string() }

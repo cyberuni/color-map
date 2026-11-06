@@ -6,6 +6,9 @@ import { describe, readColor, round } from '../shared.js'
 const definition = command({
 	name: 'find-contrast',
 	description: 'Find the color closest in lightness to a background that reaches a WCAG 2 contrast target',
+	examples: [
+		{ command: "color-map find-contrast '#3b82f6' --target 4.5", description: 'Find a gray that reads on blue at AA' }
+	],
 	arguments: [{ name: 'bg', description: 'The background color', type: t.string() }],
 	options: {
 		target: { description: 'The contrast ratio to reach, 1 to 21', type: t.number({ min: 1, max: 21 }), default: 4.5 },

@@ -20,6 +20,9 @@ function rows(colors: Color[], full: boolean) {
 const definition = command({
 	name: 'scale',
 	description: 'Build a color scale from a seed color: a preset, a Radix-style brand scale, or contrast targets',
+	examples: [
+		{ command: "color-map scale '#3b82f6' --preset tailwind-11", description: 'An 11-step scale around a blue seed' }
+	],
 	arguments: [{ name: 'seed', description: 'The color the scale is built around', type: t.string() }],
 	options: {
 		preset: { description: 'The scale shape', type: t.enum([...PRESETS]), default: 'tailwind-11' },
