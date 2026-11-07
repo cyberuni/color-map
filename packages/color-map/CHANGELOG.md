@@ -1,5 +1,11 @@
 # color-map
 
+## 2.4.0
+
+### Minor Changes
+
+- 7c86bc6: Upgrade to clibuilder 12.2 and add `examples` to every command, so `--help` shows copyable invocations in the AXI structured help.
+
 ## 2.3.1
 
 ### Patch Changes
