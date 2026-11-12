@@ -13,7 +13,7 @@
 		"@colordx/core": "7.3.0",
 		"@size-limit/preset-small-lib": "^14.3.0",
 		"@texel/color": "1.1.11",
-		"chroma-js": "3.2.0",
+		"chroma-js": "3.3.0",
 		"color-map": "workspace:*",
 		"colord": "2.11.0",
 		"colorjs.io": "0.7.1",
