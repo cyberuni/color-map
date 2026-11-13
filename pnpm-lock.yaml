@@ -249,8 +249,8 @@ importers:
         specifier: ^11.0.0
         version: 11.5.2
       clibuilder:
-        specifier: ~12.2.0
-        version: 12.2.0(js-yaml@4.3.1)
+        specifier: ~12.3.0
+        version: 12.3.0(js-yaml@4.3.1)
       colorjs.io:
         specifier: 0.7.1
         version: 0.7.1
@@ -2150,8 +2150,8 @@ packages:
     resolution: {integrity: sha512-77PSwercCZU2Fc4sX94eF8k8Pxte6JAwL4/ICZLFjJLqegs7kCuAsqqj/70NQF6TvDpgFjkubQB2FW2ZZddvQg==}
     engines: {node: '>=8'}
 
-  clibuilder@12.2.0:
-    resolution: {integrity: sha512-aaKIqEEkt8b/h1TdnZdWSPLcnjooMSOKUCxHOUFqf9aEcCbq523XQf9nE2UtjC+U2VOd8P65Pzqczbw1BfBgaw==}
+  clibuilder@12.3.0:
+    resolution: {integrity: sha512-MqBZWtcWs5ihPCIbu3XNtOcMOrYTj3oITTYFGUt0fo/jvG7UA1oEXeiZ3R1JhKgunyjiX1ZOCFe0AmW7pVK4ng==}
     engines: {node: '>= 20.19'}
     peerDependencies:
       js-yaml: ^4.1.0
@@ -5669,7 +5669,7 @@ snapshots:
 
   ci-info@4.4.0: {}
 
-  clibuilder@12.2.0(js-yaml@4.3.1):
+  clibuilder@12.3.0(js-yaml@4.3.1):
     dependencies:
       '@toon-format/toon': 4.4.0
       args-minus: 0.2.3

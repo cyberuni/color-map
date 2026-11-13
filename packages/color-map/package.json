@@ -100,7 +100,7 @@
 		"@types/node": "^26.2.0",
 		"@vitest/coverage-v8": "^5.0.0",
 		"assertron": "^11.0.0",
-		"clibuilder": "~12.2.0",
+		"clibuilder": "~12.3.0",
 		"colorjs.io": "0.7.1",
 		"culori": "4.0.2",
 		"depcheck": "^1.4.3",
