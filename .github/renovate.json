@@ -1,5 +1,5 @@
 {
-	"extends": ["github>unional/renovate-preset"],
+	"extends": ["github>repobuddy/renovate-preset"],
 	"platformAutomerge": true,
 	"packageRules": [
 		{
