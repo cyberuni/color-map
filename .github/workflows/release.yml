@@ -5,7 +5,7 @@ on:
 
 jobs:
   code:
-    uses: cyberuni/.github/.github/workflows/pnpm-verify.yml@main
+    uses: repobuddy/.github/.github/workflows/pnpm-verify.yml@v2
     with:
       os: '["ubuntu-latest"]'
       skip-playwright: true
@@ -15,7 +15,7 @@ jobs:
   # checkpoint is where pnpm-publish-gate inspects the tarball, which the
   # semantic-release path had nowhere to put.
   release:
-    uses: cyberuni/.github/.github/workflows/pnpm-release-changeset-oidc.yml@main
+    uses: repobuddy/.github/.github/workflows/pnpm-release-changeset-oidc.yml@v2
     needs: code
     # Declaring `permissions:` replaces the default, so every scope the callee needs must
     # be listed here — unlisted ones drop to `none`, not to the default.
