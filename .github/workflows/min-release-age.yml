@@ -1,0 +1,50 @@
+name: min-release-age
+
+# Removes minimum-release-age lifts whose window has passed and opens a PR.
+# Only lines carrying a `# min-release-age: lift … until …` marker are touched.
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: min-release-age
+  cancel-in-progress: false
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    env:
+      # A PR opened with GITHUB_TOKEN does not trigger CI. Set this secret to a
+      # GitHub App or fine-grained token so the restore PR runs required checks.
+      GH_TOKEN: ${{ secrets.MIN_RELEASE_AGE_TOKEN || github.token }}
+      BRANCH: chore/min-release-age-restore
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          token: ${{ env.GH_TOKEN }}
+
+      - name: Remove expired lifts
+        id: restore
+        run: node .github/scripts/min-release-age.mjs restore --github-output
+
+      - name: Open restore PR
+        if: steps.restore.outputs.removed != '0'
+        env:
+          BODY: ${{ steps.restore.outputs.body }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -C "$BRANCH"
+          git commit -am 'chore: restore minimum release age'
+          git push --force origin "$BRANCH"
+          if [ "$(gh pr view "$BRANCH" --json state --jq .state 2>/dev/null)" = OPEN ]; then
+            gh pr edit "$BRANCH" --body "$BODY"
+          else
+            gh pr create --head "$BRANCH" --title 'chore: restore minimum release age' --body "$BODY"
+          fi

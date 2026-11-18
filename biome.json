@@ -12,7 +12,9 @@
 			"!**/dist",
 			"!**/esm",
 			"!**/node_modules",
+			"!.github/scripts/min-release-age.mjs",
 			"!packages/color-map/schemas",
+			"!packages/color-map/skills/*/scripts",
 			"!pnpm-lock.yaml",
 			"!skills-lock.json"
 		]

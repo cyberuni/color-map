@@ -12,7 +12,10 @@
 	"keywords": ["color", "palette", "design-system", "contrast", "css"],
 	"extensions": {
 		"org.cyberuni.universal-plugin": {
-			"vendors": ["claude-code", "cursor", "codex", "copilot-cli"]
+			"vendors": ["claude-code", "cursor", "codex", "copilot-cli"],
+			"scripts": {
+				"skills/color-map/scripts/color-map.mjs": { "forward": "color-map" }
+			}
 		}
 	}
 }

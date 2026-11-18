@@ -22,7 +22,7 @@
 		"typecheck": "turbo run typecheck",
 		"verify": "run-p lint verify:pkg plugin:check plugin:check-version",
 		"verify:pkg": "turbo run build coverage depcheck typecheck llms:check size pack:check",
-		"version": "changeset version && pnpm --filter color-map exec node scripts/sync-plugin-version.mjs",
+		"version": "changeset version && pnpm --filter color-map exec node scripts/sync-plugin-version.mjs && universal-plugin plugin version --from-package --root packages/color-map",
 		"watch": "turbo run watch",
 		"web": "pnpm --filter=website"
 	},
@@ -36,7 +36,7 @@
 		"npm-run-all2": "^9.0.3",
 		"rimraf": "^6.1.3",
 		"turbo": "^2.10.9",
-		"universal-plugin": "0.22.0"
+		"universal-plugin": "0.23.0"
 	},
 	"packageManager": "pnpm@12.21.0"
 }
