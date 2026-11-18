@@ -5,13 +5,13 @@ description: Build a design-system color palette, scale or token file with the c
 
 # color-map
 
-Drive the `color-map` command instead of writing color math by hand. Every result prints as TOON by default; add `--format json` for JSON. Run it with `npx color-map` when it is not installed.
+Drive the `color-map` command instead of writing color math by hand. Run it as `node <this skill's folder>/scripts/color-map.mjs <command> [args]`. Every result prints as TOON by default; add `--format json` for JSON.
 
 ## One prompt to a valid palette
 
-1. Run `color-map palette '<brand color>' [--mode dark]`. The answer lists each role (`primary`, `primaryContainer`, `success`, `warning`, `danger`, `info`, `surface`, `surfaceVariant`, `outline`) with its background, text color and WCAG 2 ratio.
+1. Run `node <this skill's folder>/scripts/color-map.mjs palette '<brand color>' [--mode dark]`. The answer lists each role (`primary`, `primaryContainer`, `success`, `warning`, `danger`, `info`, `surface`, `surfaceVariant`, `outline`) with its background, text color and WCAG 2 ratio.
 2. Read `failing` and `issues`. `failing: 0` and `issues: "none: ..."` mean every pair meets its target. If not, change `--target` or the brand color and run it again; do not edit hex values by hand.
-3. Write the result with `color-map export '<brand color>' --source palette --to css|tailwind|dtcg`. The output is the file content: redirect it to a file.
+3. Write the result with `node <this skill's folder>/scripts/color-map.mjs export '<brand color>' --source palette --to css|tailwind|dtcg`. The output is the file content: redirect it to a file.
 4. Do both modes when the design has a dark theme: run steps 1 and 3 with `--mode dark`.
 
 ## Commands
@@ -28,7 +28,7 @@ Drive the `color-map` command instead of writing color math by hand. Every resul
 | `export [color] --to css\|tailwind\|dtcg [--source palette\|scale] [--tokens file.json]` | write tokens |
 | `schema [command]` | print the JSON Schema of a command's options |
 
-Colors are any CSS color: `#3b82f6`, `oklch(0.7 0.15 250)`, `color-mix(in oklab, red, blue)`. Add `--full` for every field. Run `color-map <command> --help` for one command.
+Colors are any CSS color: `#3b82f6`, `oklch(0.7 0.15 250)`, `color-mix(in oklab, red, blue)`. Add `--full` for every field. Run `node <this skill's folder>/scripts/color-map.mjs <command> --help` for one command.
 
 ## Rules
 
