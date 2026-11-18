@@ -22,7 +22,7 @@
 		"typecheck": "turbo run typecheck",
 		"verify": "run-p lint verify:pkg plugin:check plugin:check-version",
 		"verify:pkg": "turbo run build coverage depcheck typecheck llms:check size pack:check",
-		"version": "changeset version && pnpm --filter color-map exec node scripts/sync-plugin-version.mjs",
+		"version": "changeset version && pnpm --filter color-map exec node scripts/sync-plugin-version.mjs && universal-plugin plugin version --from-package --root packages/color-map",
 		"watch": "turbo run watch",
 		"web": "pnpm --filter=website"
 	},
