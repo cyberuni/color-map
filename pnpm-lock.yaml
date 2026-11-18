@@ -202,6 +202,9 @@ importers:
       turbo:
         specifier: ^2.10.9
         version: 2.10.9
+      universal-plugin:
+        specifier: 0.22.0
+        version: 0.22.0
 
   apps/website:
     dependencies:
@@ -1326,6 +1329,11 @@ packages:
     resolution: {integrity: sha512-dFxQSl+lYZ5Wc9TVUxrSwze9vwC6IBpg4zcbxJkLiZPPnYLX95Zvp9zC+ChPRmc2QpyVzqH4eGnxKzHaVZ1A7Q==}
     peerDependencies:
       '@biomejs/biome': '>= 2'
+
+  '@repobuddy/upx@0.2.0':
+    resolution: {integrity: sha512-uoiPhl9RkZGH9DqIZbsFDdcljmmZEemLNwSB0ZJFcqYs/rq86kFZEb//YFw9NNmHt+jlHtSCwIoAGAaIe4q0Vw==}
+    engines: {node: '>=22'}
+    hasBin: true
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     resolution: {integrity: sha512-ia3DwAs0OsMGS7+IConptSiyk9pEXkOx/AbJ2n/lAGxH3QkWQus1t8d7gnAT38FCU2sQu8lUbeR6AiZFv4JxaA==}
@@ -3693,6 +3701,11 @@ packages:
   unist-util-visit@5.2.0:
     resolution: {integrity: sha512-fpsYs/VVoZxfGY9/j3FQpZmN8wdLJaV1Pt38AaJNZu9uKIHcFU3halCdBveEq1HGKO1OEfJY65w1zvoFV1b3qQ==}
 
+  universal-plugin@0.22.0:
+    resolution: {integrity: sha512-nD/IEYTxBfzhFb9d2LQhJVPiB1a91Gurv4L286WO93g121bF+NTxcRDKQk33laSuYELShvF9RwT+va+GKumVtw==}
+    engines: {node: '>=22'}
+    hasBin: true
+
   unpartial@1.0.5:
     resolution: {integrity: sha512-yAqaXcachjgZUnM2yIkf+4KJhmyuoj7stBvlnlZpB15OYVbKnLhgJfmLW7qkpzLHCdsm1bEFvhyN9hCmlZ3uuw==}
     engines: {node: '>=6'}
@@ -5031,6 +5044,10 @@ snapshots:
   '@repobuddy/biome@2.3.1(@biomejs/biome@2.5.7)':
     dependencies:
       '@biomejs/biome': 2.5.7
+
+  '@repobuddy/upx@0.2.0':
+    dependencies:
+      semver: 7.8.5
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     optional: true
@@ -7372,6 +7389,11 @@ snapshots:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.1.0
+
+  universal-plugin@0.22.0:
+    dependencies:
+      '@repobuddy/upx': 0.2.0
+      rolldown: 1.2.16
 
   unpartial@1.0.5: {}
 
