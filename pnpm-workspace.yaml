@@ -20,6 +20,8 @@ allowBuilds:
 minimumReleaseAge: 1440
 minimumReleaseAgeStrict: true
 minimumReleaseAgeExclude:
+  # Approved by the Council: universal-plugin@0.22.0 was under 24h old when adopted. Remove after 2026-11-19.
+  - universal-plugin@0.22.0
   # Renovate security update: vitest@4.1.11
   - vitest@4.1.11
   # Renovate security update: astro@7.4.7
