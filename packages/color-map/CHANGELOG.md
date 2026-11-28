@@ -1,5 +1,15 @@
 # color-map
 
+## 2.4.0
+
+### Minor Changes
+
+- 7c86bc6: Upgrade to clibuilder 12.2 and add `examples` to every command, so `--help` shows copyable invocations in the AXI structured help.
+
+### Patch Changes
+
+- 4344c3f: The `color-map` skill runs the CLI through `skills/color-map/scripts/color-map.mjs`, which works on every install route of the plugin, including Cursor and Copilot CLI installs, where a bare `color-map` is not on `PATH`.
+
 ## 2.3.1
 
 ### Patch Changes

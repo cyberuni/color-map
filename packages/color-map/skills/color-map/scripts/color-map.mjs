@@ -1,5 +1,5 @@
 // Written by `universal-plugin plugin build` to forward to the color-map CLI of color-map. Edit plugin.json, not this file.
-globalThis.__SKILL_SCRIPT__ = {"package":"color-map","bin":"color-map","version":"2.3.1","entry":"skills/color-map/scripts/color-map.mjs","commands":{},"forward":"own"};
+globalThis.__SKILL_SCRIPT__ = {"package":"color-map","bin":"color-map","version":"2.4.0","entry":"skills/color-map/scripts/color-map.mjs","commands":{},"forward":"own"};
 import { spawnSync } from 'node:child_process'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
